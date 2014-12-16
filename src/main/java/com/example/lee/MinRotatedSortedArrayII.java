@@ -1,7 +1,7 @@
 package com.example.lee;
 
 /**
- * Created by pzhong1 on 12/15/14.
+ * Created by benbendaisy on 12/15/14.
  * Follow up for "Find Minimum in Rotated Sorted Array":
  * What if duplicates are allowed?
  * Would this affect the run-time complexity? How and why?
