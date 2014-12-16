@@ -10,6 +10,26 @@ package com.example.lee;
  */
 public class MinRotatedSortedArray {
     public int findMin(int[] num) {
-
+        if(null == num){
+            return -1;
+        } else if(num.length == 1){
+            return num[0];
+        }
+        int left = 0, right = num.length - 1;
+        int min = Integer.MAX_VALUE;
+        while(left <= right){
+            int mid = (left + right) / 2;
+            if(num[mid] < min ){
+                min = num[mid];
+            }
+            if(num[left] < num[mid]){
+                min = Math.min(min, num[left]);
+                left = mid + 1;
+            } else {
+                min = Math.min(min, num[right]);
+                right = mid -1;
+            }
+        }
+        return min;
     }
 }
