@@ -3,7 +3,7 @@ package com.example.lee;
 import com.example.lee.model.ListNode;
 
 /**
- * Created by pzhong1 on 12/17/14.
+ * Created by benbendaisy on 12/17/14.
  */
 public class SortList {
     public ListNode sortList(ListNode head) {
