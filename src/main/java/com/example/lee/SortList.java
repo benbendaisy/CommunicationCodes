@@ -8,7 +8,6 @@ import com.example.lee.model.ListNode;
  * implement it by both quick sort and merge sort
  */
 public class SortList {
-    ListNode previous = new ListNode(0);
 
     //quick sort
     public ListNode sortList(ListNode head) {
