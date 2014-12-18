@@ -4,9 +4,68 @@ import com.example.lee.model.ListNode;
 
 /**
  * Created by benbendaisy on 12/17/14.
+ * Sort a linked list in O(n log n) time using constant space complexity.
+ * implement it by both quick sort and merge sort
  */
 public class SortList {
+    ListNode previous = new ListNode(0);
+
+    //quick sort
     public ListNode sortList(ListNode head) {
+        if(head == null || head.next == null){
+            return head;
+        }
+        sortListHelp(head, null);
+        return head;
+    }
+
+    private void sortListHelp(ListNode head, ListNode anchor){
+        if(head == null || head == anchor){
+            return;
+        }
+        ListNode partition = sortListPartition(head, anchor);
+        sortListHelp(head, partition);
+        sortListHelp(partition.next, anchor);
+    }
+
+    private ListNode sortListPartition(ListNode head, ListNode end){
+        ListNode previous = new ListNode(0);
+        previous.next = head;
+        ListNode anchor = head;
+        ListNode less = head;
+
+        while(less != null && less != end && anchor.val >= less.val){
+            previous = previous.next;
+            less = less.next;
+        }
+
+        ListNode bigger = less;
+
+        while(bigger != null && bigger != end){
+            while(bigger != null && bigger != end && anchor.val < bigger.val){
+                bigger = bigger.next;
+            }
+            if(bigger != null){
+                swap(less, bigger);
+                previous = previous.next;
+                less = less.next;
+                bigger = bigger.next;
+            }
+        }
+        swap(anchor, previous);
+        return previous;
+    }
+
+    private void swap(ListNode node1, ListNode node2){
+        if(node1 != null && node2 != null){
+            int temp = node1.val;
+            node1.val = node2.val;
+            node2.val = temp;
+        }
+    }
+
+    //merge sort
+    public ListNode sortList1(ListNode head) {
         if(head == null || head.next == null){
             return head;
         } else if(head.next.next == null){
@@ -25,8 +84,8 @@ public class SortList {
             runner = runner.next.next;
         }
         prev.next = null;
-        first = sortList(first);
-        second = sortList(second);
+        first = sortList1(first);
+        second = sortList1(second);
         return sortListMerge(first, second);
     }
 
@@ -34,13 +93,13 @@ public class SortList {
         ListNode head = new ListNode(0);
         ListNode previous = head;
         while(first != null && second != null){
-            while(first != null && second != null && first.val < second.val){
+            while(first != null && second != null && first.val <= second.val){
                 head.next = first;
                 head = head.next;
                 first = first.next;
             }
 
-            while(second != null && first != null && second.val < first.val){
+            while(second != null && first != null && second.val <= first.val){
                 head.next = second;
                 head = head.next;
                 second = second.next;
