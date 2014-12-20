@@ -10,6 +10,7 @@ import java.util.*;
  * Given numerator = 2, denominator = 1, return "2".
  * Given numerator = 2, denominator = 3, return "0.(6)".
  * Created by benbendaisy on 12/18/14.
+ * Implemented it by both recursive and iterative ways
  */
 public class FractionToRecurringDecimal {
     public String fractionToDecimal1(int numerator, int denominator) {
@@ -36,7 +37,6 @@ public class FractionToRecurringDecimal {
         //check if there is any point
         boolean isInteger = (numeratorL % denominatorL) == 0 ? true : false;
         Map<String, Long> map = new LinkedHashMap<String, Long>();
-        //List<Long> ll = new ArrayList<Long>();
         long mul = -1, remainer = -1;
         int point = 0;
 
@@ -60,17 +60,17 @@ public class FractionToRecurringDecimal {
 
     public String fractionToDecimalHelper(Map<String, Long> map, long numeratorL, long denominatorL, boolean isNegative, boolean isInteger, int point){
         long mul = -1, remainer = -1;
-        String key = "0:" + numeratorL;
-        if(map.containsKey(key)){
-            remainer = numeratorL;
+        if(numeratorL == 0){
             mul = 0l;
+            remainer = 0l;
             return formater(map, mul, remainer, isNegative, isInteger, point);
         }
+        String key = "";
+
         if(numeratorL < denominatorL){
             key = "0:" + numeratorL;
             if(!map.containsKey(key)){
                 map.put(key, 0l);
-                //ll.add(0l);
                 remainer = numeratorL;
                 numeratorL = numeratorL * 10;
 
@@ -79,7 +79,7 @@ public class FractionToRecurringDecimal {
                 mul = 0l;
                 return formater(map, mul, remainer, isNegative, isInteger, point);
             }
-            fractionToDecimalHelper(map, numeratorL, denominatorL, isNegative, isInteger, point);
+            return fractionToDecimalHelper(map, numeratorL, denominatorL, isNegative, isInteger, point);
         }
 
         mul = (long) (numeratorL / denominatorL);
@@ -89,7 +89,6 @@ public class FractionToRecurringDecimal {
         //use multiple and remainer as a key to judge if there is a recycle
         key = mul + ":" + remainer;
         if(!map.containsKey(key)){
-            //ll.add(mul);
             map.put(key, mul);
         } else {
             return formater(map, mul, remainer, isNegative, isInteger, point);
@@ -161,7 +160,6 @@ public class FractionToRecurringDecimal {
         //check if there is any point
         boolean isInteger = (numeratorL % denominatorL) == 0 ? true : false;
         Map<String, Long> map = new LinkedHashMap<String, Long>();
-        //List<Long> ll = new ArrayList<Long>();
         long mul = -1, remainer = -1;
         int point = 0;
 
@@ -189,7 +187,6 @@ public class FractionToRecurringDecimal {
                 String key = "0:" + numeratorL;
                 if(!map.containsKey(key)){
                     map.put(key, 0l);
-                    //ll.add(0l);
                     numeratorL = numeratorL * 10;
                 } else {
                     remainer = numeratorL;
@@ -210,7 +207,6 @@ public class FractionToRecurringDecimal {
             //use multiple and remainer as a key to judge if there is a recycle
             String key = mul + ":" + remainer;
             if(!map.containsKey(key)){
-                //ll.add(mul);
                 map.put(key, mul);
             } else {
                 break;
@@ -260,8 +256,9 @@ public class FractionToRecurringDecimal {
 
     public static void main(String[] args) {
         FractionToRecurringDecimal fractionToRecurringDecimal = new FractionToRecurringDecimal();
-        //System.out.println(fractionToRecurringDecimal.fractionToDecimal(2147483647, 37));
-        //System.out.println(fractionToRecurringDecimal.fractionToDecimal(1, Integer.MIN_VALUE));
-        System.out.println(fractionToRecurringDecimal.fractionToDecimal1(-2147483648, -10));
+//        System.out.println(fractionToRecurringDecimal.fractionToDecimal1(2147483647, 37));
+//        System.out.println(fractionToRecurringDecimal.fractionToDecimal1(1, Integer.MIN_VALUE));
+//        System.out.println(fractionToRecurringDecimal.fractionToDecimal1(-2147483648, -10));
+        System.out.println(fractionToRecurringDecimal.fractionToDecimal1(1, 6));
     }
 }
