@@ -1,7 +1,7 @@
 package com.example.lee.model;
 
 /**
- * Created by pzhong1 on 12/16/14.
+ * Created by benbendaisy on 12/16/14.
  */
 public class TreeNode {
     public int val;
