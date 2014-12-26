@@ -10,6 +10,23 @@ package com.example.lee;
  */
 public class GasStation {
     public int canCompleteCircuit(int[] gas, int[] cost) {
-        return 0;
+        if(gas == null || cost == null || gas.length == 0 || cost.length == 0 || gas.length != cost.length){
+            return -1;
+        }
+        int total = 0; //check if there is a solution
+        int sum = 0; //check if current start point validate
+        int startIndex = -1; // point the point just before a valid start
+        int len = gas.length;
+        for(int i = 0; i < len; i++){
+            int remaining = gas[i] - cost[i];
+            sum += remaining;
+            total += remaining;
+            if(sum < 0){
+                startIndex = i;
+                sum = 0;
+            }
+        }
+
+        return total >= 0 ? startIndex + 1 : -1;
     }
 }

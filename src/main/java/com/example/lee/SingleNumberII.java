@@ -85,4 +85,10 @@ public class SingleNumberII {
         }
         return ones;
     }
+
+    public static void main(String[] args) {
+        int[] A = {2, 3, 3, 3};
+        SingleNumberII singleNumber = new SingleNumberII();
+        System.out.println(singleNumber.singleNumberII(A));
+    }
 }
