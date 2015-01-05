@@ -28,14 +28,16 @@ public class ConstructBinaryTreefromPreorderandInorderTraversal {
     }
 
     private TreeNode buildTreeHelper(int[] preorder, int[] inorder, int start, int end, int start1, int end1, Map<Integer, Integer> map){
-        if(start > end || start1 > end1){
+        if(start > end || start1 > end1 || start >= preorder.length){
             return null;
+        } else if(start == end){
+            return new TreeNode(preorder[start]);
         }
+
         TreeNode node = new TreeNode(preorder[start]);
-        int end3 = map.get(preorder[start]) - 1;
-        int end2 = start + end3 - start1 + 1;
-        node.left = buildTreeHelper(preorder, inorder, start + 1, end2, start1, end3, map);
-        node.right = buildTreeHelper(preorder, inorder, end2 + 2, end, end3 + 2, end1, map);
+        int leftLength = map.get(preorder[start]) - start1;
+        node.left = buildTreeHelper(preorder, inorder, start + 1, start + leftLength, start1, map.get(preorder[start]) - 1, map);
+        node.right = buildTreeHelper(preorder, inorder, start + leftLength + 1, end, map.get(preorder[start]) + 1, end1, map);
         return node;
     }
 
