@@ -45,4 +45,27 @@ public class BinaryTreeInorderTraversal {
         }
         return list;
     }
+
+    //remove visited treenode set
+    public List<Integer> inorderTraversalI(TreeNode root) {
+        List<Integer> list = new ArrayList<Integer>();
+        if(root == null){
+            return list;
+        }
+        Stack<TreeNode> stack = new Stack<TreeNode>();
+
+        while(true){
+            while(root != null){
+                stack.add(root);
+                root = root.left;
+            }
+            if(stack.isEmpty()){
+                break;
+            }
+            root = stack.pop();
+            list.add(root.val);
+            root = root.right;
+        }
+        return list;
+    }
 }
