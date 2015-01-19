@@ -27,6 +27,41 @@ package com.example.lee;
  */
 public class DungeonGame {
     public int calculateMinimumHP(int[][] dungeon) {
-        return 0;
+        if(dungeon == null || dungeon.length == 0){
+            return 0;
+        }
+
+        int[][] dp = new int[dungeon.length][dungeon[0].length];
+        int m = dungeon.length - 1;
+        int n = dungeon[0].length - 1;
+        dp[m][n] = setHp(1 - dungeon[m][n]);
+
+        //initial right most column
+        for(int i = m - 1; i >= 0; i--){
+            dp[i][n] = setHp(dp[i + 1][n] - dungeon[i][n]);
+        }
+
+        //initial bottom column
+        for(int j = n - 1; j >= 0; j--){
+            dp[m][j] = setHp(dp[m][j + 1] - dungeon[m][j]);
+        }
+
+        for(int i = m - 1; i >= 0; i--){
+            for(int j = n - 1; j >= 0; j--){
+                dp[i][j] = setHp(Math.min(dp[i + 1][j] - dungeon[i][j], dp[i][j + 1] - dungeon[i][j]));
+            }
+        }
+
+        return dp[0][0];
+    }
+
+    private int setHp(int hp){
+        return hp <= 0 ? 1 : hp;
+    }
+
+    public static void main(String[] args) {
+        DungeonGame dungeonGame = new DungeonGame();
+        int[][] dungeon = {{-200}};
+        System.out.println(dungeonGame.calculateMinimumHP(dungeon));
     }
 }
