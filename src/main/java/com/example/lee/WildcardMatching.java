@@ -43,9 +43,9 @@ public class WildcardMatching {
         }
 
         if('*' == p.charAt(idx2)){
-            return isMatch(s, p, idx1 + 1, idx2 + 1) || isMatch(s, p, idx1 + 1, idx2);
+            return isMatch(s, p, idx1 + 1, idx2 + 1) || isMatch(s, p, idx1 + 1, idx2) || isMatch(s, p, idx1, idx2 + 1);
         } else if('?' == p.charAt(idx2)){
-            return isMatch(s, p, idx1 + 1, idx2);
+            return isMatch(s, p, idx1 + 1, idx2 + 1);
         } else{
             if(s.charAt(idx1) == p.charAt(idx2)){
                 return isMatch(s, p, idx1 + 1, idx2 + 1);
@@ -76,18 +76,18 @@ public class WildcardMatching {
         }
 
         if('*' == p.charAt(idx2)){
-            //multiple '*' has the same effect with single '*'
-            while(idx2 + 1 < p.length() && '*' == p.charAt(idx2 + 1)){
-                idx2++;
-            }
-
-            //omit value that does not equal the character in p
-            while(idx1 < s.length() && idx2 + 1 < p.length() && s.charAt(idx1) != p.charAt(idx2 + 1)){
-                idx1++;
-            }
-            return isMatch(s, p, idx1 + 1, idx2 + 1, map) || isMatch(s, p, idx1 + 1, idx2, map);
+//            //multiple '*' has the same effect with single '*'
+//            while(idx2 + 1 < p.length() && '*' == p.charAt(idx2 + 1)){
+//                idx2++;
+//            }
+//
+//            //omit value that does not equal the character in p
+//            while(idx1 < s.length() && idx2 + 1 < p.length() && s.charAt(idx1) != p.charAt(idx2 + 1)){
+//                idx1++;
+//            }
+            return isMatch(s, p, idx1 + 1, idx2 + 1, map) || isMatch(s, p, idx1 + 1, idx2, map) || isMatch(s, p, idx1, idx2 + 1, map);
         } else if('?' == p.charAt(idx2)){
-            return isMatch(s, p, idx1 + 1, idx2, map);
+            return isMatch(s, p, idx1 + 1, idx2 + 1, map);
         } else{
             if(s.charAt(idx1) == p.charAt(idx2)){
                 return isMatch(s, p, idx1 + 1, idx2 + 1, map);
@@ -98,9 +98,80 @@ public class WildcardMatching {
         }
     }
 
+    //iteratively check
+    public boolean isMatchII(String s, String p) {
+        if(null == s){
+            return null == p ? true : false;
+        } else if(null == p){
+            return false;
+        }
+
+        int idxs = 0;
+        int idxp = 0;
+        int lens = s.length();
+        int lenp = p.length();
+        int idxs1 = 0, idxp1 = 0;
+        boolean hasStar = false;
+        while(idxs < lens && idxp <= lenp){
+            //handle the case *?
+            if(idxp == lenp){
+                if(hasStar){
+                    idxp = idxp1;
+                    idxs1++;
+                    idxs = idxs1;
+                } else {
+                    return false;
+                }
+            }
+            char ch = p.charAt(idxp);
+            switch (ch) {
+                case '?': {
+                    idxs++;
+                    idxp++;
+                    break;
+                }
+                case '*': {
+                    hasStar = true;
+                    //handle multiple star
+                    while(idxp < lenp && '*' == p.charAt(idxp)){
+                        idxp++;
+                    }
+                    //if star is the last character, it match any string
+                    if(idxp == lenp){
+                        return true;
+                    }
+                    idxs1 = idxs;
+                    idxp1 = idxp;
+                    break;
+                }
+                default: {
+                    if(s.charAt(idxs) != p.charAt(idxp)){
+                        if(hasStar){
+                            //skip one character in string s
+                            idxp = idxp1;
+                            idxs1++;
+                            idxs = idxs1;
+                        } else {
+                            return false;
+                        }
+                    } else {
+                        idxs++;
+                        idxp++;
+                    }
+                    break;
+                }
+            }
+        }
+
+        while (idxp < lenp && '*' == p.charAt(idxp)) {
+            idxp++;
+        }
+
+        return idxp == lenp ? true : false;
+    }
+
     public static void main(String[] args) {
         WildcardMatching wildcardMatching = new WildcardMatching();
-        System.out.println(wildcardMatching.isMatchI("abbaabbbbababaababababbabbbaaaabbbbaaabbbabaabbbbbabbbbabbabbaaabaaaabbbbbbaaabbabbbbababbbaaabbabbabb",
-                "***b**a*a*b***b*a*b*bbb**baa*bba**b**bb***b*a*aab*a**"));
+        System.out.println(wildcardMatching.isMatchI("hi", "*?"));
     }
 }
