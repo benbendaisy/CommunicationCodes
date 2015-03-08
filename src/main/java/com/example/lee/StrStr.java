@@ -10,7 +10,7 @@ package com.example.lee;
  * Update (2014-11-02):
  * The signature of the function had been updated to return the index instead of the pointer. If you still see your function signature returns a char * or String, please click the reload button  to reset your code definition.
  */
-public class ImplementstrStr {
+public class StrStr {
     public int strStr(String haystack, String needle) {
         long start = System.currentTimeMillis();
         if (null == haystack || null == needle) {
@@ -80,7 +80,7 @@ public class ImplementstrStr {
     }
 
     public static void main(String[] args) {
-        ImplementstrStr implementstrStr = new ImplementstrStr();
+        StrStr implementstrStr = new StrStr();
         String str = "mississippi";
         String pattern = "issi";
         System.out.println(implementstrStr.strStr(str, pattern));
