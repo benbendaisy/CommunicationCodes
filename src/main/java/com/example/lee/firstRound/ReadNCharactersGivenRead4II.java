@@ -34,6 +34,7 @@ public class ReadNCharactersGivenRead4II {
             System.arraycopy(buffer /* src */, offset /* srcPos */, buf /* dest */, readBytes /* destPos */, realBytes /* length */);
             offset = (offset + realBytes) % 4;
             bufLeft = s - realBytes;
+            readBytes += realBytes;
         }
         return readBytes;
     }
