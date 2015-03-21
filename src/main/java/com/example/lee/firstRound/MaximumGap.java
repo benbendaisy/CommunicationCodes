@@ -1,5 +1,7 @@
 package com.example.lee.firstRound;
 
+import java.util.Arrays;
+
 /**
  * Created by benbendaisy on 12/15/14.
  * Given an unsorted array, find the maximum difference between the successive elements in its sorted form.
@@ -56,10 +58,11 @@ public class MaximumGap {
         return maxGap;
     }
     public int maximumGapI(int[] num) {
-        if(num == null || num.length <= 2){
+        if(num == null || num.length < 2){
             return 0;
         }
         int max = Integer.MIN_VALUE;
+        Arrays.sort(num);
         for(int i = 1; i < num.length; i++){
             int locMax = Math.abs(num[i] - num[i-1]);
             if(locMax > max){
