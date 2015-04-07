@@ -1,13 +1,9 @@
-package com.example.lee.firstRound;
+package com.example.lee.secondRound;
 
 import com.example.lee.model.ListNode;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
- * Created by pzhong1 on 12/16/14.
- * Sort a linked list using insertion sort.
+ * Created by benbendaisy on 3/24/15.
  */
 public class InsertionSortList {
     public ListNode insertionSortList(ListNode head) {
@@ -17,7 +13,6 @@ public class InsertionSortList {
         ListNode dummyHead = new ListNode(0);
         dummyHead.next = head;
         ListNode cur = head;
-        ListNode previous = dummyHead;
         while (cur != null) {
             ListNode prev = dummyHead;
             while (prev.next != cur && prev.next.val < cur.val) {
@@ -25,12 +20,14 @@ public class InsertionSortList {
             }
             if (prev.next != cur) {
                 ListNode t = cur.next;
+                if (prev.next.next == cur) {
+                    prev.next.next = cur.next;
+                }
+                //prev.next.next = cur.next;
                 cur.next = prev.next;
                 prev.next = cur;
                 cur = t;
-                previous.next = t;
             } else {
-                previous = cur;
                 cur = cur.next;
             }
         }
@@ -38,7 +35,13 @@ public class InsertionSortList {
     }
 
     public static void main(String[] args) {
-        Map<String, String> map = new HashMap<String, String>();
-
+        InsertionSortList insertionSortList = new InsertionSortList();
+        ListNode node1 = new ListNode(3);
+        ListNode node2 = new ListNode(4);
+        ListNode node3 = new ListNode(1);
+        node1.next = node2;
+        node2.next = node3;
+        insertionSortList.insertionSortList(node1);
+        System.out.println("te");
     }
 }

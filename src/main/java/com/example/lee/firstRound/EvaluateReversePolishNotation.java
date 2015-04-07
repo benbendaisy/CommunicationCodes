@@ -44,6 +44,13 @@ public class EvaluateReversePolishNotation {
     }
 
     private boolean isNumber(String str) {
+        if (null == str || "".equals(str)) {
+            return false;
+        }
+        if (str.startsWith("-") || str.startsWith("+")) {
+            str = str.substring(1);
+        }
+        if ("".equals(str)) return false;
         for (char ch : str.toCharArray()) {
             if (!Character.isDigit(ch)) {
                 return false;
