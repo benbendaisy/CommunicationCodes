@@ -1,7 +1,11 @@
 package com.example.probility;
 
+import java.util.Random;
+
 /**
  * Created by benbendaisy on 3/17/15.
+ *
+ * (k/(i-1)) * ((i-1)/i)=k/i. i is the length of input array
  */
 public class ReservoirSampling {
     public int[] selectKSamples(int[] data, int k) {
@@ -11,7 +15,9 @@ public class ReservoirSampling {
             pool[i] = data[i];
         }
         for (int i = k; i < data.length; i++) {
-            int rand = (int) (Math.random() * (i + 1));
+            Random random = new Random();
+            //int rand = (int) (Math.random() * (i + 1));
+            int rand = random.nextInt(i + 1);
             if (rand < k) {
                 pool[rand] = data[i];
             }
