@@ -36,6 +36,10 @@ import com.example.lee.model.TreeLinkNode;
  */
 public class PopulatingNextRightPointersinEachNode {
     public void connect(TreeLinkNode root) {
-
+        if (null == root) return;
+        if (null != root.left) root.left.next = root.right;
+        if (null != root.next && null != root.right) root.right.next = root.next.left;
+        connect(root.left);
+        connect(root.right);
     }
 }

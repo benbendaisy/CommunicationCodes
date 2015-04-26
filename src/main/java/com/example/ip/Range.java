@@ -1,4 +1,4 @@
-package com.example.other;
+package com.example.ip;
 
 /**
  * Created by benbendaisy on 3/21/15.

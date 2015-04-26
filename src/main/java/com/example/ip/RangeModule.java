@@ -5,7 +5,7 @@
 // are not looking at a single one. Make sure you choose the right
 // data­structures so that your implementation is efficient.
 
-package com.example.other;
+package com.example.ip;
 
 import java.util.Iterator;
 import java.util.LinkedList;

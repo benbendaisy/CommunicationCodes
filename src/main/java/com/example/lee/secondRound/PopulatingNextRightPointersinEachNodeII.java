@@ -28,6 +28,27 @@ import com.example.lee.model.TreeLinkNode;
  */
 public class PopulatingNextRightPointersinEachNodeII {
     public void connect(TreeLinkNode root) {
+        if (null == root) return;
+        if (null != root.right) {
+            root.right.next = findNext(root.next);
+            connect(root.right);
+        }
+        if (null != root.left) {
+            root.left.next = root.right == null ? findNext(root.next) : root.right;
+            connect(root.left);
+        }
+    }
 
+    private TreeLinkNode findNext(TreeLinkNode root) {
+        if (null == root) {
+            return null;
+        } else if (null != root.left) {
+            return root.left;
+        } else if (null != root.right) {
+            return root.right;
+        } else if (null != root.next) {
+            return findNext(root.next);
+        }
+        return null;
     }
 }

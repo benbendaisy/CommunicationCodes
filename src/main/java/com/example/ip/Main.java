@@ -1,4 +1,4 @@
-package com.example.other;//
+package com.example.ip;//
 //  Main.java
 //  codescreen
 

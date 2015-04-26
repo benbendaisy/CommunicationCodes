@@ -42,7 +42,7 @@ public class RecoverBinarySearchTree {
             prev = root;
         } else if(prev.val > root.val){
             if(node1 == null){
-                node1 = prev; //assume two nodes that are not in oders are neighbors
+                node1 = prev; //assume two nodes that are not in orders are neighbors
                 node2 = root;
             } else {
                 node2 = root; //find another one not in order and should be the smaller
