@@ -1,5 +1,10 @@
 package com.example.lee.firstRound;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+
 /**
  * Created by benbendaisy on 1/27/15.
  *
@@ -41,5 +46,27 @@ public class NQueensII {
             }
         }
         return true;
+    }
+
+
+    public static void main(String[] args) throws IOException {
+        Scanner in = new Scanner(System.in);
+        final String fileName = System.getenv("OUTPUT_PATH");
+        BufferedWriter bw = new BufferedWriter(new FileWriter(fileName));
+        int res = 1;
+
+        int _a_size = Integer.parseInt(in.nextLine());
+        int[] _a = new int[_a_size];
+        int _a_item;
+        for(int _a_i = 0; _a_i < _a_size; _a_i++) {
+            _a_item = Integer.parseInt(in.nextLine());
+            _a[_a_i] = _a_item;
+        }
+
+        //res = maxThreats(_a);
+        bw.write(String.valueOf(res));
+        bw.newLine();
+
+        bw.close();
     }
 }
