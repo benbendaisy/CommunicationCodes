@@ -70,6 +70,7 @@ public class LongestPalindromicSubstring {
     }
 
     //o(n) solution, refer to http://leetcode.com/2011/11/longest-palindromic-substring-part-ii.html
+    //http://www.felix021.com/blog/read.php?2040
     public String longestPalindromeII(String s) {
         if (null == s || s.length() < 2) {
             return s;
@@ -88,7 +89,7 @@ public class LongestPalindromicSubstring {
         int maxLen = 0, idx = 0;
         //calculating p
         for (int i = 0; i < str.length(); i++) {
-            int l = 2*c - i;
+            int l = 2 * c - i;
             p[i] = r > i && l > 0 ? Math.min(p[l], r - i) : 1;
 
             while (i + p[i] < str.length() && i - p[i] >= 0 && str.charAt(i + p[i]) == str.charAt(i - p[i])) {

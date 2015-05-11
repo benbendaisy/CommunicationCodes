@@ -39,4 +39,24 @@ public class RomantoInteger {
         }
         return 0;
     }
+
+
+    //refer to http://blog.csdn.net/ironyoung/article/details/45225693
+    public int romanToIntI(String s) {
+        if (null == s || s.length() < 1) {
+            return -1;
+        }
+        int res = 0;
+        for (int i = 0; i < s.length() - 1; i++) {
+            int l = charToI(s.charAt(i));
+            int r = charToI(s.charAt(i + 1));
+            if (l < r) {
+                res -= l;
+            } else {
+                res += r;
+            }
+        }
+        res += charToI(s.charAt(s.length() - 1));
+        return res;
+    }
 }

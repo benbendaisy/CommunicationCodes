@@ -10,19 +10,20 @@ public class LargestRectangleinHistogram {
         if (null == height || height.length < 1) return 0;
         int max = 0;
         Stack<Integer> stack = new Stack<Integer>();
-        for (int i = 0; i < height.length; i++) {
-            while (!stack.isEmpty() && height[i] < height[stack.peek()]) {
+        int len = height.length;
+        for (int i = 0; i < len; i++) {
+            while (!stack.isEmpty() && height[stack.peek()] > height[i]) {
                 int idx = stack.pop();
-                int lMax = (stack.isEmpty() ? i : i - stack.peek() - 1) * height[idx];
-                max = Math.max(max, lMax);
+                max = Math.max(max, (stack.isEmpty() ? i : i - stack.peek() - 1) * height[idx]);
             }
             stack.push(i);
         }
+
         while (!stack.isEmpty()) {
             int idx = stack.pop();
-            int lMax = (stack.isEmpty() ? height.length : height.length - stack.peek() - 1) * height[idx];
-            max = Math.max(max, lMax);
+            max = Math.max(max, (stack.isEmpty() ? len : len - stack.peek() - 1) * height[idx]);
         }
+
         return max;
     }
 

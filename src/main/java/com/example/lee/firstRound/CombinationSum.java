@@ -40,7 +40,7 @@ public class CombinationSum {
         }
 
         for(int i = idx; i < candidates.length; i++){
-            List<Integer> newList = new ArrayList<>(list);
+            List<Integer> newList = new ArrayList<Integer>(list);
             newList.add(candidates[i]);
             combinationSum(candidates, target - candidates[i], i, newList, lists);
         }

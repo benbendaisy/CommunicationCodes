@@ -37,6 +37,6 @@ public class LongestCommonSubstringAlgorithm {
 
     public static void main(String[] args) {
         LongestCommonSubstringAlgorithm longestCommonSubstringAlgorithm = new LongestCommonSubstringAlgorithm();
-        System.out.println(longestCommonSubstringAlgorithm.lcs("abacdfgdcaba", "hij"));
+        System.out.println(longestCommonSubstringAlgorithm.lcs("abacdfgdcaba", "abcd"));
     }
 }

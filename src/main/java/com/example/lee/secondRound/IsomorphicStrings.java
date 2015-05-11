@@ -19,6 +19,32 @@ import java.util.*;
  * Given "paper", "title", return true.
  */
 public class IsomorphicStrings {
+    public boolean isIsomorphic(String s, String t) {
+        if (null == s && null == t) {
+            return true;
+        } else if (null == s || null == t || s.length() != t.length()) {
+            return false;
+        }
+        Map<Character, Character> map = new HashMap<Character, Character>();
+        Set<Character> set = new HashSet<Character>();
+        for (int i = 0; i < s.length(); i++) {
+            //for one character mapping to different characters
+            if (map.containsKey(s.charAt(i)) &&  map.get(s.charAt(i)) != t.charAt(i)) {
+                return false;
+            } else if (!map.containsKey(s.charAt(i))) {
+                //for more than two charaters mapping to same character
+                if (!set.add(t.charAt(i))) return false;
+                map.put(s.charAt(i), t.charAt(i));
+            }
+        }
+        char[] chars = s.toCharArray();
+        for (int i = 0; i < s.length(); i++) {
+            chars[i] = map.get(chars[i]);
+        }
+        String str = new String(chars);
+        return str.equals(t);
+    }
+
     private class ICharacter {
         private char ch;
         private int cnt;
@@ -28,7 +54,7 @@ public class IsomorphicStrings {
         }
     }
 
-    public boolean isIsomorphic(String s, String t) {
+    public boolean isIsomorphicI(String s, String t) {
         if (null == s && null == t) {
             return true;
         } else if (null == s || null == t || s.length() != t.length()) {
@@ -66,7 +92,7 @@ public class IsomorphicStrings {
     }
 
     //this solution is not working
-    public boolean isIsomorphicI(String s, String t) {
+    public boolean isIsomorphicII(String s, String t) {
         if (null == s && null == t) {
             return true;
         } else if (null == s || null == t || s.length() != t.length()) {
@@ -103,7 +129,7 @@ public class IsomorphicStrings {
 
     public static void main(String[] args) {
         IsomorphicStrings isomorphicStrings = new IsomorphicStrings();
-        System.out.println(isomorphicStrings.isIsomorphicI("aba", "baa"));
+        System.out.println(isomorphicStrings.isIsomorphic("ab", "aa"));
     }
 
 }
