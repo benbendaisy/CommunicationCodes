@@ -2,6 +2,7 @@ package com.example.syntax;
 
 import com.google.common.collect.MinMaxPriorityQueue;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -26,6 +27,7 @@ public class PQMinMax {
         Random generator = new Random();
 
         // set the max size to 5
+        //MinMaxPriorityQueue<Data> pq = MinMaxPriorityQueue.orderedBy(Collections.reverseOrder()).maximumSize(5).create();
         MinMaxPriorityQueue<Data> pq = MinMaxPriorityQueue.maximumSize(5).create();
 
         // pq.contains(); // <= certainly, this method is linear time, don't use it!
