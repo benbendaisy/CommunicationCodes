@@ -25,7 +25,7 @@ public class PriorityQueueDemo {
             @Override
             public int compare(Integer lhs, Integer rhs) {
                 if (lhs > rhs) return 1;
-                if (lhs.equals(rhs)) return 0;
+                if (lhs == rhs) return 0;
                 return -1;
             }
         });

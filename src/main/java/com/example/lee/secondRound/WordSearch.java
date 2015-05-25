@@ -12,6 +12,35 @@ public class WordSearch {
         boolean[][] visited = new boolean[row][col];
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
+                if (board[i][j] == word.charAt(0) && exist(board, word, i, j, visited, 0)) return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean exist(char[][] board, String word, int x, int y, boolean[][] visited, int idx) {
+        if (idx == word.length()) return true;
+        int row = board.length;
+        int col = board[0].length;
+        if (x < 0 || x >= row || y < 0 || y >= col) return false;
+        char ch = word.charAt(idx);
+        if (!visited[x][y] && board[x][y] == ch) {
+            visited[x][y] = true;
+            if (exist(board, word, x + 1, y, visited, idx + 1) || exist(board, word, x - 1, y, visited, idx + 1) || exist(board, word, x, y + 1, visited, idx + 1) || exist(board, word, x, y - 1, visited, idx + 1)) return true;
+            visited[x][y] = false;
+        }
+        return false;
+    }
+
+
+    public boolean existI(char[][] board, String word) {
+        if (board == null || word == null) return false;
+        if (word.length() == 0) return true;
+        int row = board.length;
+        int col = board[0].length;
+        boolean[][] visited = new boolean[row][col];
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
                 if (board[i][j] == word.charAt(0) && exist(board, word, i, j, visited)) {
                     return true;
                 }
@@ -38,6 +67,7 @@ public class WordSearch {
         }
         return false;
     }
+
 
     public static void main(String[] args) {
         char[][] board = {{'a', 'a', 'a', 'a'}, {'a', 'a', 'a', 'a'}, {'a', 'a', 'a', 'a'}};

@@ -59,5 +59,6 @@ public class DivideTwoIntegers {
     public static void main(String[] args) {
         DivideTwoIntegers divideTwoIntegers = new DivideTwoIntegers();
         System.out.println(divideTwoIntegers.divide(-8, 2));
+        StringBuilder sb = new StringBuilder();
     }
 }
