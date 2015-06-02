@@ -32,7 +32,8 @@ public class LRUCache {
     public int get(int key) {
         if (map.containsKey(key)) {
             int value = map.get(key).value;
-            deleteNode(key);
+            deleteNode
+                    (key);
             insert(key, value);
             return value;
         } else {

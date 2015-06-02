@@ -2,10 +2,7 @@ package com.example.syntax;
 
 //import com.google.common.collect.MinMaxPriorityQueue;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * Created by benbendaisy on 5/10/15.
@@ -29,6 +26,16 @@ public class PriorityQueueDemo {
                 return -1;
             }
         });
+
+        Map<Integer, Integer> map = new LinkedHashMap<Integer, Integer>();
+        map.put(1, 1);
+        map.put(3, 3);
+        map.put(2, 2);
+        Set<Integer> set = map.keySet();
+
+        for (int i : set) {
+            System.out.println(i);
+        }
 
         //MinMaxPriorityQueue pqueue = MinMaxPriorityQueue.maximumSize(5).create();
     }
