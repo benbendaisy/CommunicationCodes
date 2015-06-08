@@ -1,5 +1,7 @@
 package com.example.syntax;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -12,5 +14,43 @@ public class UUIDDemo {
 
         // checking the value of random UUID
         System.out.println("Random UUID value: "+uid.randomUUID());
+        String str = "approach";
+        System.out.println(getSortedString(str));
+    }
+
+    private static String getSortedStringI(String string) {
+        Map<Character, Integer> map = new HashMap<>();
+        for (char ch : string.toCharArray()) {
+            if (map.containsKey(ch)) {
+                map.put(ch, map.get(ch) + 1);
+            } else {
+                map.put(ch, 1);
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        for (char ch : map.keySet()) {
+            sb.append(ch);
+            sb.append(map.get(ch));
+        }
+        return sb.toString();
+    }
+
+    private static String getSortedString(String string) {
+
+        int[] chars = new int[26];
+        for (char ch : string.toLowerCase().toCharArray()) {
+            int idx = ch - 'a';
+            chars[idx] = chars[idx] + 1;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 26; i++) {
+            if (chars[i] != 0) {
+                char ch = (char) (i + 'a');
+                sb.append(ch);
+                //sb.append(Character.toChars(i + 'a'));
+                sb.append(chars[i]);
+            }
+        }
+        return sb.toString();
     }
 }
