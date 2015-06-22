@@ -1,6 +1,8 @@
 package com.example.ip.apple;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by benbendaisy on 6/3/15.
@@ -23,22 +25,31 @@ public class BloodGraph {
 
     public boolean sharingAncester(BloodNode node1, BloodNode node2) {
         if (null == node1 || null == node2) return false;
-        for (BloodNode child : node1.children) {
-            if ("M".equals(child.gender) && isAncester(child, node2)) return true;
-            if (sharingAncester(child, node2)) return true;
-        }
+//        for (BloodNode child : node1.children) {
+//            if ("M".equals(child.gender) && isAncester(child, node2)) return true;
+//            if (sharingAncester(child, node2)) return true;
+//        }
+//
+//        for (BloodNode child : node2.children) {
+//            if ("M".equals(child.gender) && isAncester(child, node1)) return true;
+//            if (sharingAncester(child, node1)) return true;
+//        }
 
-        for (BloodNode child : node2.children) {
-            if ("M".equals(child.gender) && isAncester(child, node1)) return true;
-            if (sharingAncester(child, node1)) return true;
-        }
-
-        return false;
+        return isAncester(node1, node2);
     }
 
     private boolean isAncester(BloodNode node1, BloodNode node2) {
-        if (null == node1) return false;
-        if (node1 == node2.dad) return true;
-        return isAncester(node1.dad, node2);
+        if (null == node1 || null == node2) return false;
+        Set<BloodNode> parent = new HashSet<>();
+        while (node1 != null) {
+            parent.add(node1);
+            node1 = node1.dad;
+        }
+        while (node2 != null) {
+            if (!parent.add(node2)) return true;
+            node2 = node2.dad;
+        }
+
+        return false;
     }
 }

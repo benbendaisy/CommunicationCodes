@@ -1,8 +1,6 @@
 package com.example.syntax;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by pzhong1 on 5/9/15.
@@ -16,6 +14,9 @@ public class UUIDDemo {
         System.out.println("Random UUID value: "+uid.randomUUID());
         String str = "approach";
         System.out.println(getSortedString(str));
+        List<Integer> list = new ArrayList<>();
+        Iterator<Integer> it = list.iterator();
+        Set<Integer> set = new HashSet<>();
     }
 
     private static String getSortedStringI(String string) {
