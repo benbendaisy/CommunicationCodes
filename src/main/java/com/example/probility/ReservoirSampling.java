@@ -30,6 +30,9 @@ public class ReservoirSampling {
         System.out.println("");
     }
 
+
+    //distributed reservoir sampling refer to https://ballsandbins.wordpress.com/2014/04/13/distributedparallel-reservoir-sampling/
+
     public static void main(String[] args) {
         ReservoirSampling reservoirSampling = new ReservoirSampling();
         int[] data = {1, 2, 3, 4, 5, 6};

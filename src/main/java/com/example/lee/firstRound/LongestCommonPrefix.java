@@ -15,7 +15,7 @@ public class LongestCommonPrefix {
         int idxMax = str.length();
         for (int i = 1; i < strs.length; i++) {
             int lIdx = findLongestCommonPrefix(strs[i], str);
-            if (idxMax < lIdx) {
+            if (idxMax > lIdx) {
                 idxMax = lIdx;
             }
         }
@@ -35,9 +35,10 @@ public class LongestCommonPrefix {
     }
 
     public static void main(String[] args) {
-        String[] strs = {"a", "b"};
+        String[] strs = {"a", "b", "a"};
         LongestCommonPrefix longestCommonPrefix = new LongestCommonPrefix();
         System.out.println(longestCommonPrefix.findLongestCommonPrefix("a","b"));
+        System.out.println(longestCommonPrefix.longestCommonPrefix(strs));
         System.out.println("a".substring(0, 0));
     }
 }
