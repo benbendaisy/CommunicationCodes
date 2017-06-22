@@ -1,7 +1,7 @@
 package com.example.ip;
 
 /**
- * Created by pzhong1 on 5/12/15.
+ * Created by benbendaisy on 6/18/17.
  */
 public class MaxmizeSequenceNumber {
     public static int getMaxNum(int[] nums) {
