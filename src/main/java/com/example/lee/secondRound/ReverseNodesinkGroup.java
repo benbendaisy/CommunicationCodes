@@ -40,14 +40,20 @@ public class ReverseNodesinkGroup {
         return dummyHead.next;
     }
 
+    /**
+     * 0 -> 1 -> 2 -> 3
+     * @param start
+     * @param end
+     * @return
+     */
     private ListNode reverseKGroup(ListNode start, ListNode end) {
-        ListNode last = start.next;
-        ListNode cur = last.next;
+        ListNode last = start.next; //1
+        ListNode cur = last.next;  //2
         while (cur != end) {
-            last.next = cur.next;
-            cur.next = start.next;
-            start.next = cur;
-            cur = last.next;
+            last.next = cur.next; // 1 -> 3
+            cur.next = start.next; // 2 -> 1 -> 3
+            start.next = cur; // 0 -> 2 -> 1 -> 3
+            cur = last.next; //
         }
         return last;
     }
