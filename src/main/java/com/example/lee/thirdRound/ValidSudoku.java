@@ -1,10 +1,10 @@
-package com.example.lee.secondRound;
+package com.example.lee.thirdRound;
 
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by benbendaisy on 6/22/15.
+ * Created by benbendaisy on 7/5/17.
  */
 public class ValidSudoku {
     public boolean isValidSudoku(char[][] board) {
@@ -12,8 +12,8 @@ public class ValidSudoku {
             return false;
         }
 
-        //check row
         Set<Character> seenCharacter;
+        // check row
         for (int i = 0; i < board.length; i++) {
             seenCharacter = new HashSet<>();
             for (int j = 0; j < board[0].length; j++) {
@@ -23,7 +23,7 @@ public class ValidSudoku {
             }
         }
 
-        //check column
+        // check column
         for (int j = 0; j < board[0].length; j++) {
             seenCharacter = new HashSet<>();
             for (int i = 0; i < board.length; i++) {
@@ -33,13 +33,15 @@ public class ValidSudoku {
             }
         }
 
-        //check 3 * 3 block
+        // check 3 * 3 block
         for (int i = 0; i < board.length; i += 3) {
             for (int j = 0; j < board[0].length; j += 3) {
                 seenCharacter = new HashSet<>();
-                for (int k = i; k < i + 3; k++) {
-                    for (int l = j; l < j + 3; l++) {
-                        if (board[k][l] != '.' && (board[k][l] < '1' || board[k][l] > '9' || !seenCharacter.add(board[k][l]))) {
+                for (int k = 0; k < 3; k++) {
+                    for (int l = 0; l < 3; l++) {
+                        int idx = k + i;
+                        int idy = l + j;
+                        if (board[idx][idy] != '.' && (board[idx][idy] < '1' || board[idx][idy] > '9' || !seenCharacter.add(board[idx][idy]))) {
                             return false;
                         }
                     }
@@ -48,4 +50,22 @@ public class ValidSudoku {
         }
         return true;
     }
+
+
+    public static void main(String[] args) {
+        ValidSudoku validSudoku = new ValidSudoku();
+        char[][] board = new char[][]{
+                {'.','8','7','6','5','4','3','2','1'},
+                {'2','.','.','.','.','.','.','.','.'},
+                {'3','.','.','.','.','.','.','.','.'},
+                {'4','.','.','.','.','.','.','.','.'},
+                {'5','.','.','.','.','.','.','.','.'},
+                {'6','.','.','.','.','.','.','.','.'},
+                {'7','.','.','.','.','.','.','.','.'},
+                {'8','.','.','.','.','.','.','.','.'},
+                {'9','.','.','.','.','.','.','.','.'},
+        };
+        System.out.println(validSudoku.isValidSudoku(board));
+    }
+
 }
