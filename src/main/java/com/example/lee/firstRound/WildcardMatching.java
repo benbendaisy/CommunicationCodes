@@ -170,6 +170,35 @@ public class WildcardMatching {
         return idxp == lenp ? true : false;
     }
 
+    public boolean isMatchIII(String s, String p) {
+        if (s == null && p == null) {
+            return true;
+        } else if (s == null || p == null) {
+            return false;
+        }
+        int curIdxS = 0, curIdxP = 0;
+        int oldIdxS = -1, oldIdxP = -1;
+        while (curIdxS < s.length()) {
+            if (curIdxP < p.length() && (s.charAt(curIdxS) == p.charAt(curIdxP) || p.charAt(curIdxP) == '?')) {
+                curIdxP++;
+                curIdxS++;
+            } else if (curIdxP < p.length() && p.charAt(curIdxP) == '*') {
+                oldIdxP = curIdxP;
+                oldIdxS = curIdxS;
+                curIdxP++;
+            } else if (oldIdxP != -1) {
+                curIdxP = oldIdxP + 1;
+                curIdxS = ++oldIdxS;
+            } else {
+                return false;
+            }
+        }
+        while (curIdxP < p.length() && p.charAt(curIdxP) == '*') {
+            curIdxP++;
+        }
+        return curIdxP == p.length();
+    }
+
     public static void main(String[] args) {
         WildcardMatching wildcardMatching = new WildcardMatching();
         System.out.println(wildcardMatching.isMatchI("hi", "*?"));
