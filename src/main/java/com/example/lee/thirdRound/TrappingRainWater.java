@@ -77,8 +77,7 @@ public class TrappingRainWater {
         int res = 0;
         for (int i = 0; i < height.length; i++) {
             while (!stack.isEmpty() && height[stack.peek()] < height[i]) {
-                int top = stack.peek();
-                stack.pop();
+                int top = stack.pop();
                 if (stack.isEmpty()) {
                     continue;
                 }

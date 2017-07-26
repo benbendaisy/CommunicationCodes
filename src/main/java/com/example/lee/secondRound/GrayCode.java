@@ -35,7 +35,7 @@ public class GrayCode {
     }
 
     public static void main(String[] args) {
-        int adding = 1 << 0;
+        int adding = 1 << 5;
         System.out.println(adding);
     }
 }
