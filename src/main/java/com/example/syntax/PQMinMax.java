@@ -2,7 +2,6 @@ package com.example.syntax;
 
 import com.google.common.collect.MinMaxPriorityQueue;
 
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.Random;
 
