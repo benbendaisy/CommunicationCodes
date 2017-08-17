@@ -70,7 +70,7 @@ public class SurroundedRegions {
         int len1 = board.length;
         int len2 = board[0].length;
         queue.add(s);
-        while(!queue.isEmpty()){
+        while(!queue.isEmpty()) {
             Point p = queue.poll();
             board[p.x][p.y] = r;
             int px = p.x - 1;

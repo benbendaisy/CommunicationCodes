@@ -40,13 +40,15 @@ public class WordLadder {
                 for(char c = 'a'; c <= 'z'; c++){
                     word[i] = c;
                     String tempStr = new String(word);
-                    if(end.equals(tempStr)){
-                        return level + 1;
+                    if (dict.contains(tempStr)) {
+                        if (end.equals(tempStr)) {
+                            return level + 1;
+                        } else if (visited.add(tempStr)) {
+                            queue.add(tempStr);
+                            queueLevel.add(level + 1);
+                        }
                     }
-                    if(dict.contains(tempStr) && visited.add(tempStr)){
-                        queue.add(tempStr);
-                        queueLevel.add(level + 1);
-                    }
+
                 }
             }
         }
