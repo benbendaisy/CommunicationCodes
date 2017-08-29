@@ -5,6 +5,11 @@ import java.util.Map;
 import java.util.Optional;
 
 public class SingleNumberII {
+    /**
+     * O(32n) soution by bit operations
+     * @param nums
+     * @return
+     */
     public int singleNumber(int[] nums) {
         if (nums == null || nums.length == 0) {
             return -1;
@@ -23,6 +28,12 @@ public class SingleNumberII {
         }
         return res;
     }
+
+    /**
+     * O(n) solution with O(n) space
+     * @param nums
+     * @return
+     */
     public int singleNumberI(int[] nums) {
         if (nums == null || nums.length == 0) {
             return -1;
