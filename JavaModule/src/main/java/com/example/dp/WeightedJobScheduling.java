@@ -1,7 +1,5 @@
 package com.example.dp;
 
-import com.example.lee.firstRound.SymmetricTree;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;

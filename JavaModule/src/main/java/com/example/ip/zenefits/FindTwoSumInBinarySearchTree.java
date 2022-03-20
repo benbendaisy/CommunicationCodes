@@ -1,6 +1,5 @@
 package com.example.ip.zenefits;
 
-import com.example.lee.firstRound.SymmetricTree;
 import com.example.lee.model.TreeNode;
 
 /**

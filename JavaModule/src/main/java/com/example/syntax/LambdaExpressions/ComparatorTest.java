@@ -1,7 +1,5 @@
 package com.example.syntax.LambdaExpressions;
 
-import com.example.lee.firstRound.SymmetricTree;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;

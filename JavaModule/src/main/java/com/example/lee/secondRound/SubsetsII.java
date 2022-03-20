@@ -1,7 +1,5 @@
 package com.example.lee.secondRound;
 
-import com.example.lee.model.Interval;
-
 import java.util.*;
 
 /**

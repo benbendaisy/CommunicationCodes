@@ -1,6 +1,5 @@
 package com.example.lee.thirdRound;
 
-import com.example.lee.model.ListNode;
 import com.example.lee.model.TreeNode;
 
 import java.util.ArrayList;
