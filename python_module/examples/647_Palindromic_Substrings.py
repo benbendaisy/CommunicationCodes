@@ -17,5 +17,5 @@ class Solution:
 if __name__ == "__main__":
     s = "abc"
     solution = Solution()
-    ret = solution.countSubstrings1(s)
+    ret = solution.countSubstrings(s)
     print(ret)
