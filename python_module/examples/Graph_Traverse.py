@@ -63,7 +63,7 @@ class Graph:
         """
         i, e = 0, 0
         ds = DisjointSet(self.nodes)
-        self.graph = sorted(self.graph, key=lambda item: item[2])
+        self.graph = sorted(self.graph, key = lambda item: item[2])
         while e < self.V - 1:
             s, d, w = self.graph[i]
             i += 1
@@ -86,9 +86,9 @@ class Graph:
             4. Repeat these steps for all the given vertices in ascending order of weight.
         """
         visited = [0]*self.vertexNum
-        edgeNum=0
-        visited[0]=True
-        while edgeNum<self.vertexNum-1:
+        edgeNum = 0
+        visited[0] = True
+        while edgeNum < self.vertexNum-1:
             min = math.inf
             for i in range(self.vertexNum):
                 if visited[i]:
