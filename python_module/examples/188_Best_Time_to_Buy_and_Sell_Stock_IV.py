@@ -36,6 +36,7 @@ class Solution:
         # ishold: 0 nothold, 1 hold
         dp = [[[-math.inf] * 2 for _ in range(k + 1)] for _ in range(n)]
 
+        # optimize the result that can be skipped
         if 2*k > n:
             res = 0
             for i, j in zip(prices[1:], prices[:-1]):
