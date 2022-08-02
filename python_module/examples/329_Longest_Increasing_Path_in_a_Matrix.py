@@ -10,7 +10,7 @@ class Solution:
             longestPath = 1
             for dx, dy in directions:
                 x1, y1 = x + dx, y + dy
-                if 0 <= x1 < len(matrix) and 0 <= y1 < len(matrix[0]) and matrix[x1][y1] < matrix[x][y]:
+                if 0 <= x1 < len(matrix) and 0 <= y1 < len(matrix[0]) and matrix[x1][y1] > matrix[x][y]:
                     longestPath = max(longestPath, 1 + longestIncreasingPathes(x1, y1))
 
             return longestPath

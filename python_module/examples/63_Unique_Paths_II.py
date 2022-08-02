@@ -35,7 +35,7 @@ class Solution:
         m, n = len(obstacleGrid), len(obstacleGrid[0])
         @lru_cache(None)
         def uniquePaths(x: int, y: int):
-            if x < 0 or x >= m or y < 0 or y >= n or obstacleGrid[x][y] == 0:
+            if x < 0 or x >= m or y < 0 or y >= n or obstacleGrid[x][y] == 1:
                 return 0
             elif x == m - 1 and y == n - 1:
                 return 1

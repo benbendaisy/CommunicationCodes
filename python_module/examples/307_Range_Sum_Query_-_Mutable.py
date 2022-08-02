@@ -59,12 +59,40 @@ class NumArray1:
             right >>= 1
         return res
 
+class NumArray2:
+    def __init__(self, nums: List[int]):
+        self.length = len(nums)
+        self.tree = [0] * self.length + nums
+        for i in range(self.length - 1, 0, -1):
+            self.tree[i] = self.tree[i << 1] + self.tree[i << 1 | 1]
+
+    def update(self, index: int, val: int) -> None:
+        self.tree[self.length + index] = val
+        i = self.length + index
+        while i > 1:
+            self.tree[i >> 1] = self.tree[i] + self.tree[i ^ 1]
+            i >>= 1
+
+    def sumRange(self, left: int, right: int) -> int:
+        res = 0
+        left, right = left + self.length, right + self.length
+        while left <= right:
+            if left % 2 == 1:
+                res += self.tree[left]
+                left += 1
+            if right % 2 == 0:
+                res += self.tree[right]
+                right -= 1
+            left >>= 1
+            right >>= 1
+        return res
+
 # Driver Code
 if __name__ == "__main__" :
 
     a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
-    solution = NumArray1(a)
+    solution = NumArray(a)
 
     # print the sum in range(1,2) index-based
     print(solution.sumRange(1, 3))
