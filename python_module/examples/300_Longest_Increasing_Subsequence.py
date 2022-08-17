@@ -49,8 +49,10 @@ class Solution:
         sub = []
         for num in nums:
             idx = bisect_left(sub, num)
+            # If num is greater than any element in sub
             if idx == len(sub):
                 sub.append(num)
+            # Otherwise, replace the first element in sub greater than or equal to num
             else:
                 sub[idx] = num
         return len(sub)
