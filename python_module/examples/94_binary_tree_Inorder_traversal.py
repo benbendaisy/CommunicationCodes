@@ -17,7 +17,7 @@ class Solution:
         self.inorderTraversal(root.right)
         return self.res
 
-    def inorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+    def inorderTraversal1(self, root: Optional[TreeNode]) -> List[int]:
         if not root:
             return []
 
@@ -25,6 +25,21 @@ class Solution:
         stack = []
         res = []
         while len(stack) > 0 or cur:
+            while cur:
+                stack.append(cur)
+                cur = cur.left
+            cur = stack.pop()
+            res.append(cur.val)
+            cur = cur.right
+        return res
+
+    def inorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        if not root:
+            return []
+        cur = root
+        stack = []
+        res = []
+        while stack or cur:
             while cur:
                 stack.append(cur)
                 cur = cur.left

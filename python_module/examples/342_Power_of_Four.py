@@ -17,7 +17,7 @@ class Solution:
         Input: n = 1
         Output: true
     """
-    def isPowerOfFour(self, n: int) -> bool:
+    def isPowerOfFour1(self, n: int) -> bool:
         if n < 0:
             return False
 
@@ -25,6 +25,14 @@ class Solution:
             n >>= 2
         return n == 1
 
+    def isPowerOfFour(self, n: int) -> bool:
+        if n < 0:
+            return False
+
+        while n % 4 == 0 and n > 3:
+            n >>= 2
+
+        return n == 1
 if __name__ == "__main__":
     solution = Solution()
     ret = solution.isPowerOfFour(16)
