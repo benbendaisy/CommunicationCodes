@@ -75,7 +75,7 @@ class Solution:
                         break
         return False
 
-    def increasingTriplet(self, nums: List[int]) -> bool:
+    def increasingTriplet5(self, nums: List[int]) -> bool:
         if not nums:
             return False
 
@@ -89,4 +89,18 @@ class Solution:
             else:
                 idx = bisect_left(sub, num)
                 sub[idx] = num
+        return False
+
+    def increasingTriplet(self, nums: List[int]) -> bool:
+        if len(nums) < 3:
+            return False
+
+        firstNum, lastNum = math.inf, math.inf
+        for num in nums:
+            if num <= firstNum:
+                firstNum = num
+            elif num <= lastNum:
+                lastNum = num
+            else:
+                return True
         return False
