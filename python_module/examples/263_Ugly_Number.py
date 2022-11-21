@@ -24,7 +24,7 @@ class Solution:
 
     -231 <= n <= 231 - 1
     """
-    def isUgly(self, n: int) -> bool:
+    def isUgly1(self, n: int) -> bool:
         if n < 1:
             return False
 
@@ -35,3 +35,11 @@ class Solution:
                 return True
 
         return False
+
+    def isUgly(self, n: int) -> bool:
+        if n < 1:
+            return False
+        for i in [2, 3, 5]:
+            while n % i == 0:
+                n /= i
+        return n == 1

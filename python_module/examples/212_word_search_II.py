@@ -18,7 +18,7 @@ class Solution:
         visited[row][col] = False
         return discovered
 
-    def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
+    def findWords1(self, board: List[List[str]], words: List[str]) -> List[str]:
         arr = []
         for word in words:
             visited = [[False] * len(board[0]) for _ in range(len(board))]
@@ -32,6 +32,57 @@ class Solution:
                 if discovered:
                     break
         return arr
+
+    def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
+        word_key = "$" # ending word key
+        trie = {}
+        for word in words:
+            node = trie
+            for ch in word:
+                # retrieve the next node; If not found, create a empty node.
+                node = node.setdefault(ch, {})
+            # mark the existence of a word in trie node
+            node[word_key] = word
+
+        rows, cols = len(board), len(board[0])
+        matched_words = []
+
+        def back_tracking(row, col, parent_trie):
+            letter = board[row][col]
+            cur_node = parent_trie[letter]
+
+            # check if we find a match of word
+            word_match = cur_node.pop(word_key, False)
+            if word_match:
+                # also we removed the matched word to avoid duplicates,
+                # as well as avoiding using set() for results.
+                matched_words.append(word_match)
+            # Before the EXPLORATION, mark the cell as visited
+            board[row][col] = "#"
+            # Explore the neighbors in 4 directions, i.e. up, right, down, left
+            for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                new_row, new_col = row + dx, col + dy
+                if new_row < 0 or new_row >= rows or new_col < 0 or new_col >= cols:
+                    continue
+                if board[new_row][new_col] not in cur_node:
+                    continue
+                back_tracking(new_row, new_col, cur_node)
+
+            # End of EXPLORATION, we restore the cell
+            board[row][col] = letter
+
+            # Optimization: incrementally remove the matched leaf node in Trie.
+            if not cur_node:
+                parent_trie.pop(letter)
+
+        for row in range(rows):
+            for col in range(cols):
+                # starting from each of the cells
+                if board[row][col] in trie:
+                    back_tracking(row, col, trie)
+        return matched_words
+
+
 
 
 if __name__ == "__main__":
