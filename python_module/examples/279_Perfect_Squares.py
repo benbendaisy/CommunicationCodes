@@ -26,28 +26,30 @@ class Solution:
         1 <= n <= 104
     """
     def numSquares(self, n: int) -> int:
-        squareNums = [i ** 2 for i in range(1, int(sqrt(n)) + 1)]
+        square_nums = [i ** 2 for i in range(1, int(sqrt(n)) + 1)]
 
         dp = [math.inf] * (n + 1)
         dp[0] = 0
         for i in range(1, n + 1):
-            for square in squareNums:
+            for square in square_nums:
                 if i < square:
                     break
                 dp[i] = min(dp[i], dp[i - square] + 1)
         return dp[n]
 
     def numSquares1(self, n: int) -> int:
-        squareNums = [i ** 2 for i in range(1, int(sqrt(n)) + 1)]
+        square_nums = [i ** 2 for i in range(1, int(sqrt(n)) + 1)]
 
         @lru_cache(None)
         def squares(k: int) -> int:
-            if k in squareNums:
+            if k in square_nums:
                 return 1
 
-            minSquare = math.inf
-            for square in squareNums:
-                if square > k:
+            min_square = math.inf
+            for square in square_nums:
+                if k < square:
                     break
-                minSquare = min(minSquare, squares(k - square) + 1)
-            return minSquare
+                min_square = min(min_square, squares(k - square) + 1)
+            return min_square
+
+        return squares(n)

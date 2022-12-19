@@ -30,7 +30,7 @@ class Solution:
         The number of nodes in the linked list is in the range [0, 104].
         -106 <= Node.val <= 106
     """
-    def oddEvenList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+    def oddEvenList1(self, head: Optional[ListNode]) -> Optional[ListNode]:
         oddHead = head
         if not head or not head.next:
             return head
@@ -52,3 +52,23 @@ class Solution:
         oddCur.next = evenHead
         evenCur.next = None
         return head
+
+    def oddEvenList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        if not head:
+            return head
+        prev_odd = odd = ListNode(0)
+        prev_even = even = ListNode(0)
+        cur = head
+        idx = 0
+        while cur:
+            if idx % 2 == 0:
+                odd.next = cur
+                odd = odd.next
+            else:
+                even.next = cur
+                even = even.next
+            cur = cur.next
+            idx += 1
+        odd.next = prev_even.next
+        even.next = None
+        return prev_odd.next
