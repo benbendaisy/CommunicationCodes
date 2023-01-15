@@ -13,11 +13,16 @@ class Solution:
     def preorderTraversal1(self, root: Optional[TreeNode]) -> List[int]:
         if not root:
             return []
+        arr = []
+        def preorder_travel_recursive(node: TreeNode):
+            if not node:
+                return
+            arr.append(node.val)
+            preorder_travel_recursive(node.left)
+            preorder_travel_recursive(node.right)
+        preorder_travel_recursive(root)
+        return arr
 
-        self.res.append(root.val)
-        self.preorderTraversal(root.left)
-        self.preorderTraversal(root.right)
-        return self.res
 
     def preorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
         if not root:
@@ -26,7 +31,7 @@ class Solution:
         cur = root
         res = []
         stack = [cur]
-        while len(stack) > 0:
+        while stack:
             cur = stack.pop()
             res.append(cur.val)
             if cur.right:

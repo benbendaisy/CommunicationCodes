@@ -24,7 +24,7 @@ class Solution:
         res = []
         stack = [cur]
         visited = set()
-        while len(stack) > 0:
+        while stack:
             if stack[-1] in visited:
                 cur = stack.pop()
                 res.append(cur.val)
