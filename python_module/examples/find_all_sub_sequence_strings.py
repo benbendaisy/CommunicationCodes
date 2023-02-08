@@ -1,3 +1,6 @@
+from typing import List
+
+
 class Solution:
     # Below is the implementation of the above approach
     def printSubsequence(self, input, output):
@@ -48,3 +51,10 @@ class Solution:
             for j in range(i + 1,len(str) + 1):
                 subStr = str[i:j]
                 print(subStr + "")
+
+    def find_subsequences(self, nums: List[int]) -> List[List[int]]:
+        res, n = set(), len(nums)
+        for bit_mask in range(1, 1 << n):
+            sequence = [nums[i] for i in range(n) if bit_mask >> i & 1]
+            res.add(sequence)
+        return res
