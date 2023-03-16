@@ -81,4 +81,5 @@ class Solution:
             node.bottomLeft = self.construct([row[:n] for row in grid[n:]])
             node.topRight = self.construct([row[n:] for row in grid[:n]])
             node.bottomRight = self.construct([row[n:] for row in grid[n:]])
-        return node
+
+            return node

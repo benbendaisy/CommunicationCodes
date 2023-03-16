@@ -9,8 +9,6 @@ class Solution:
 
         Return the minimum number of swaps so that every couple is sitting side by side. A swap consists of choosing any two people, then they stand up and switch seats.
 
-
-
         Example 1:
 
         Input: row = [0,2,1,3]
@@ -22,7 +20,6 @@ class Solution:
         Input: row = [3,2,0,1]
         Output: 0
         Explanation: All couples are already seated side by side.
-
 
         Constraints:
 
