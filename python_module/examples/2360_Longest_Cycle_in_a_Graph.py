@@ -34,6 +34,7 @@ class Solution:
             graph[u].append(v)
             indegree[v] += 1
         queue = deque([node for node, indeg in enumerate(indegree) if indeg == 0])
+        # remove nodes that does not have cycle
         while queue:
             for _ in range(len(queue)):
                 node = queue.popleft()
@@ -61,7 +62,7 @@ class Solution:
                 parent[px] = py
             else:
                 rank[px] += rank[py]
-                rank[py] = px
+                parent[py] = px
 
         for u, v in enumerate(edges):
             if v == -1:

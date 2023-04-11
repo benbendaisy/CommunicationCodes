@@ -24,22 +24,42 @@ class Solution:
         s consists of English letters.
     """
 
-    def lengthOfLongestSubstringTwoDistinct(self, s: str) -> int:
+    def lengthOfLongestSubstringTwoDistinct1(self, s: str) -> int:
         if not s:
             return 0
         l = r = 0
-        hashmap = defaultdict()
-        maxLength = 1
+        hash_map = {}
+        max_length = 1
         while r < len(s):
-            hashmap[s[r]] = r
+            hash_map[s[r]] = r
+            if len(hash_map) == 3:
+                min_index = min(hash_map.values())
+                del hash_map[s[min_index]]
+                l = min_index + 1
+            max_length = max(max_length, r - l + 1)
             r += 1
-            if len(hashmap) == 3:
-                minIndex = min(hashmap.values())
-                del hashmap[s[minIndex]]
-                l = minIndex + 1
-            maxLength = max(maxLength, r - l)
-        return maxLength
+        return max_length
 
+    def lengthOfLongestSubstringTwoDistinct(self, s: str) -> int:
+        """
+        running window
+        :param s:
+        :return:
+        """
+        if not s:
+            return 0
+        chars_dict = defaultdict(int)
+        start = 0
+        res = 0
+        for i, v in enumerate(s):
+            chars_dict[s[i]] += 1
+            while len(chars_dict) > 2:
+                chars_dict[s[start]] -= 1
+                if chars_dict[s[start]] == 0:
+                    del chars_dict[s[start]]
+                start += 1
+            res = max(res, i - start + 1)
+        return res
 
 if __name__ == "__main__":
     s = "cacaabbb"

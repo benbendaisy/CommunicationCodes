@@ -1,3 +1,4 @@
+import collections
 from collections import Counter
 from typing import List
 
@@ -31,7 +32,7 @@ class Solution:
         Explanation: We can pick from trees [2,3,2,2].
         If we had started at the first tree, we would only pick from trees [1,2].
     """
-    def totalFruit(self, fruits: List[int]) -> int:
+    def totalFruit1(self, fruits: List[int]) -> int:
         MAX_BASKETS = 2
         fruit_counter = Counter()
         output, w_start = 0, 0
@@ -49,3 +50,26 @@ class Solution:
             fruit_counter[f] += 1
             output = max(output, fruit_counter.total())
         return output
+
+    def totalFruit(self, fruits: List[int]) -> int:
+        """
+            Given an array tree of integers representing types of fruit in a basket,
+            the goal is to find the length of the longest contiguous subarray where
+            at most two types of fruit are present.
+        :param fruits:
+        :return:
+        """
+        ans = 0
+        count_dict = collections.defaultdict(int)
+
+        # running window with size 2
+        l = 0
+        for r, t in enumerate(fruits):
+            count_dict[t] += 1
+            while len(count_dict) > 2:
+                count_dict[fruits[l]] -= 1
+                if count_dict[fruits[l]] == 0:
+                    del count_dict[fruits[l]]
+                l += 1
+            ans = max(ans, r - l + 1)
+        return ans

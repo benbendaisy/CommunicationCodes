@@ -28,7 +28,7 @@ class Solution:
         0 <= s.length <= 5 * 104
         s consists of English letters, digits, symbols and spaces.
     """
-    def lengthOfLongestSubstring(self, s: str) -> int:
+    def lengthOfLongestSubstring1(self, s: str) -> int:
         walker = runner = 0
         seen = set()
         maxLength = 0
@@ -42,6 +42,22 @@ class Solution:
 
         maxLength = max(maxLength, runner - walker)
         return maxLength
+
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        """
+            Running window
+        :param s:
+        :return:
+        """
+        char_set = set()
+        l, res = 0, 0
+        for i, ch in enumerate(s):
+            while ch in char_set:
+                char_set.discard(s[l])
+                l += 1
+            char_set.add(ch)
+            res = max(res, i - l + 1)
+        return res
 
 
 if __name__ == "__main__":
