@@ -50,13 +50,14 @@ class Solution:
             return ptr
 
         def partition(l: int, r: int):
-            pivot, ptr = random.randint(0, r - l + 1) + l, l
-            nums[pivot], nums[l] = nums[l], nums[pivot]
-            for i in range(l, r + 1):
-                if nums[i] <= pivot:
+            pivot, ptr = random.randint(l, r), l
+            nums[pivot], nums[r] = nums[r], nums[pivot]
+            for i in range(l, r):
+                if nums[i] <= nums[r]:
                     nums[i], nums[ptr] = nums[ptr], nums[i]
                     ptr += 1
-            return ptr - 1
+            nums[ptr], nums[r] = nums[r], nums[ptr]
+            return ptr
 
         def quickSelect(l: int, r: int, m: int):
             if l == r:

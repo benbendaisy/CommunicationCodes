@@ -1,3 +1,4 @@
+from collections import Counter
 from typing import List
 
 
@@ -26,7 +27,7 @@ class Solution:
     Input: s = "zzzzzyyyyy", words = ["zzyy","zy","zyy"]
     Output: 3
     """
-    def expressiveWords(self, s: str, words: List[str]) -> int:
+    def expressiveWords1(self, s: str, words: List[str]) -> int:
         f = lambda x: (tuple(zip(*[(k, len(tuple(g))) for k, g in groupby(x)])))
         (sch, sct), ans = f(s), 0
         for word in words:
@@ -35,6 +36,23 @@ class Solution:
                 for sc, wc in zip(sct, wct):
                     if sc < wc or (sc < 3 and sc != wc):
                         break
-                    else:
-                        ans += 1
+                else:
+                    ans += 1
         return ans
+
+    # def expressiveWords(self, s: str, words: List[str]) -> int:
+    #     def get_counter(x: str):
+    #         char_counter = Counter(x)
+    #         return dict(sorted(char_counter.items(), key = lambda i: i[0]))
+    #
+    #     s_counter = get_counter(s)
+    #     ans = 0
+    #     for word in words:
+    #         word_counter = get_counter(word)
+    #         if s_counter.keys() == word_counter.keys():
+    #             for sc, wc in zip(s_counter.values(), word_counter.values()):
+    #                 if sc < wc or (sc < 3 and sc != wc):
+    #                     break
+    #                 else:
+    #                     ans += 1
+    #     return ans

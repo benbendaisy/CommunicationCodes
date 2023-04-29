@@ -32,5 +32,20 @@ class Solution:
 
         0 <= n <= 109
     """
-    def bulbSwitch(self, n: int) -> int:
+    def bulbSwitch1(self, n: int) -> int:
         return int(math.sqrt(n))
+
+    def bulbSwitch(self, n: int) -> int:
+        l, r = 0, n
+        res = 0
+        while l <= r:
+            mid = l + (r - l) // 2
+            square = mid * mid
+            if square == n:
+                return mid
+            elif square < n:
+                l = mid + 1
+                res = mid
+            else:
+                r = mid - 1
+        return res

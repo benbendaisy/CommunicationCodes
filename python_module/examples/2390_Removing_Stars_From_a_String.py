@@ -28,7 +28,7 @@ class Solution:
         Output: ""
         Explanation: The entire string is removed, so we return an empty string.
     """
-    def removeStars(self, s: str) -> str:
+    def removeStars_1(self, s: str) -> str:
         stack = []
         i, n = 0, len(s)
         while i < n:
@@ -37,4 +37,13 @@ class Solution:
             else:
                 stack.pop()
             i += 1
+        return "".join(stack)
+
+    def removeStars(self, s: str) -> str:
+        stack = []
+        for ch in s:
+            if ch != "*":
+                stack.append(ch)
+            else:
+                stack.pop()
         return "".join(stack)
