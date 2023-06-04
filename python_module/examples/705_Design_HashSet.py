@@ -1,4 +1,4 @@
-class MyHashSet:
+class MyHashSet1:
 
     def __init__(self):
         self.myMap = {}
@@ -14,3 +14,17 @@ class MyHashSet:
 
     def contains(self, key: int) -> bool:
         return key in self.myMap
+
+class MyHashSet:
+    def __init__(self):
+        self.hash_map = {}
+        
+    def add(self, key: int) -> None:
+        self.hash_map[key] = None
+
+    def remove(self, key: int) -> None:
+        if key in self.hash_map:
+            del self.hash_map[key]
+
+    def contains(self, key: int) -> bool:
+        return key in self.hash_map

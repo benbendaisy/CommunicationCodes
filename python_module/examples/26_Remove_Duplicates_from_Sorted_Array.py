@@ -61,4 +61,16 @@ class Solution:
                 idx += 1
                 nums[idx] = nums[i]
         return idx + 1
+    
+    def removeDuplicates2(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        seen = set()
+        idx = 0
+        for num in nums:
+            if num not in seen:
+                nums[idx] = num
+                idx += 1
+                seen.add(num)
+        return idx
 
