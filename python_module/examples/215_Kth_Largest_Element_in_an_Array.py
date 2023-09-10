@@ -49,7 +49,7 @@ class Solution:
             nums[ptr], nums[r] = nums[r], nums[ptr]
             return ptr
 
-        def partition(l: int, r: int):
+        def partition(l, r):
             pivot, ptr = random.randint(l, r), l
             nums[pivot], nums[r] = nums[r], nums[pivot]
             for i in range(l, r):
@@ -58,20 +58,17 @@ class Solution:
                     ptr += 1
             nums[ptr], nums[r] = nums[r], nums[ptr]
             return ptr
-
-        def quickSelect(l: int, r: int, m: int):
+        
+        def quick_select(l, r, m):
             if l == r:
                 return nums[l]
             idx = partition(l, r)
             if idx == m:
                 return nums[idx]
             elif idx > m:
-                return quickSelect(l, idx - 1, m)
-
-            return quickSelect(idx + 1, r, m)
-
-
-        return quickSelect(0, len(nums) - 1, len(nums) - k)
+                return quick_select(l, idx - 1, m)
+            return quick_select(idx + 1, r, m)
+        return quick_select(0, len(nums) - 1, len(nums) - k)
 
 if __name__ == "__main__":
     nums = [1,2,1,3,2,5]

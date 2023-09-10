@@ -27,34 +27,41 @@ class Solution:
         -100 <= Node.val <= 100
         -200 <= x <= 200
     """
-    def partition(self, head: Optional[ListNode], x: int) -> Optional[ListNode]:
+    def partition1(self, head: Optional[ListNode], x: int) -> Optional[ListNode]:
         if not head or not head.next:
             return head
-
-        lessHead = lessTail = greaterHead = greaterTail = None
-
+        less_head = less_tail = great_head = great_tail = None
         cur = head
         while cur:
             if cur.val < x:
-                if not lessHead or not lessTail:
-                    lessHead = cur
-                    lessTail = cur
+                if not less_head or not less_tail:
+                    less_head = less_tail = cur
                 else:
-                    lessTail.next = cur
-                    lessTail = cur
+                    less_tail.next = cur
+                    less_tail = cur
             else:
-                if not greaterHead or not greaterTail:
-                    greaterHead = cur
-                    greaterTail = cur
+                if not great_head or not great_tail:
+                    great_head = great_tail = cur
                 else:
-                    greaterTail.next = cur
-                    greaterTail = cur
+                    great_tail.next = cur
+                    great_tail = cur
             cur = cur.next
-
-        if lessTail:
-            lessTail.next = greaterHead
-
-        if greaterTail:
-            greaterTail.next = None
-
-        return lessHead if lessHead else greaterHead
+        if less_tail:
+            less_tail.next = great_head
+        if great_tail:
+            great_tail.next = None
+        return less_head if less_head else great_head
+    
+    def partition(self, head: Optional[ListNode], x: int) -> Optional[ListNode]:
+        before_head, after_head = ListNode(0), ListNode(0)
+        before_tail, after_tail = before_head, after_head
+        cur = head
+        while cur:
+            if cur.val < x:
+                before_tail.next, before_tail = cur, cur
+            else:
+                after_tail.next, after_tail = cur, cur
+            cur = cur.next
+        after_tail.next = None
+        before_tail.next = after_head.next
+        return before_head.next

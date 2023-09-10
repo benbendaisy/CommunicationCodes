@@ -5,8 +5,7 @@ class Solution:
     def letterCombinations(self, digits: str) -> List[str]:
         if not digits:
             return []
-
-        letterMap = {
+        letter_map = {
             "0": ["_"],
             "1": [],
             "2": ["a", "b", "c"],
@@ -19,14 +18,12 @@ class Solution:
             "9": ["w", "x", "y", "z"]
         }
         res = []
-
-        def letterCombs(dits: str, strArr: list):
-            if not dits:
-                res.append("".join(strArr))
+        n = len(digits)
+        def letter_combine(idx, str_arr):
+            if idx == n:
+                res.append("".join(str_arr))
                 return
-            letter = dits[0]
-            for ch in letterMap[letter]:
-                letterCombs(dits[1:], strArr + [ch])
-
-        letterCombs(digits, [])
+            for ch in letter_map[digits[idx]]:
+                letter_combine(idx + 1, str_arr + [ch])
+        letter_combine(0, [])
         return res

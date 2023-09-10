@@ -37,13 +37,13 @@ class Solution:
         0 <= cost[i] <= 999
     """
     def minCostClimbingStairs1(self, cost: List[int]) -> int:
+        n = len(cost)
         @lru_cache(None)
-        def climbingStairs(idx: int):
-            if idx <= 1:
+        def min_cost_climbing(idx):
+            if idx >= n - 2:
                 return 0
-            return min(cost[idx - 1] + climbingStairs(idx - 1), cost[idx - 2] + climbingStairs(idx - 2))
-
-        return climbingStairs(len(cost))
+            return cost[idx] + min(min_cost_climbing(idx + 1), min_cost_climbing(idx + 2))
+        return min_cost_climbing(n)
 
     def minCostClimbingStairs(self, cost: List[int]) -> int:
         if not cost:

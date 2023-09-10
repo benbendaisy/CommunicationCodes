@@ -45,7 +45,7 @@ class Solution:
                 t += min(x, b)
             return t >= n * x
 
-        l, r = 0, 2**64
+        l, r = 0, sum(batteries) // n
         while l < r:
             mid = (r + l)//2 + 1 # always pick the (r - l) // 2 + 1 to avoid unlimited running
             if check(mid):

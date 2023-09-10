@@ -27,18 +27,18 @@ class Solution:
         Output: true
     """
     def isInterleave2(self, s1: str, s2: str, s3: str) -> bool:
+        n1, n2 = len(s1), len(s2)
         @lru_cache(None)
-        def tryAllCombinations(ptr1: int, ptr2: int, res: str):
-            if ptr1 == len(s1) and ptr2 == len(s2) and res == s3:
+        def try_combination(ptr1, ptr2, res):
+            if ptr1 == n1 and ptr2 == n2 and res == s3:
                 return True
-
             ans = False
-            if ptr1 < len(s1):
-                ans = ans or tryAllCombinations(ptr1 + 1, ptr2, res + s1[ptr1])
-            if ptr2 < len(s2):
-                ans = ans or tryAllCombinations(ptr1, ptr2 + 1, res + s2[ptr2])
+            if ptr1 < n1:
+                ans = ans or try_combination(ptr1 + 1, ptr2, res + s1[ptr1])
+            if ptr2 < n2:
+                ans = ans or try_combination(ptr1, ptr2 + 1, res + s2[ptr2])
             return ans
-        return tryAllCombinations(0, 0, "")
+        return try_combination(0, 0, "")
 
     def isInterleave3(self, s1: str, s2: str, s3: str) -> bool:
         if len(s1) + len(s2) != len(s3):
@@ -59,12 +59,12 @@ class Solution:
         return tryAllCombinations(0, 0)
 
     def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
-        if len(s1) + len(s2) != len(s3):
+        n1, n2, n3 = len(s1), len(s2), len(s3)
+        if n1 + n2 != n3:
             return False
-
-        dp = [[False] * (len(s2) + 1) for _ in range(len(s1) + 1)]
-        for i in range(len(s1) + 1):
-            for j in range(len(s2) + 1):
+        dp = [[False] * (n2 + 1) for _ in range(n1 + 1)]
+        for i in range(n1 + 1):
+            for j in range(n2 + 1):
                 if i == 0 and j == 0:
                     dp[i][j] = True
                 elif i == 0:
@@ -73,7 +73,7 @@ class Solution:
                     dp[i][j] = dp[i - 1][j] and s1[i - 1] == s3[i + j - 1]
                 else:
                     dp[i][j] = (dp[i][j - 1] and s2[j - 1] == s3[i + j - 1]) or (dp[i - 1][j] and s1[i - 1] == s3[i + j - 1])
-        return dp[len(s1)][len(s2)]
+        return dp[-1][-1]
 
 if __name__ == "__main__":
     s1 = "aabcc"
