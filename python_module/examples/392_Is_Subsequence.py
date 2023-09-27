@@ -22,12 +22,12 @@ class Solution:
 
     def isSubsequence(self, s: str, t: str) -> bool:
         ls, lt = len(s), len(t)
-        leftIdx, rightIdx = 0, 0
-        while leftIdx < ls and rightIdx < lt:
-            if s[leftIdx] == t[rightIdx]:
-                leftIdx += 1
-                rightIdx += 1
+        idx_s, idx_t = 0, 0
+        while idx_s < ls and idx_t < lt:
+            if s[idx_s] == t[idx_t]:
+                idx_s += 1
+                idx_t += 1
             else:
-                rightIdx += 1
-        return leftIdx == ls
+                idx_t += 1
+        return idx_s == ls
 

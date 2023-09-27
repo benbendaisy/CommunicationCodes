@@ -11,7 +11,7 @@ class Solution:
 
         self.max_so_far = math.inf
         visited = [[False] * col for _ in range(row)]
-
+        @lru_cache(None)
         def dfs(x, y, max_diff):
             if x == row - 1 and y == col - 1:
                 self.max_so_far = min(self.max_so_far, max_diff)
@@ -47,23 +47,21 @@ class Solution:
         if not heights:
             return 0
         row, col = len(heights), len(heights[0])
-        heap = [(0, 0, 0)]
+        heap =[(0, 0, 0)]
         visited = [[False] * col for _ in range(row)]
         max_diffs = [[math.inf] * col for _ in range(row)]
         max_diffs[0][0] = 0
-
         while heap:
             _, x, y = heapq.heappop(heap)
-            visited[x][y] = visited
+            visited[x][y] = True
             for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
-                adx, ady = x + dx, y + dy
-                if 0 <= adx < row and 0 <= ady < col and not visited[adx][ady]:
-                    current_diff = abs(heights[adx][ady] - heights[x][y])
-                    max_diff = max(current_diff, max_diffs[x][y])
-                    if max_diff < max_diffs[adx][ady]:
-                        max_diffs[adx][ady] = max_diff
-                        heapq.heappush(heap, (max_diff, adx, ady))
-
+                new_x, new_y = x + dx, y + dy
+                if 0<= new_x < row and 0<= new_y < col and not visited[new_x][new_y]:
+                    cur_diff = abs(heights[new_x][new_y] - heights[x][y])
+                    max_diff = max(cur_diff, max_diffs[x][y])
+                    if max_diff < max_diffs[new_x][new_y]:
+                        max_diffs[new_x][new_y] = max_diff
+                        heapq.heappush(heap, (max_diff, new_x, new_y))
         return max_diffs[-1][-1]
 
     def minimumEffortPath(self, heights: List[List[int]]) -> int:

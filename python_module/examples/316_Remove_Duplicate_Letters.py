@@ -20,13 +20,16 @@ class Solution:
         s consists of lowercase English letters.
     """
     def removeDuplicateLetters(self, s: str) -> str:
-        lastIndexes = {ch:i for i,ch in enumerate(s)}
+        last_indexes = {ch:i for i,ch in enumerate(s)}
         stack = []
         visited = set()
         for i in range(len(s)):
             if s[i] not in visited:
-                while stack and s[i] < stack[-1] and lastIndexes[s[i]] > i:
+                # last_indexes[stack[-1]] > i proves there is another element later
+                while stack and s[i] < stack[-1] and last_indexes[stack[-1]] > i:
                     visited.remove(stack.pop())
                 stack.append(s[i])
                 visited.add(s[i])
         return "".join(stack)
+
+        

@@ -18,9 +18,8 @@ class Solution:
             "9": ["w", "x", "y", "z"]
         }
         res = []
-        n = len(digits)
         def letter_combine(idx, str_arr):
-            if idx == n:
+            if idx == len(digits):
                 res.append("".join(str_arr))
                 return
             for ch in letter_map[digits[idx]]:

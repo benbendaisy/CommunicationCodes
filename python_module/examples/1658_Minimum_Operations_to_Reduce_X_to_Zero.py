@@ -30,32 +30,32 @@ class Solution:
         1 <= x <= 109
     """
     def minOperations1(self, nums: List[int], x: int) -> int:
-        total = sum(nums)
         n = len(nums)
+        total = sum(nums)
+        current = 0
         left = 0
-        maxLeft = -1
-        cur = 0
+        max_length = -math.inf
         for right in range(n):
-            cur += nums[right]
-            while cur > total - x and left <= right:
-                cur -= nums[left]
+            current += nums[right]
+            while current > total - x and left <= right:
+                current -= nums[left]
                 left += 1
-            if cur == total - x:
-                maxLeft = max(maxLeft, right - left + 1)
-        return n - maxLeft if maxLeft != -1 else -1
+            if current == total - x:
+                max_length = max(max_length, right - left + 1)
+        return n - max_length if max_length != -math.inf else -1
 
     def minOperations(self, nums: List[int], x: int) -> int:
         n = len(nums)
         current = sum(nums)
         left = 0
-        minLength = math.inf
+        min_length = math.inf
         for right in range(n):
             current -= nums[right]
             while current < x and left <= right:
                 current += nums[left]
                 left += 1
             if current == x:
-                minLength = min(minLength, n - right - 1 + left)
-        return minLength if minLength != math.inf else -1
+                min_length = min(min_length, n - (right - left + 1))
+        return min_length if min_length != math.inf else -1
 
 

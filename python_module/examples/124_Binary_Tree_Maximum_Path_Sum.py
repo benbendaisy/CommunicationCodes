@@ -30,7 +30,7 @@ class Solution:
     def maxPathSum(self, root: Optional[TreeNode]) -> int:
         max_sum_path = -math.inf
         # post order traversal of subtree rooted at `node`
-        def gain_from_subtree(node: Optional[TreeNode]):
+        def gain_from_subtree(node: Optional[TreeNode]) -> int:
             nonlocal max_sum_path
             if not node:
                 return 0

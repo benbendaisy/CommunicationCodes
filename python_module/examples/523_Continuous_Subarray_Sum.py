@@ -50,7 +50,7 @@ class Solution:
             # if the remainder s % k occurs for the first time
             if sums % k not in hashMap:
                 hashMap[sums % k] = i + 1
-            # if the subarray size is at least two
+            # if the subarray size is at least twice
             elif hashMap[sums % k] < i:
                 return True
         return False

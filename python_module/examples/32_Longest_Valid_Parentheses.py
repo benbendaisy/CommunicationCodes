@@ -28,8 +28,8 @@ class Solution:
     def longestValidParentheses(self, s: str) -> int:
         if not s:
             return 0
-        stack = collections.deque()
-        maxLen = 0
+        stack = []
+        max_length = 0
         stack.append(-1)
         for i in range(len(s)):
             if s[i] == "(":
@@ -39,8 +39,8 @@ class Solution:
                 if not stack:
                     stack.append(i)
                 else:
-                    maxLen = max(maxLen, i - stack[-1])
-        return maxLen
+                    max_length = max(max_length, i - stack[-1])
+        return max_length
 
 
 

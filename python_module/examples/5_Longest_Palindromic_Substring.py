@@ -31,7 +31,7 @@ class Solution:
                     maxStr = subStr
         return maxStr
 
-    def longestPalindrome(self, s: str) -> str:
+    def longestPalindrome2(self, s: str) -> str:
         n = len(s)
         def expand(left:int, right:int):
             while 0 <= left <= right < n and s[left] == s[right]:
@@ -44,6 +44,49 @@ class Solution:
             w2 = expand(i, i + 1)
             maxIndexes = max(maxIndexes, w1, w2, key=lambda x: x[1] - x[0] + 1)
         return s[maxIndexes[0]:maxIndexes[1]]
+    
+    def longestPalindrome3(self, s: str) -> str:
+        def expand_around_center(left, right):
+            while left >= 0 and right < len(s) and s[left] == s[right]:
+                left -= 1
+                right += 1
+            return s[left + 1:right]
+        longest = ""
+        for i in range(len(s)):
+            palind1 = expand_around_center(i, i)
+            palind2 = expand_around_center(i, i + 1)
+            if len(palind1) > len(longest):
+                longest = palind1
+            if len(palind2) > len(longest):
+                longest = palind2
+        return longest
+    
+    def longestPalindrome(self, s: str) -> str:
+        
+        n = len(s)
+        # Form a bottom-up dp 2d array
+        # dp[i][j] will be 'true' if the string from index i to j is a palindrome. 
+        dp = [[False] * n  for _ in range(n)]
+        
+        ans = ''
+        # every string with one character is a palindrome
+        for i in range(n):
+            dp[i][i] = True
+            ans = s[i]
+            
+        maxLen = 1
+        for start in range(n-1, -1, -1):
+            for end in range(start+1, n):             
+				# palindrome condition
+                if s[start] == s[end]:
+                    # if it's a two char. string or if the remaining string is a palindrome too
+                    if end - start == 1 or dp[start+1][end-1]:
+                        dp[start][end] = True
+                        if maxLen < end - start + 1:
+                            maxLen = end - start + 1
+                            ans = s[start: end+ 1]
+        
+        return ans
 
 
 if __name__ == "__main__":

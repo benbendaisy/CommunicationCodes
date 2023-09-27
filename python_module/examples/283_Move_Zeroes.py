@@ -27,15 +27,14 @@ class Solution:
         """
 
         idx1 = idx2 = 0
-
-        while idx1 < len(nums):
-            while idx2 < len(nums) and nums[idx2] != 0:
-                idx2 += 1
-
-            idx1 = idx2
-            while idx1 < len(nums) and nums[idx1] == 0:
+        n = len(nums)
+        while idx2 < n:
+            while idx1 < n and nums[idx1] != 0:
                 idx1 += 1
-            if idx1 < len(nums):
+            idx2 = idx1
+            while idx2 < len(nums) and nums[idx2] == 0:
+                idx2 += 1
+            if idx2 < n:
                 nums[idx1], nums[idx2] = nums[idx2], nums[idx1]
 
 if __name__ == "__main__":

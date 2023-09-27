@@ -43,15 +43,15 @@ class Solution:
         res = []
         carry = 0
         idxa, idxb = len(a) - 1, len(b) - 1
-        while idxa >= 0 or idxb >= 0 or carry:
-            total = carry
+        while idxa >= 0 or idxb >= 0 or carry > 0:
+            t = carry
             if idxa >= 0:
-                total += int(a[idxa])
+                t += int(a[idxa])
                 idxa -= 1
             if idxb >= 0:
-                total += int(b[idxb])
+                t += int(b[idxb])
                 idxb -= 1
-            res.insert(0, total % 2)
-            carry = total // 2
-        return "".join([str(ch) for ch in res])
+            res.insert(0, str(t % 2))
+            carry = t // 2
+        return "".join(res)
 

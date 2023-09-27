@@ -34,12 +34,10 @@ class Solution:
         -231 <= Node.val <= 231 - 1
     """
     def isValidBST(self, root: Optional[TreeNode]) -> bool:
-        def validBST(cur, lessVal, biggerVal):
+        def valid_bst(cur, less_val, bigger_val):
             if not cur:
                 return True
-            if lessVal >= cur.val or biggerVal <= cur.val:
+            if less_val >= cur.val or cur.val >= bigger_val:
                 return False
-
-            return validBST(cur.left, lessVal, cur.val) and validBST(cur.right, cur.val, biggerVal)
-
-        return validBST(root, -math.inf, math.inf)
+            return valid_bst(cur.left, less_val, cur.val) and valid_bst(cur.right, cur.val, bigger_val)
+        return valid_bst(root, -math.inf, math.inf)

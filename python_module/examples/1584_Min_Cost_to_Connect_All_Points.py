@@ -7,22 +7,19 @@ class Solution:
         if not points:
             return 0
         n = len(points)
-        inGraph = [False] * n
+        in_graph = [False] * n
         heap = [(0, 0)]
-        minCost = 0
-        edgeUsed = 0
-        while edgeUsed < n:
-            weight, currentNode = heapq.heappop(heap)
-            if inGraph[currentNode]:
+        min_cost = 0
+        edge_used = 0
+        while edge_used < n:
+            weight, node = heapq.heappop(heap)
+            if in_graph[node]:
                 continue
-
-            inGraph[currentNode] = True
-            minCost += weight
-            edgeUsed += 1
-
+            in_graph[node] = True
+            min_cost += weight
+            edge_used += 1
             for i in range(n):
-                if not inGraph[i]:
-                    w = abs(points[i][0] - points[currentNode][0]) + abs(points[i][1] - points[currentNode][1])
+                if not in_graph[i]:
+                    w = abs(points[i][0] - points[node][0]) + abs(points[i][1] - points[node][1])
                     heapq.heappush(heap, (w, i))
-
-        return minCost
+        return min_cost

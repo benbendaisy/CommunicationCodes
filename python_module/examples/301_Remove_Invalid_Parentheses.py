@@ -31,31 +31,32 @@ class Solution:
     def removeInvalidParentheses(self, s: str) -> List[str]:
         def is_valid(s1: str):
             cnt = 0
-            for i in range(len(s1)):
-                if s1[i] == "(":
+            for ch in s1:
+                if ch == '(':
                     cnt += 1
-                elif s1[i] == ")":
+                elif ch == ')':
                     cnt -= 1
                     if cnt < 0:
                         return False
             return cnt == 0
-
-        que = collections.deque([(s, 0)])
+        que = deque([(s, 0)])
         visited = {s}
+        found, min_changes = False, math.inf
         res = []
-        found, minChanges = False, math.inf
         while que:
-            curS, chgs = que.popleft()
-            if found and minChanges < chgs:
+            cur_string, cur_change = que.popleft()
+            if found and min_changes < cur_change:
                 break
-            if is_valid(curS):
-                res.append(curS)
-                minChanges = chgs
+            if is_valid(cur_string):
+                res.append(cur_string)
+                min_changes = cur_change
                 found = True
             else:
-                for i in range(len(curS)):
-                    nextS = curS[:i] + curS[i + 1:]
-                    if nextS not in visited:
-                        que.append((nextS, chgs + 1))
-                        visited.add(nextS)
+                for i in range(len(cur_string)):
+                    if cur_string[i] != '(' and cur_string[i] != ')':
+                        continue
+                    next_string = cur_string[:i] + cur_string[i + 1:]
+                    if next_string not in visited:
+                        que.append((next_string, cur_change + 1))
+                        visited.add(next_string)
         return res

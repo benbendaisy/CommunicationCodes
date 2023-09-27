@@ -58,12 +58,12 @@ class Solution:
         return max(dp)
 
     def longestStrChain(self, words: List[str]) -> int:
-        wordDict = {}
+        word_dict = {}
         words.sort(key=lambda x: len(x))
         for word in words:
-            wordDict[word] = 1
+            word_dict[word] = 1
             for i in range(len(word)):
                 predecessor = word[:i] + word[i + 1:]
-                if predecessor in wordDict:
-                    wordDict[word] = max(1 + wordDict[predecessor], wordDict[word])
-        return max(wordDict.values())
+                if predecessor in word_dict:
+                    word_dict[word] = max(1 + word_dict[predecessor], word_dict[word])
+        return max(word_dict.values())
