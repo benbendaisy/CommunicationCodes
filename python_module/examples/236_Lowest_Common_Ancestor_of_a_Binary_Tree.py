@@ -55,7 +55,7 @@ class Solution:
         recursiveCommonAncestor(root)
         return self.node
 
-    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+    def lowestCommonAncestor2(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
         parents = {root: None}
         cur = root
         stack = deque([root])
@@ -79,3 +79,18 @@ class Solution:
         while cur not in parentTrack:
             cur = parents[cur]
         return cur
+    
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        ancestor_node = None
+        def recursive_common_ancestor(node: 'TreeNode'):
+            nonlocal ancestor_node
+            if not node:
+                return False
+            left = recursive_common_ancestor(node.left)
+            right = recursive_common_ancestor(node.right)
+            mid = p == node or q == node
+            if left + mid + right >= 2:
+                ancestor_node = node
+            return left or mid or right
+        recursive_common_ancestor(root)
+        return ancestor_node

@@ -30,26 +30,25 @@ class Solution:
         -231 <= target <= 231 - 1
     """
     def addOperators(self, num: str, target: int) -> List[str]:
-        def tryAllExpressions(idx: int, exp: str, prevValue: int, allValue: int):
-            if idx == len(num):
-                if allValue == target:
-                    self.res.append(exp)
+        n = len(num)
+        res = []
+        def try_all_expressions(idx, exp, prev, total):
+            if idx == n:
+                if total == target:
+                    res.append(exp)
                 return
-            for i in range(idx, len(num)):
-                curVal = int(num[idx : i + 1])
+            for i in range(idx, n):
+                cur_val = int(num[idx : i + 1])
                 if num[idx] == '0' and i > idx:
                     return
-
                 if idx == 0:
-                    tryAllExpressions(i + 1, str(curVal), curVal, curVal)
+                    try_all_expressions(i + 1, str(cur_val), cur_val, cur_val)
                 else:
-                    tryAllExpressions(i + 1, exp + "+" + str(curVal), curVal, allValue + curVal)
-                    tryAllExpressions(i + 1, exp + "-" + str(curVal), -curVal, allValue - curVal)
-                    tryAllExpressions(i + 1, exp + "*" + str(curVal), prevValue * curVal, allValue - prevValue + prevValue * curVal)
-
-        self.res = []
-        tryAllExpressions(0, "", 0, 0)
-        return self.res
+                    try_all_expressions(i + 1, exp + "+" + str(cur_val), cur_val, total + cur_val)
+                    try_all_expressions(i + 1, exp + "-" + str(cur_val), -cur_val, total - cur_val)
+                    try_all_expressions(i + 1, exp + "*" + str(cur_val), prev * cur_val, total - prev + prev * cur_val)
+        try_all_expressions(0, "", 0, 0)
+        return res
 
 if __name__ == "__main__":
     num = "123"

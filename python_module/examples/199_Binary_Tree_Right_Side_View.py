@@ -33,17 +33,16 @@ class Solution:
     def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
         if not root:
             return []
-        nodeMap = defaultdict(list)
+        level_map = defaultdict(list)
         que = deque([(root, 0)])
         while que:
             node, level = que.popleft()
             if node:
-                nodeMap[level].append(node)
+                level_map[level].append(node)
                 que.append((node.left, level + 1))
                 que.append((node.right, level + 1))
-
         res = []
-        for key in sorted(nodeMap.keys()):
-            cur = nodeMap[key][-1]
+        for key in sorted(level_map.keys()):
+            cur = level_map[key][-1]
             res.append(cur.val)
         return res

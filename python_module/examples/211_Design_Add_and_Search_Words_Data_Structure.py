@@ -29,21 +29,22 @@ class WordDictionary:
 
     def __init__(self):
         self.children = {}
+
     def addWord(self, word: str) -> None:
-        node = self.children
+        trie = self.children
         for ch in word:
-            node = node.setdefault(ch, {})
-        node["$"] = True
+            trie = trie.setdefault(ch, {})
+        trie["$"] = True
 
     def search(self, word: str) -> bool:
-        def dfs(node, idx):
+        def helper(trie, idx):
             if idx == len(word):
-                return "$" in node
+                return "$" in trie
             if word[idx] == ".":
-                for child in node.keys():
-                    if child != "$" and dfs(node[child], idx + 1):
+                for ch in trie.keys():
+                    if ch != "$" and helper(trie[ch], idx + 1):
                         return True
-            if word[idx] in node:
-                return dfs(node[word[idx]], idx + 1)
+            if word[idx] in trie:
+                return helper(trie[word[idx]], idx + 1)
             return False
-        return dfs(self.children, 0)
+        return helper(self.children, 0)

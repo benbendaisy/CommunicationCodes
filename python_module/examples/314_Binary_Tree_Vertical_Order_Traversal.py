@@ -35,13 +35,12 @@ class Solution:
     def verticalOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
         if not root:
             return []
-
-        columnTable = defaultdict(list)
-        queue = deque([(root, 0)])
-        while queue:
-            node, column = queue.popleft()
+        que = deque([(root, 0)])
+        column_dict = defaultdict(list)
+        while que:
+            node, column = que.popleft()
             if node:
-                columnTable[column].append(node.val)
-                queue.append((node.left, column - 1))
-                queue.append((node.right, column + 1))
-        return [columnTable[x] for x in sorted(columnTable.keys())]
+                column_dict[column].append(node.val)
+                que.append((node.left, column - 1))
+                que.append((node.right, column + 1))
+        return [column_dict[x] for x in sorted(column_dict.keys())]

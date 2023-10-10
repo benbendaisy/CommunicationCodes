@@ -19,7 +19,12 @@ class Solution:
         There is at least one word in s.
         All the words in s are separated by a single space.
     """
-    def reverseWords(self, s: str) -> str:
+    def reverseWords1(self, s: str) -> str:
         if not s:
             return s
         return " ".join([x[::-1] for x in s.split(" ")])
+    
+    def reverseWords(self, s: str) -> str:
+        if not s:
+            return s
+        return " ".join(map(lambda x: x[::-1], s.split(" ")))

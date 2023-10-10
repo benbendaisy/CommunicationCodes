@@ -56,16 +56,16 @@ class Codec1:
         :rtype: TreeNode
         """
         arr = data.split(" ")
-        self.idx = 0
-        def deserializeStr():
-            if self.idx == len(arr) or arr[self.idx] == "#":
+        def helper():
+            if arr[0] == "#":
+                arr.pop(0)
                 return None
-            node = TreeNode(arr[self.idx])
-            self.idx += 1
-            node.left = deserializeStr()
-            self.idx += 1
-            node.right = deserializeStr()
-            return node
+            root = TreeNode(arr[0])
+            arr.pop(0)
+            root.left = helper()
+            root.right = helper()
+            return root
+        return helper()
 
         return deserializeStr()
 

@@ -53,27 +53,22 @@ class Solution:
     def find132pattern(self, nums: List[int]) -> bool:
         if not nums:
             return False
-
+        
         n = len(nums)
-        minArray = [-1] * n
-        minArray[0] = nums[0]
+        min_array = [math.inf] * n
+        min_array[0] = nums[0]
         for i in range(1, n):
-            minArray[i] = min(minArray[i - 1], nums[i])
-
+            min_array[i] = min(min_array[i - 1], nums[i])
+        
         stack = []
-
         for j in range(n - 1, -1, -1):
-            if minArray[j] == nums[j]:
+            if min_array[j] == nums[j]:
                 continue
-
-            # from right to find one element that is bigger than the smallest element so far
-            while stack and stack[-1] <= minArray[j]:
+            while stack and stack[-1] <= min_array[j]:
                 stack.pop()
-            # if there is an element that is bigger than the element from the right
             if stack and nums[j] > stack[-1]:
                 return True
             stack.append(nums[j])
-
         return False
 
 if __name__ == "__main__":

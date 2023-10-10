@@ -4,11 +4,11 @@ from typing import List
 
 class Solution:
     def intersect(self, nums1: List[int], nums2: List[int]) -> List[int]:
-        nums2Dict = Counter(nums2)
+        nums_cnt_dict = Counter(nums1)
         arr = []
-        for v in nums1:
-            if v in nums2Dict and nums2Dict[v] > 0:
-                arr.append(v)
-                nums2Dict[v] -= 1
+        for num in nums2:
+            if num in nums_cnt_dict and nums_cnt_dict[num] > 0:
+                arr.append(num)
+                nums_cnt_dict[num] -= 1
         return arr
 

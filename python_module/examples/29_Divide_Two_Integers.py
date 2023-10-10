@@ -47,29 +47,24 @@ class Solution:
         :param divisor:
         :return:
         """
-        isNegative = False
+        is_negative = False
         if dividend < 0:
             dividend = -dividend
-            isNegative = ~isNegative
-
+            is_negative = ~is_negative
         if divisor < 0:
             divisor = -divisor
-            isNegative = ~isNegative
-
-        maxInt = 2**31 - 1
-        minInt = -2**31
-
+            is_negative = ~is_negative
+        max_int = 2**31 - 1
+        min_int = -2**31
         res = 0
         for i in range(31, -1, -1):
             if (divisor << i) <= dividend:
                 dividend -= (divisor << i)
                 res += 1 << i
-        if isNegative:
+        if is_negative:
             res = -res
-
-        if res >= maxInt:
-            return maxInt
-        elif res <= minInt:
-            return minInt
-
+        if res >= max_int:
+            return max_int
+        elif res <= min_int:
+            return min_int
         return res

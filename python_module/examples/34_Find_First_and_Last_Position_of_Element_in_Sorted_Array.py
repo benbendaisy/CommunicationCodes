@@ -32,23 +32,19 @@ class Solution:
     def searchRange(self, nums: List[int], target: int) -> List[int]:
         if not nums:
             return [-1, -1]
-
-        l, r = 0, len(nums) - 1
+        n = len(nums)
+        l, r = 0, n - 1
         while l <= r:
-            m = l + (r - l)//2
-            if nums[m] == target:
-                idxL = idxR = m
-                while idxL >= 0 and nums[idxL] == target:
-                    idxL -= 1
-                while idxR < len(nums) and nums[idxR] == target:
-                    idxR += 1
-                if idxL < 0 or nums[idxL] != target:
-                    idxL += 1
-                if idxR == len(nums) or nums[idxR] != target:
-                    idxR -= 1
-                return [idxL, idxR]
-            elif nums[m] < target:
-                l = m + 1
+            mid = (l + r) // 2
+            if nums[mid] == target:
+                lidx, ridx = mid, mid
+                while lidx >= 0 and nums[lidx] == target:
+                    lidx -= 1
+                while ridx < n and nums[ridx] == target:
+                    ridx += 1
+                return [lidx + 1, ridx - 1]
+            elif nums[mid] < target:
+                l = mid + 1
             else:
-                r = m - 1
+                r = mid - 1
         return [-1, -1]
