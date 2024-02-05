@@ -34,7 +34,7 @@ class Solution:
 
         Follow up: Could you do this using only O(n) extra space, where n is the total number of rows in the triangle?
     """
-    def minimumTotal(self, triangle: List[List[int]]) -> int:
+    def minimumTotal1(self, triangle: List[List[int]]) -> int:
         if not triangle:
             return 0
 
@@ -46,6 +46,15 @@ class Solution:
             return triangle[row][col] + min(minTotals(row + 1, col), minTotals(row + 1, col + 1))
 
         return minTotals(0, 0)
+
+    def minimumTotal(self, triangle: List[List[int]]) -> int:
+        @cache
+        def min_path(row, col):
+            path = triangle[row][col]
+            if row < len(triangle) - 1:
+                path += min(min_path(row + 1, col), min_path(row + 1, col + 1))
+            return path
+        return min_path(0, 0)
 
 if __name__ == "__main__":
     triangle = [[-1],[2,3],[1,-1,-3]]

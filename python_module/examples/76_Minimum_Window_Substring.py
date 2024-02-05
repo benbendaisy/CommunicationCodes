@@ -66,3 +66,34 @@ class Solution:
                 l += 1
             r += 1
         return "" if ans[0] == float("inf") else s[ans[1] : ans[2] + 1]
+
+    def minWindow(self, s: str, t: str) -> str:
+        """
+        1, two dict: dict_t and dict_window
+        2, two lengths: one required length and the length of window that only includes characters in target string
+        3, 3.1: adding the character to the window, 3.2: checking if need to adjust the length of window
+           3.3: shrink the window
+        """
+        if not s or not t:
+            return ""
+        dict_t = Counter(t)
+        req_length = len(dict_t)
+        l, r = 0, 0
+        formed = 0
+        dict_window = defaultdict(lambda: 0)
+        res = (float('inf'), None, None)
+        while r < len(s):
+            ch = s[r]
+            dict_window[ch] += 1
+            if ch in dict_t and dict_window[ch] == dict_t[ch]:
+                formed += 1
+            while l <= r and formed == req_length:
+                character = s[l]
+                if r - l + 1 < res[0]:
+                    res = (r - l + 1, l, r)
+                dict_window[character] -= 1
+                if character in dict_t and dict_window[character] < dict_t[character]:
+                    formed -= 1
+                l += 1
+            r += 1
+        return "" if res[0] == float("inf") else s[res[1] : res[2] + 1]

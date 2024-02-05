@@ -38,7 +38,7 @@ class Solution:
             return new_sum
         return range_sum_bst(root)
 
-    def rangeSumBST(self, root: Optional[TreeNode], low: int, high: int) -> int:
+    def rangeSumBST2(self, root: Optional[TreeNode], low: int, high: int) -> int:
         stack = [root]
         ans = 0
         while stack:
@@ -51,4 +51,30 @@ class Solution:
                 if node.val < high:
                     stack.append(node.right)
         return ans
+
+    def rangeSumBST3(self, root: Optional[TreeNode], low: int, high: int) -> int:
+        def range_sum(node):
+            if not node:
+                return 0
+            new_sum = 0
+            if low <= node.val <= high:
+                new_sum += node.val
+            new_sum += range_sum(node.left)
+            new_sum += range_sum(node.right)
+            return new_sum
+        return range_sum(root)
+    
+    def rangeSumBST(self, root: Optional[TreeNode], low: int, high: int) -> int:
+        stack = [root]
+        res = 0
+        while stack:
+            node = stack.pop()
+            if node:
+                if low <= node.val <= high:
+                    res += node.val
+                if node.left:
+                    stack.append(node.left)
+                if node.right:
+                    stack.append(node.right)
+        return res
 

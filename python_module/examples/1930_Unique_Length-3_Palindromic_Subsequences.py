@@ -46,6 +46,20 @@ class Solution:
         resSet = set()
         palindromicSubs(-1, "")
         return len(resSet)
+    
+    def countPalindromicSubsequence3(self, s: str) -> int:
+        res_set = set()
+        n = len(s)
+        @cache
+        def helper(idx: int, cur_str: str):
+            if idx == n or len(cur_str) == 3:
+                if len(cur_str) == 3 and cur_str[0] == cur_str[-1]:
+                    res_set.add(cur_str)
+                return
+            for i in range(idx, n):
+                helper(i + 1, cur_str + s[i])
+        helper(0, "")
+        return len(res_set)
 
     def countPalindromicSubsequence(self, s: str) -> int:
         res = 0

@@ -26,7 +26,7 @@ class Solution:
         2 <= arr[i] <= 109
         All the values of arr are unique.
     """
-    def numFactoredBinaryTrees(self, arr: List[int]) -> int:
+    def numFactoredBinaryTrees1(self, arr: List[int]) -> int:
         MOD = 10 ** 9 + 7
         n = len(arr)
         arr.sort()
@@ -41,3 +41,19 @@ class Solution:
                         dp[i] %= MOD
 
         return sum(dp) % MOD
+
+    def numFactoredBinaryTrees(self, arr: List[int]) -> int:
+        mod = 10 ** 9 + 7
+        n = len(arr)
+        arr.sort()
+        dp = [1] * n
+        indexes = {x:i for i, x in enumerate(arr)}
+        for i, x in enumerate(arr):
+            for j in range(i):
+                # arr[j] will be left child
+                if x % arr[j] == 0:
+                    right = x / arr[j]
+                    if right in indexes:
+                        dp[i] += dp[j] * dp[indexes[right]]
+                        dp[i] %= mod
+        return sum(dp) % mod

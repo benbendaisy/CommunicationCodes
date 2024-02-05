@@ -34,14 +34,14 @@ class Solution:
     """
     def numberOfArithmeticSlices(self, nums: List[int]) -> int:
         n = len(nums)
-        ans = 0
+        res = 0
         cnt = {}
         for i in range(n):
             cnt[i] = {}
-            for j in range(0, i):
+            for j in range(i):
                 delta = nums[i] - nums[j]
                 sums = cnt[j].get(delta, 0)
                 origin = cnt[i].get(delta, 0)
                 cnt[i][delta] = origin + sums + 1
-                ans += sums
-        return ans
+                res += sums
+        return res

@@ -42,10 +42,10 @@ class Solution:
             return []
         n = len(temperatures)
         res = [0] * n
-        for i in range(n):
-            for j in range(i + 1, n):
-                if temperatures[j] > temperatures[i]:
-                    res[i] = j - i
+        for day in range(n):
+            for future_day in range(day + 1, n):
+                if temperatures[future_day] > temperatures[day]:
+                    res[day] = future_day - day
                     break
         return res
 
@@ -53,14 +53,12 @@ class Solution:
         if not temperatures:
             return []
         n = len(temperatures)
-        stack = []
         res = [0] * n
-        for i, v in enumerate(temperatures):
-            while stack and temperatures[stack[-1]] < v:
-                prev = stack.pop()
-                res[prev] = i - prev
-            stack.append(i)
+        stack = []
+        for cur_day, cur_temp in enumerate(temperatures):
+            while stack and temperatures[stack[-1]] < cur_temp:
+                prev_day = stack.pop()
+                res[prev_day] = cur_day - prev_day
+            stack.append(cur_day)
         return res
-
-
 

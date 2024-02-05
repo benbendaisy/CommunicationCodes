@@ -29,15 +29,14 @@ class Solution:
             return 0
         elif k == 0:
             return 1
-
         inv = 0
-        for i in range(min(k, n - 1)):
-            inv = (inv + self.kInversePairs(n - 1, k - i))
+        for i in range(min(k, n - 1) + 1):
+            inv = (inv + self.kInversePairs(n - 1, k - i)) % 1000000007
         return inv
 
     def kInversePairs2(self, n: int, k: int) -> int:
-        dp = [[0] * k for _ in range(n)]
-        for i in range(n + 1):
+        dp = [[0] * (k + 1) for _ in range(n + 1)]
+        for i in range(1, n + 1):
             for j in range(k + 1):
                 if j == 0:
                     dp[i][j] = 1
@@ -45,3 +44,17 @@ class Solution:
                     for p in range(min(j, i - 1) + 1):
                         dp[i][j] = (dp[i][j] + dp[i - 1][j - p]) % 1000000007
         return dp[n][k]
+    
+    def kInversePairs(self, n: int, k: int) -> int:
+        MOD = 10**9 + 7
+        dp = [[0] * (k + 1) for _ in range(n + 1)]
+
+        for i in range(1, n + 1):
+            for j in range(k + 1):
+                if j == 0:
+                    dp[i][j] = 1
+                else:
+                    val = (dp[i - 1][j] + MOD - (dp[i - 1][j - i] if j - i >= 0 else 0)) % MOD
+                    dp[i][j] = (dp[i][j - 1] + val) % MOD
+
+        return (dp[n][k] + MOD - (dp[n][k - 1] if k > 0 else 0)) % MOD

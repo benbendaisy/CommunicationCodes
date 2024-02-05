@@ -42,7 +42,7 @@ class Solution:
 
         return max(dp)
 
-    def lengthOfLIS(self, nums: List[int]) -> int:
+    def lengthOfLIS2(self, nums: List[int]) -> int:
         if not nums:
             return 0
 
@@ -55,4 +55,26 @@ class Solution:
             # Otherwise, replace the first element in sub greater than or equal to num
             else:
                 sub[idx] = num
+        return len(sub)
+    
+    def lengthOfLIS3(self, nums: List[int]) -> int:
+        n = len(nums)
+        dp = [1] * n
+        for i in range(1, n):
+            for j in range(i):
+                if nums[i] > nums[j]:
+                    dp[i] = max(dp[i], dp[j] + 1)
+        return max(dp)
+    
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        sub = [nums[0]]
+        for num in nums[1:]:
+            if num > sub[-1]:
+                sub.append(num)
+            else:
+                # Find the first element in sub that is greater than or equal to num
+                i = 0
+                while num > sub[i]:
+                    i += 1
+                sub[i] = num
         return len(sub)

@@ -29,7 +29,7 @@ class Solution:
         fromi and toi consist of uppercase English letters.
         fromi != toi
     """
-    def findItinerary(self, tickets: List[List[str]]) -> List[str]:
+    def findItinerary1(self, tickets: List[List[str]]) -> List[str]:
         if not tickets:
             return []
         graph = defaultdict(list)
@@ -48,4 +48,23 @@ class Solution:
             res.append(start)
 
         DFS("JFK")
+        return res[::-1]
+    
+    def findItinerary(self, tickets: List[List[str]]) -> List[str]:
+        if not tickets:
+            return []
+        graph = defaultdict(list)
+        for start, end in tickets:
+            graph[start].append(end)
+        for key in graph.keys():
+            graph[key].sort(reverse=True)
+        res = []
+        @cache
+        def helper(start):
+            targets = graph[start]
+            while targets:
+                next = targets.pop()
+                helper(next)
+            res.append(start)
+        helper("JFK")
         return res[::-1]

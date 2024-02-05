@@ -52,14 +52,14 @@ class Solution:
         positions = sorted(list(set([x for building in buildings for x in building[:2]])))
 
         # Hast table 'edge_index_map' to record every {position : index} pairs in edges.
-        edgeIndexMap = {x: i for i, x in enumerate(positions)}
-        heights = [0] * len(positions)
+        edge_index_map = {x:i for i, x in enumerate(positions)}
+        heights = [0] * len(edge_index_map)
         for left, right, height in buildings:
-            leftIdx = edgeIndexMap[left]
-            rightIdx = edgeIndexMap[right]
+            left_index = edge_index_map[left]
+            right_index = edge_index_map[right]
 
             # Update the maximum height within the range [left_idx, right_idx)
-            for i in range(leftIdx, rightIdx):
+            for i in range(left_index, right_index):
                 heights[i] = max(heights[i], height)
         ans = []
         for i in range(len(heights)):

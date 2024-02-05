@@ -70,7 +70,7 @@ class Solution:
 
         return (a_count + e_count + i_count + o_count + u_count) % MOD
 
-    def countVowelPermutation(self, n: int) -> int:
+    def countVowelPermutation3(self, n: int) -> int:
 
         a_vowel_permutation_count = [1] * n
         e_vowel_permutation_count = [1] * n
@@ -94,3 +94,22 @@ class Solution:
                   u_vowel_permutation_count[n - 1]) % MOD
 
         return result
+    
+    def countVowelPermutation4(self, n: int) -> int:
+        mod = 10 ** 9 + 7
+        @cache
+        def vowel_permutation(i, vowel):
+            total = 1
+            if i > 1:
+                if vowel == 'a':
+                    total = (vowel_permutation(i - 1, 'e') + vowel_permutation(i - 1, 'i') + vowel_permutation(i - 1, 'u')) % mod
+                elif vowel == 'e':
+                    total = (vowel_permutation(i - 1, 'a') + vowel_permutation(i - 1, 'i')) % mod
+                elif vowel == 'i':
+                    total = (vowel_permutation(i - 1, 'e') + vowel_permutation(i - 1, 'o')) % mod
+                elif vowel == 'o':
+                    total = vowel_permutation(i - 1, 'i')
+                else:
+                    total = (vowel_permutation(i - 1, 'i') + vowel_permutation(i - 1, 'o')) % mod
+            return total
+        return sum(vowel_permutation(n, vowel) for vowel in 'aeiou') % mod

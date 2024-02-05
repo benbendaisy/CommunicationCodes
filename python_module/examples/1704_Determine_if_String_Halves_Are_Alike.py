@@ -18,7 +18,7 @@ class Solution:
         Explanation: a = "text" and b = "book". a has 1 vowel whereas b has 2. Therefore, they are not alike.
         Notice that the vowel o is counted twice.
     """
-    def halvesAreAlike(self, s: str) -> bool:
+    def halvesAreAlike1(self, s: str) -> bool:
         n = len(s)
         a = s[:n//2]
         b = s[n//2:]
@@ -31,3 +31,17 @@ class Solution:
 
         a_cnt, b_cnt = count_vowerl(a), count_vowerl(b)
         return a_cnt == b_cnt
+    
+    def halvesAreAlike(self, s: str) -> bool:
+        n = len(s)
+        a = s[:n//2]
+        b = s[n//2:]
+        def count_vowels(string: str):
+            cnt = 0
+            for ch in string:
+                if ch in "aeiouAEIOU":
+                    cnt += 1
+            return cnt
+        a_vowel_cnt = count_vowels(a)
+        b_vowel_cnt = count_vowels(b)
+        return a_vowel_cnt == b_vowel_cnt

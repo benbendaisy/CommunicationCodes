@@ -23,7 +23,7 @@ class Solution:
         0 <= startRow < m
         0 <= startColumn < n
     """
-    def findPaths(self, m: int, n: int, maxMove: int, startRow: int, startColumn: int) -> int:
+    def findPaths1(self, m: int, n: int, maxMove: int, startRow: int, startColumn: int) -> int:
         @lru_cache(None)
         def calculatePaths(rowx: int, colx: int, curMove: int):
             if rowx < 0 or rowx >= m or colx < 0 or colx >= n:
@@ -39,3 +39,18 @@ class Solution:
             return curPath % ((10**9)+7)
 
         return calculatePaths(startRow, startColumn, maxMove)
+    
+    def findPaths(self, m: int, n: int, maxMove: int, startRow: int, startColumn: int) -> int:
+        @cache
+        def calculate_path(row, col, cur_move):
+            if row < 0 or row >= m or col < 0 or col >= n:
+                return 1
+            elif cur_move == 0:
+                return 0
+            cur_path = 0
+            for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                x = row + dx
+                y = col + dy
+                cur_path += calculate_path(x, y, cur_move - 1)
+            return cur_path % ((10**9)+7)
+        return calculate_path(startRow, startColumn, maxMove)

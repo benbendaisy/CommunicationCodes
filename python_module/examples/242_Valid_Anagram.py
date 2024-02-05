@@ -24,15 +24,23 @@ class Solution:
     def isAnagram(self, s: str, t: str) -> bool:
         if not s or not t or len(s) != len(t):
             return False
-        chDict = Counter(s)
+        s_counter = Counter(s)
 
         for ch in t:
-            if ch not in chDict:
+            if ch not in s_counter:
                 return False
-            chDict[ch] -= 1
-
-        for k, v in chDict.items():
+            s_counter[ch] -= 1
+        for k, v in s_counter.items():
             if v != 0:
                 return False
-
         return True
+
+    
+    def isAnagram(self, s: str, t: str) -> bool:
+        if not s or not t or len(s) != len(t):
+            return False
+        s_chars = list(s)
+        t_chars = list(t)
+        s_chars.sort()
+        t_chars.sort()
+        return s_chars == t_chars

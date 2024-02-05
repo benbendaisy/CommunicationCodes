@@ -46,7 +46,7 @@ class Solution:
                 minChar = key
         return minChar
 
-    def firstUniqChar(self, s: str) -> int:
+    def firstUniqChar2(self, s: str) -> int:
         if not s:
             return -1
 
@@ -54,4 +54,13 @@ class Solution:
         for i, v in enumerate(s):
             if charMap[v] == 1:
                 return i
+        return -1
+    
+    def firstUniqChar(self, s: str) -> int:
+        if not s:
+            return -1
+        cnt = Counter(s)
+        for idx, ch in enumerate(s):
+            if cnt[ch] == 1:
+                return idx
         return -1

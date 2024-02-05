@@ -38,12 +38,12 @@ class Solution:
     """
     def minCostClimbingStairs1(self, cost: List[int]) -> int:
         n = len(cost)
-        @lru_cache(None)
-        def min_cost_climbing(idx):
-            if idx >= n - 2:
+        @cache
+        def min_cost_climbing_stairs(idx):
+            if idx < 2:
                 return 0
-            return cost[idx] + min(min_cost_climbing(idx + 1), min_cost_climbing(idx + 2))
-        return min_cost_climbing(n)
+            return min(cost[idx - 1] + min_cost_climbing_stairs(idx - 1), cost[idx - 2] + min_cost_climbing_stairs(idx - 2))
+        return min_cost_climbing_stairs(n)
 
     def minCostClimbingStairs(self, cost: List[int]) -> int:
         if not cost:

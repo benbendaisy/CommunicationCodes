@@ -30,7 +30,7 @@ class Solution:
                 return False
         return True
 
-    def uniqueOccurrences(self, arr: List[int]) -> bool:
+    def uniqueOccurrences2(self, arr: List[int]) -> bool:
         count_map = Counter(arr)
         cnt_list = defaultdict(list)
         for k, v in count_map.items():
@@ -38,3 +38,8 @@ class Solution:
                 return False
             cnt_list[v].append(k)
         return True
+    
+    def uniqueOccurrences(self, arr: List[int]) -> bool:
+        freq = Counter(arr)
+        freq_set = set(freq.values())
+        return len(freq) == len(freq_set)

@@ -44,7 +44,7 @@ class Solution:
             return max(longest_common_subsequence(idx1 + 1, idx2), longest_common_subsequence(idx1, idx2 + 1))
         return longest_common_subsequence(0, 0)
 
-    def longestCommonSubsequence(self, text1: str, text2: str) -> int:
+    def longestCommonSubsequence4(self, text1: str, text2: str) -> int:
         if not text1 or not text2:
             return 0
 
@@ -57,3 +57,32 @@ class Solution:
                 else:
                     dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
         return dp[m][n]
+    
+    def longestCommonSubsequence5(self, text1: str, text2: str) -> int:
+        m, n = len(text1), len(text2)
+        @cache
+        def helper(idx1, idx2):
+            if idx1 == m or idx2 == n:
+                return 0
+            option_1 = helper(idx1 + 1, idx2)
+            option_2 = helper(idx1, idx2 + 1)
+            option_3 = 0
+            if text1[idx1] == text2[idx2]:
+                option_3 = helper(idx1 + 1, idx2 + 1) + 1
+            return max(option_1, option_2, option_3)
+        return helper(0, 0)
+    
+    def longestCommonSubsequence(self, text1: str, text2: str) -> int:
+        m, n = len(text1), len(text2)
+        @cache
+        def helper(idx1, idx2):
+            if idx1 == m or idx2 == n:
+                return 0
+            
+            if text1[idx1] == text2[idx2]:
+                return helper(idx1 + 1, idx2 + 1) + 1
+            
+            option_1 = helper(idx1 + 1, idx2)
+            option_2 = helper(idx1, idx2 + 1)
+            return max(option_1, option_2)
+        return helper(0, 0)

@@ -41,7 +41,7 @@ class Solution:
             min_falling_sum = min(min_falling_sum, min_falling_path_sum(0, c))
         return min_falling_sum
 
-    def minFallingPathSum(self, matrix: List[List[int]]) -> int:
+    def minFallingPathSum2(self, matrix: List[List[int]]) -> int:
         m, n = len(matrix), len(matrix[0])
         dp = [[0] * (n + 1) for _ in range(m + 1)]
         for r in range(m - 1, -1, -1):
@@ -57,3 +57,20 @@ class Solution:
         for c in range(n):
             min_path_sum = min(min_path_sum, dp[0][c])
         return min_path_sum
+
+    def minFallingPathSum(self, matrix: List[List[int]]) -> int:
+        rows, cols = len(matrix), len(matrix[0])
+        @cache
+        def falling_path_sum(r, c):
+            if r < 0 or r >= rows or c < 0 or c >= cols:
+                return math.inf
+            if r == rows - 1:
+                return matrix[r][c]
+            left =  falling_path_sum(r + 1, c - 1)
+            middle = falling_path_sum(r + 1, c)
+            right = falling_path_sum(r + 1, c + 1)
+            return min(left, middle, right) + matrix[r][c]
+        min_sum = math.inf
+        for c in range(cols):
+            min_sum = min(min_sum, falling_path_sum(0, c))
+        return min_sum

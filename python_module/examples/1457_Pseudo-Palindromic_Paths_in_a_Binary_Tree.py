@@ -34,7 +34,7 @@ class Solution:
         The number of nodes in the tree is in the range [1, 105].
         1 <= Node.val <= 9
     """
-    def pseudoPalindromicPaths1 (self, root: Optional[TreeNode]) -> int:
+    def pseudoPalindromicPaths1(self, root: Optional[TreeNode]) -> int:
         def checkPseudoPalindromic(arr):
             numDict = Counter(arr)
             oddCnt = 0
@@ -60,11 +60,11 @@ class Solution:
         findAllPathes(root, [])
         return cnt
 
-    def pseudoPalindromicPaths (self, root: Optional[TreeNode]) -> int:
+    def pseudoPalindromicPaths2(self, root: Optional[TreeNode]) -> int:
         def preorder(node, path):
             nonlocal count
             if node:
-                # compute occurences of each digit
+                # compute occurrences of each digit
                 # in the corresponding register
                 path = path ^ (1 << node.val)
                 # if it's a leaf, check if the path is pseudo-palindromic
@@ -79,3 +79,22 @@ class Solution:
         count = 0
         preorder(root, 0)
         return count
+    
+    def pseudoPalindromicPaths(self, root: Optional[TreeNode]) -> int:
+        cnt = 0
+        def preorder(node, path):
+            if not node:
+                return
+            nonlocal cnt
+            # compute occurences of each digit 
+            # in the corresponding register
+            path = path ^ (1 << node.val)
+            # if it's a leaf, check if the path is pseudo-palindromic
+            if node.left is None and node.right is None:
+                if path & (path - 1) == 0:
+                    cnt += 1
+            else:
+                preorder(node.left, path)
+                preorder(node.right, path)
+        preorder(root, 0)
+        return cnt

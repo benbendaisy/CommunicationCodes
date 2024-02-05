@@ -28,7 +28,7 @@ class Solution:
         Input: root = [1,null,2,null,0,3]
         Output: 3
     """
-    def maxAncestorDiff(self, root: Optional[TreeNode]) -> int:
+    def maxAncestorDiff1(self, root: Optional[TreeNode]) -> int:
         if not root:
             return 0
         self.res = 0
@@ -42,3 +42,19 @@ class Solution:
             helper(node.right, cur_min, cur_max)
         helper(root, root.val, root.val)
         return self.res
+    
+    def maxAncestorDiff(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+        res = 0
+        def helper(node, min_v, max_v):
+            nonlocal res
+            if not node:
+                return
+            res = max(res, abs(node.val - min_v), abs(node.val - max_v))
+            min_v = min(node.val, min_v)
+            max_v = max(node.val, max_v)
+            helper(node.left, min_v, max_v)
+            helper(node.right, min_v, max_v)
+        helper(root, root.val, root.val)
+        return res

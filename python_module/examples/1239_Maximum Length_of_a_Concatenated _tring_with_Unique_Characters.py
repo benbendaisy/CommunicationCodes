@@ -32,7 +32,7 @@ class Solution:
         Output: 26
         Explanation: The only string in arr has all 26 characters.
     """
-    def maxLength(self, arr: List[str]) -> int:
+    def maxLength1(self, arr: List[str]) -> int:
         if not arr:
             return 0
 
@@ -46,3 +46,15 @@ class Solution:
                 maxLength = max(maxLength, len(concatedString))
                 res.append(concatedString)
         return maxLength
+    
+    def maxLength(self, arr: List[str]) -> int:
+        res = [""]
+        best = 0
+        for word in arr:
+            for i in range(len(res)):
+                new_res = res[i] + word
+                if len(new_res) != len(set(new_res)):
+                    continue
+                res.append(new_res)
+                best = max(best, len(new_res))
+        return best
