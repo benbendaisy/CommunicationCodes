@@ -18,7 +18,7 @@ class Solution:
         Output: "0"
         Explanation: Remove all the digits from the number and it is left with nothing which is 0.
     """
-    def removeKdigits(self, num: str, k: int) -> str:
+    def removeKdigits1(self, num: str, k: int) -> str:
         numStack = []
         # Construct a monotone increasing sequence of digits
         for digit in num:
@@ -33,3 +33,13 @@ class Solution:
 
         # trip the leading zeros
         return "".join(finalStack).lstrip("0") or "0"
+    
+    def removeKdigits(self, num: str, k: int) -> str:
+        stack = []
+        for digit in num:
+            while k > 0 and stack and stack[-1] > digit:
+                stack.pop()
+                k -= 1
+            stack.append(digit)
+        final_stack = stack[:-k] if k > 0 else stack
+        return "".join(final_stack).lstrip("0") or "0"

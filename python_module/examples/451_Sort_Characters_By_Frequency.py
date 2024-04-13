@@ -35,9 +35,16 @@ class Solution:
             res.extend([key] * value)
         return "".join(res)
 
-    def frequencySort(self, s: str) -> str:
+    def frequencySort2(self, s: str) -> str:
         char_count_map = Counter(s)
         res = []
         for key, value in char_count_map.most_common():
             res.extend([key] * value)
         return "".join(res)
+    
+    def frequencySort(self, s: str) -> str:
+        cnts = Counter(s)
+        str_builder = []
+        for letter, freq in cnts.most_common():
+            str_builder.append(letter * freq)
+        return "".join(str_builder)

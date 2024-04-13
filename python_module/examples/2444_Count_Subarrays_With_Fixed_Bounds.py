@@ -26,7 +26,7 @@ class Solution:
         Output: 10
         Explanation: Every subarray of nums is a fixed-bound subarray. There are 10 possible subarrays.
     """
-    def countSubarrays(self, nums: List[int], minK: int, maxK: int) -> int:
+    def countSubarrays1(self, nums: List[int], minK: int, maxK: int) -> int:
         n = len(nums)
         left = -1
         last_min, last_max = -1, -1
@@ -40,3 +40,23 @@ class Solution:
                 left = i
                 last_min, last_max = -1, -1
         return cnt
+
+    def countSubarrays(self, nums: List[int], minK: int, maxK: int) -> int:
+        # min_position, max_position: the MOST RECENT positions of minK and maxK.
+        # left_bound: the MOST RECENT value outside the range [minK, maxK].
+        res = 0
+        min_pos = max_pos = left_bound = -1
+        # Iterate over nums, for each number at index i:
+        for i, num in enumerate(nums):
+            # If the number is outside the range [minK, maxK], update the most recent left_bound.
+            if num < minK or num > maxK:
+                left_bound = i
+            # If the number is minK or maxK, update the most recent position.
+            if num == minK:
+                min_pos = i
+            if num == maxK:
+                max_pos = i
+            # The number of valid subarrays equals the number of elements between left_bound and 
+            # the smaller of the two most recent positions.
+            res += max(0, min(min_pos, max_pos) - left_bound)
+        return res

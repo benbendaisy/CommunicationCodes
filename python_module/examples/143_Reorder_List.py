@@ -26,7 +26,7 @@ class Solution:
     Input: head = [1,2,3,4,5]
     Output: [1,5,2,4,3]
     """
-    def reorderList(self, head: Optional[ListNode]) -> None:
+    def reorderList1(self, head: Optional[ListNode]) -> None:
         """
         Do not return anything, modify head in-place instead.
         """
@@ -46,3 +46,29 @@ class Solution:
         while head1 and head2:
             head1.next, head1 = head2, head1.next
             head2.next, head2 = head1, head2.next
+        
+        def reorderList(self, head: Optional[ListNode]) -> None:
+            """
+                Do not return anything, modify head in-place instead.
+            """
+            if not head:
+                return
+            # find the middle of linked list [Problem 876]
+            # in 1->2->3->4->5->6 find 4
+            slow = fast = head
+            while fast and fast.next:
+                slow = slow.next
+                fast = fast.next.next
+            
+            # reverse the second part of the list [Problem 206]
+            # convert 1->2->3->4->5->6 into 1->2->3->4 and 6->5->4
+            # reverse the second half in-place
+            prev, cur = None, slow
+            while cur:
+                cur.next, prev, cur = prev, cur, cur.next
+            # merge two sorted linked lists [Problem 21]
+            # merge 1->2->3->4 and 6->5->4 into 1->6->2->5->3->4
+            first, second = head, prev
+            while second.next:
+                first.next, first = second, first.next
+                second.next, second = first, second.next

@@ -52,3 +52,28 @@ class Solution:
             return merged_array[(n1 + n2) // 2]
         else:
             return (merged_array[(n1 + n2) // 2 - 1] + merged_array[(n1 + n2) // 2]) / 2.0
+    
+    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
+        n1, n2 = len(nums1), len(nums2)
+        n = n1 + n2
+        def helper(k, n1_start, n1_end, n2_start, n2_end):
+            if n1_start > n1_end:
+                return nums2[k - n1_start]
+            if n2_start > n2_end:
+                return nums1[k - n2_start]
+            n1_idx, n2_idx = (n1_start + n1_end) // 2,  (n2_start + n2_end) // 2
+            n1_val, n2_val = nums1[n1_idx], nums2[n2_idx]
+            if n1_idx + n2_idx < k:
+                if n1_val > n2_val:
+                    return helper(k, n1_start, n1_end, n2_idx + 1, n2_end)
+                else:
+                    return helper(k, n1_idx + 1, n1_end, n2_start, n2_end)
+            else:
+                if n1_val > n2_val:
+                    return helper(k, n1_start, n1_idx - 1, n2_start, n2_end)
+                else:
+                    return helper(k, n1_start, n1_end, n2_start, n2_idx - 1)
+        if n % 2:
+            return helper(n // 2, 0, n1 - 1, 0, n2 - 1)
+        else:
+            return (helper(n//2 - 1, 0, n1 - 1, 0, n2 - 1) + helper(n // 2, 0, n1 - 1, 0, n2 -1)) / 2

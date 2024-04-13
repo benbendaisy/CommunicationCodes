@@ -42,3 +42,21 @@ class Solution:
             return []
         nums.sort()
         return max([ends(i) for i in range(len(nums))], key=len)
+    
+    def largestDivisibleSubset(self, nums: List[int]) -> List[int]:
+        @cache
+        def helper(idx):
+            tail = nums[idx]
+            max_subset = []
+            for p in range(idx):
+                if tail % nums[p] == 0:
+                    subset = helper(p)
+                    if len(max_subset) < len(subset):
+                        max_subset = subset
+            max_subset = max_subset.copy()
+            max_subset.append(tail)
+            return max_subset
+        if len(nums) == 0:
+            return []
+        nums.sort()
+        return max([helper(i) for i in range(len(nums))], key=len)

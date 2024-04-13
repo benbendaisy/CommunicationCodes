@@ -27,7 +27,7 @@ class Solution:
             ans[tuple(sorted(s))].append(s)
         return ans.values()
 
-    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+    def groupAnagrams2(self, strs: List[str]) -> List[List[str]]:
         ans = defaultdict(list)
         for s in strs:
             count = [0] * 26
@@ -35,3 +35,9 @@ class Solution:
                 count[ord(c) - ord('a')] += 1
             ans[tuple(count)].append(s)
         return ans.values()
+    
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        res = defaultdict(list)
+        for s in strs:
+            res[tuple(sorted(s))].append(s)
+        return res.values()

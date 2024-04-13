@@ -53,3 +53,18 @@ class Solution:
             return min_square
 
         return squares(n)
+
+    def numSquares2(self, n: int) -> int:
+        square_nums = [i ** 2 for i in range(1, int(math.sqrt(n)) + 1)]
+        @cache
+        def helper(k):
+            if k in square_nums:
+                return 1
+            min_num = float('inf')
+            for square in square_nums:
+                if k < square:
+                    break
+                new_num = helper(k - square) + 1
+                min_num = min(min_num, new_num)
+            return min_num
+        return helper(n)

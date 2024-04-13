@@ -20,11 +20,26 @@ class Solution:
         Input: nums = [1]
         Output: []
     """
-    def findDuplicates(self, nums: List[int]) -> List[int]:
+    def findDuplicates1(self, nums: List[int]) -> List[int]:
         res = []
         for num in nums:
             n = abs(num)
             if nums[n - 1] < 0:
                 res.append(n)
             nums[n - 1] = -nums[n - 1]
+        return res
+
+    def findDuplicates(self, nums: List[int]) -> List[int]:
+        n = len(nums)
+        idx = 0
+        while idx < n:
+            cur_idx = nums[idx] - 1
+            if nums[idx] != nums[cur_idx]:
+                nums[idx], nums[cur_idx] = nums[cur_idx], nums[idx]
+            else:
+                idx += 1
+        res = []
+        for i in range(n):
+            if nums[i] != i + 1:
+                res.append(nums[i])
         return res

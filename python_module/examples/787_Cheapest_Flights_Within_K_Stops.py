@@ -36,17 +36,17 @@ class Solution:
         graph = defaultdict(list)
         for s, d, price in flights:
             graph[s].append((d, price))
-        heap = [(0, 0, src)] # (accumulative cost, # of stops, the stop)
+        heap = [(0, 0, src)]
         visited = set()
         while heap:
-            accumutive_cost, num_of_stops, stop = heapq.heappop(heap)
+            acc_cost, num_of_stops, stop = heapq.heappop(heap)
             if stop == dst:
-                return accumutive_cost
+                return acc_cost
             if (stop, num_of_stops) in visited or num_of_stops > k:
                 continue
             visited.add((stop, num_of_stops))
             for source, cost in graph[stop]:
-                heapq.heappush(heap, (accumutive_cost + cost, num_of_stops + 1, source))
+                heapq.heappush(heap, (acc_cost + cost, num_of_stops + 1, source))
         return -1
 
 

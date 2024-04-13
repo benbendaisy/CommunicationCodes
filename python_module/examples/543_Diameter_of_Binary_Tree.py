@@ -25,7 +25,7 @@ class Solution:
     Input: root = [1,2]
     Output: 1
     """
-    def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
+    def diameterOfBinaryTree1(self, root: Optional[TreeNode]) -> int:
         diameter = 0
         @lru_cache(None)
         def dfs(node: TreeNode) -> int:
@@ -37,4 +37,18 @@ class Solution:
             diameter = max(diameter, left + right)
             return max(left, right)
         dfs(root)
+        return diameter
+    
+    def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
+        diameter = 0
+        @cache
+        def helper(node):
+            nonlocal diameter
+            if not node:
+                return 0
+            left = helper(node.left)
+            right = helper(node.right)
+            diameter = max(diameter, left + right)
+            return max(left, right) + 1
+        helper(root)
         return diameter
