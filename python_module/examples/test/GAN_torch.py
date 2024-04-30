@@ -71,8 +71,8 @@ for epoch in range(num_epochs):
 
         if i % 100 == 0:
             print(f"Epoch [{epoch}/{num_epochs}], Step [{i}/{len(data)}], "
-                  f"Generator Loss: {generator_loss.item()}, "
-                  f"Discriminator Loss: {real_loss.item() + fake_loss.item()}")
+                f"Generator Loss: {generator_loss.item()}, "
+                f"Discriminator Loss: {real_loss.item() + fake_loss.item()}")
 
 # Generate samples from the generator
 z = torch.randn(10, 100)

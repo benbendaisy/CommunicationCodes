@@ -14,3 +14,4 @@ class Solution:
     Output: [4,9,9,49,121]
     """
     def sortedSquares(self, nums: List[int]) -> List[int]:
+        return sorted([i**2 for i in nums])
