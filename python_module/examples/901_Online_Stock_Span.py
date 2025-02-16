@@ -1,4 +1,4 @@
-class StockSpanner:
+class StockSpanner1:
     """
         Design an algorithm that collects daily price quotes for some stock and returns the span of that stock's price for the current day.
 
@@ -50,3 +50,16 @@ class StockSpanner:
             cnt += self.stack.pop()[1]
         self.stack.append((price, cnt))
         return cnt
+
+class StockSpanner:
+
+    def __init__(self):
+        self.stack = []
+
+    def next(self, price: int) -> int:
+        span = 1
+        while self.stack and price >= self.stack[-1][0]:
+            top = self.stack.pop()
+            span += top[1]
+        self.stack.append((price, span))
+        return span

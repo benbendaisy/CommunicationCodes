@@ -25,7 +25,7 @@ class Solution:
                     maxCnt = max(maxCnt, j - i)
         return maxCnt
 
-    def longestValidParentheses(self, s: str) -> int:
+    def longestValidParentheses2(self, s: str) -> int:
         if not s:
             return 0
         stack = []
@@ -41,6 +41,22 @@ class Solution:
                 else:
                     max_length = max(max_length, i - stack[-1])
         return max_length
+
+    def longestValidParentheses(self, s: str) -> int:
+        if not s or len(s) < 2:
+            return 0
+        stack = [-1]
+        max_len = 0
+        for i in range(len(s)):
+            if s[i] == '(':
+                stack.append(i)
+            else:
+                stack.pop()
+                if stack:
+                    max_len = max(max_len, i - stack[-1])
+                else:
+                    stack.append(i) # fix the issue when all valid parenthese pop
+        return max_len
 
 
 

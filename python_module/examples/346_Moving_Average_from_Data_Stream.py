@@ -1,4 +1,4 @@
-class MovingAverage:
+class MovingAverage1:
     """
         Given a stream of integers and a window size, calculate the moving average of all integers in the sliding window.
 
@@ -45,3 +45,17 @@ class MovingAverage:
         self.arr.append(val)
         self.sums += delta
         return self.sums / len(self.arr)
+
+class MovingAverage:
+
+    def __init__(self, size: int):
+        self.que = []
+        self.size = size
+        self.sum = 0
+
+    def next(self, val: int) -> float:
+        if len(self.que) >= self.size:
+            self.sum -= self.que.pop(0)
+        self.sum += val
+        self.que.append(val)
+        return self.sum / len(self.que)

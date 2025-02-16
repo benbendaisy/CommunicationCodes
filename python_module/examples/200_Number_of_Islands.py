@@ -34,7 +34,7 @@ class Solution:
         1 <= m, n <= 300
         grid[i][j] is '0' or '1'.
     """
-    def numIslands(self, grid: List[List[str]]) -> int:
+    def numIslands1(self, grid: List[List[str]]) -> int:
         m, n = len(grid), len(grid[0])
         directions = [(-1, 0), (1, 0), (0, 1), (0, -1)]
         def dfs(row, col):
@@ -52,3 +52,21 @@ class Solution:
                     dfs(i, j)
         return cnt
 
+    def numIslands(self, grid: List[List[str]]) -> int:
+        cnt = 0
+        m, n = len(grid), len(grid[0])
+        def blood_search(row, col):
+            if row < 0 or row >= m or col < 0 or col >= n or grid[row][col] == '0':
+                return
+            grid[row][col] = '0'
+            for dx, dy in ((1, 0), (0, 1), (-1, 0), (0, -1)):
+                x = row + dx
+                y = col + dy
+                blood_search(x, y)
+        
+        for r in range(m):
+            for c in range(n):
+                if grid[r][c] == '1':
+                    cnt += 1
+                    blood_search(r, c)
+        return cnt

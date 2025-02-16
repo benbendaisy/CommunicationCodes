@@ -17,7 +17,7 @@ class Solution:
                 r -= 1
         return area
 
-    def maxArea(self, height: List[int]) -> int:
+    def maxArea2(self, height: List[int]) -> int:
         max_area = 0
         l, r = 0, len(height) - 1
         while l < r:
@@ -27,6 +27,18 @@ class Solution:
                 l += 1
             else:
                 r -= 1
+        return max_area
+
+    def maxArea(self, height: List[int]) -> int:
+        max_area = 0
+        left, right = 0, len(height) - 1
+        while left < right:
+            local_area = min(height[left], height[right]) * (right - left)
+            max_area = max(max_area, local_area)
+            if height[left] < height[right]:
+                left += 1
+            else:
+                right -= 1
         return max_area
 
 if __name__ == "__main__":

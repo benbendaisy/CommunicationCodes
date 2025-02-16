@@ -43,7 +43,7 @@ class Solution:
         maxLength = max(maxLength, runner - walker)
         return maxLength
 
-    def lengthOfLongestSubstring(self, s: str) -> int:
+    def lengthOfLongestSubstring2(self, s: str) -> int:
         """
             Running window
         :param s:
@@ -58,6 +58,17 @@ class Solution:
             char_set.add(ch)
             res = max(res, i - l + 1)
         return res
+    
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        char_set = set()
+        left, max_len = 0, 0
+        for right in range(len(s)):
+            while s[right] in char_set:
+                char_set.remove(s[left])
+                left += 1
+            char_set.add(s[right])
+            max_len = max(max_len, right - left + 1)
+        return max_len
 
 
 if __name__ == "__main__":

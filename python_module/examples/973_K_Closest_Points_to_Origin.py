@@ -25,7 +25,7 @@ class Solution:
         Output: [[3,3],[-2,4]]
         Explanation: The answer [[-2,4],[3,3]] would also be accepted.
     """
-    def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:
+    def kClosest1(self, points: List[List[int]], k: int) -> List[List[int]]:
         heap = []
         for (x, y) in points:
             dist = -(x**2 + y**2)
@@ -34,3 +34,14 @@ class Solution:
             else:
                 heapq.heappush(heap, (dist, x, y))
         return [[x, y] for (dist, x, y) in heap]
+
+    def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:
+        max_heap = []
+        for x, y in points:
+            dist = -(x**2 + y**2)
+            if len(max_heap) >= k and dist > max_heap[0][0]:
+                heapq.heappop(max_heap)
+                heapq.heappush(max_heap, (dist, x, y))
+            elif len(max_heap) < k:
+                heapq.heappush(max_heap, (dist, x, y))
+        return [(x, y) for _, x, y in max_heap]

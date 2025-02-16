@@ -1,7 +1,7 @@
 import heapq
 
 
-class MedianFinder:
+class MedianFinder1:
     """
         The median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value and the median is the mean of the two middle values.
 
@@ -56,3 +56,20 @@ class MedianFinder:
             return (self.min_heap[0] - self.max_heap[0]) / 2
 
         return self.min_heap[0]
+
+class MedianFinder:
+
+    def __init__(self):
+        self.min_heap = []
+        self.max_heap = []
+
+    def addNum(self, num: int) -> None:
+        heapq.heappush(self.max_heap, -num)
+        heapq.heappush(self.min_heap, -heapq.heappop(self.max_heap))
+        if len(self.min_heap) > len(self.max_heap) + 1:
+            heapq.heappush(self.max_heap, -heapq.heappop(self.min_heap))
+
+    def findMedian(self) -> float:
+        if (len(self.min_heap) + len(self.max_heap)) % 2 != 0:
+            return self.min_heap[0]
+        return (self.min_heap[0] - self.max_heap[0]) / 2

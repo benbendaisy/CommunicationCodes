@@ -2,7 +2,7 @@ from typing import List
 
 
 class Solution:
-    def generateMatrixRecursive(self, matrix: List[List[int]], val: int, it: int):
+    def generateMatrixRecursive1(self, matrix: List[List[int]], val: int, it: int):
         if it > len(matrix)//2:
             return
 
@@ -52,7 +52,7 @@ class Solution:
             col += dy[direction]
         return matrix
     
-    def generateMatrix(self, n: int) -> List[List[int]]:
+    def generateMatrix3(self, n: int) -> List[List[int]]:
         matrix = [[0] * n for i in range(n)]
         def generate_matrix(val, it):
             if it > len(matrix)//2:
@@ -81,6 +81,40 @@ class Solution:
             generate_matrix(val, it + 1)
 
         generate_matrix(1, 0)
+        return matrix
+    
+    def generateMatrix(self, n: int) -> List[List[int]]:
+        matrix = [[0] * n for _ in range(n)]
+        left, right, down, up = 0, n - 1, 0, n - 1
+        idx = 1
+        while True:
+            for i in range(left, right + 1):
+                matrix[down][i] = idx
+                idx += 1
+            down += 1
+            if down > up:
+                break
+            
+            for i in range(down, up + 1):
+                matrix[i][right] = idx
+                idx += 1
+            right -= 1
+            if right < left:
+                break
+            
+            for i in range(right, left - 1, -1):
+                matrix[up][i] = idx
+                idx += 1
+            up -= 1
+            if up < down:
+                break
+            
+            for i in range(up, down - 1, -1):
+                matrix[i][left] = idx
+                idx += 1
+            left += 1
+            if left > right:
+                break
         return matrix
 
 if __name__ == "__main__":

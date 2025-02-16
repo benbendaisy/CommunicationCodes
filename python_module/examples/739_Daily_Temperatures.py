@@ -49,7 +49,7 @@ class Solution:
                     break
         return res
 
-    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
+    def dailyTemperatures3(self, temperatures: List[int]) -> List[int]:
         if not temperatures:
             return []
         n = len(temperatures)
@@ -61,4 +61,15 @@ class Solution:
                 res[prev_day] = cur_day - prev_day
             stack.append(cur_day)
         return res
+
+    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
+        m = len(temperatures)
+        answer = [0 for _ in range(m)]
+        stack = []
+        for i in range(m):
+            while stack and temperatures[i] > temperatures[stack[-1]]:
+                idx = stack.pop()
+                answer[idx] = i - idx
+            stack.append(i)
+        return answer
 

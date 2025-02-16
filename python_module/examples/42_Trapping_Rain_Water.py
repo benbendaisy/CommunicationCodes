@@ -43,7 +43,7 @@ class Solution:
 
         return ans
 
-    def trap(self, height: List[int]) -> int:
+    def trap2(self, height: List[int]) -> int:
         if not height:
             return 0
 
@@ -58,5 +58,23 @@ class Solution:
             stack.append(cur)
 
         return res
+    
+    def trap(self, height: List[int]) -> int:
+        if not height:
+            return 0
+        res, stack = 0, []
+        water = 0
+        for idx, h in enumerate(height):
+            while stack and height[stack[-1]] < h:
+                cur = stack.pop()
+                if stack:
+                    left = stack[-1] + 1
+                    right = idx - 1
+                    hei = min(h, height[stack[-1]]) - height[cur]
+                    water += hei * (right - left + 1)
+                else:
+                    break
+            stack.append(idx)
+        return water
 
 

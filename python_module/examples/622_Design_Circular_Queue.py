@@ -1,4 +1,4 @@
-class MyCircularQueue:
+class MyCircularQueue1:
     """
         Design your implementation of the circular queue. The circular queue is a linear data structure in which the operations are performed based on FIFO (First In First Out) principle and the last position is connected back to the first position to make a circle. It is also called "Ring Buffer".
 
@@ -78,3 +78,39 @@ class MyCircularQueue:
 
     def isFull(self) -> bool:
         return self.currentLength >= self.length
+
+class MyCircularQueue:
+
+    def __init__(self, k: int):
+        self.capacity = k + 1
+        self.que = [0] * (self.capacity + 1)
+        self.front = self.rear = 0
+
+    def enQueue(self, value: int) -> bool:
+        if self.isFull():
+            return False
+        self.rear = (self.rear + 1) % self.capacity
+        self.que[self.rear] = value
+        return True
+
+    def deQueue(self) -> bool:
+        if self.isEmpty():
+            return False
+        self.front = (self.front + 1) % self.capacity
+        return True
+
+    def Front(self) -> int:
+        if self.isEmpty():
+            return -1
+        return self.que[(self.front + 1) % self.capacity]
+
+    def Rear(self) -> int:
+        if self.isEmpty():
+            return -1
+        return self.que[self.rear]
+
+    def isEmpty(self) -> bool:
+        return self.front == self.rear
+
+    def isFull(self) -> bool:
+        return (self.rear + 1) % self.capacity == self.front

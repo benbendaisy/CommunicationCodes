@@ -21,7 +21,7 @@ class Solution:
         Input: s = "(]"
         Output: false
     """
-    def isValid(self, s: str) -> bool:
+    def isValid1(self, s: str) -> bool:
         if not s:
             return False
         stack = []
@@ -35,3 +35,17 @@ class Solution:
             else:
                 stack.append(ch)
         return len(stack) == 0
+
+    def isValid(self, s: str) -> bool:
+        if not s:
+            return False
+        char_map = {'}':'{', ']':'[', ')':'('}
+        stack = []
+        for ch in s:
+            if ch in char_map:
+                top = stack.pop() if stack else '#'
+                if char_map[ch] != top:
+                    return False
+            else:
+                stack.append(ch)
+        return not stack 

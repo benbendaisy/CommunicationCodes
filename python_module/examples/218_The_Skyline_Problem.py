@@ -1,6 +1,6 @@
 import heapq
 from typing import List
-
+from sortedcontainers import SortedList
 
 # Define the disjoint-set structure.
 class UnionFind():
@@ -125,7 +125,7 @@ class Solution:
                 ans.append([edges[i], heights[i]])
         return ans
 
-    def getSkyline(self, buildings: List[List[int]]) -> List[List[int]]:
+    def getSkyline4(self, buildings: List[List[int]]) -> List[List[int]]:
         # Iterate over all buildings, for each building i,
         # add (position, i) to edges.
         edges = []
@@ -177,3 +177,25 @@ class Solution:
         # Return 'answer' as the skyline.
         return answer
 
+
+    def getSkyline(self, buildings: List[List[int]]) -> List[List[int]]:
+            ans = []
+            points = []
+            for build in buildings:
+                left, right, height = build[0], build[1], build[2]
+                points.append((left, -height))
+                points.append((right, height))
+            points.sort(key=lambda x:(x[0], x[1]))
+            prev = 0
+            max_heap = SortedList([prev])
+            for point in points:
+                x, height = point[0], point[1]
+                if height < 0:
+                    max_heap.add(-height)
+                else:
+                    max_heap.remove(height)
+                cur = max_heap[-1]
+                if cur != prev:
+                    ans.append([x, cur])
+                    prev = cur
+            return ans

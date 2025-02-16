@@ -19,7 +19,7 @@ class Solution:
         1 <= s.length <= 104
         s consists of lowercase English letters.
     """
-    def removeDuplicateLetters(self, s: str) -> str:
+    def removeDuplicateLetters1(self, s: str) -> str:
         last_indexes = {ch:i for i,ch in enumerate(s)}
         stack = []
         visited = set()
@@ -32,4 +32,16 @@ class Solution:
                 visited.add(s[i])
         return "".join(stack)
 
+    def removeDuplicateLetters(self, s: str) -> str:
+        stack = []
+        letters_count = defaultdict(int)
+        for ch in s:
+            letters_count[ch] += 1
+        for ch in s:
+            if ch not in stack:
+                while stack and stack[-1] > ch and letters_count[stack[-1]] > 0:
+                    stack.pop()
+                stack.append(ch)
+            letters_count[ch] -= 1
+        return "".join(stack)
         

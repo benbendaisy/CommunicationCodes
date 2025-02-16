@@ -14,7 +14,7 @@ class Solution:
     Input: matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]]
     Output: [1,2,3,4,8,12,11,10,9,5,6,7]
     """
-    def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
+    def spiralOrder1(self, matrix: List[List[int]]) -> List[int]:
         if not matrix or not matrix[0]:
             return []
         m = len(matrix)
@@ -39,4 +39,30 @@ class Solution:
                 res.append(matrix[i][c1])
             traverse_visit(r1 + 1, c1 + 1, r2 - 1, c2 - 1)
         traverse_visit(0, 0, m - 1, n - 1)
+        return res
+    
+    def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
+        down, up, left, right = 0, len(matrix) - 1, 0, len(matrix[0]) - 1
+        res = []
+        while True:
+            for i in range(left, right + 1):
+                res.append(matrix[down][i])
+            down += 1
+            if down > up:
+                break
+            for i in range(down, up + 1):
+                res.append(matrix[i][right])
+            right -= 1
+            if left > right:
+                break
+            for i in range(right, left - 1, -1):
+                res.append(matrix[up][i])
+            up -= 1
+            if up < down:
+                break
+            for i in range(up, down - 1, -1):
+                res.append(matrix[i][left])
+            left += 1
+            if left > right:
+                break
         return res
