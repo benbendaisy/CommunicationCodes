@@ -62,8 +62,7 @@ class Solution:
     def trap(self, height: List[int]) -> int:
         if not height:
             return 0
-        res, stack = 0, []
-        water = 0
+        water, stack = 0, []
         for idx, h in enumerate(height):
             while stack and height[stack[-1]] < h:
                 cur = stack.pop()

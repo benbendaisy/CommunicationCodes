@@ -18,7 +18,7 @@ class Solution:
     Input: nums = [0]
     Output: [[],[0]]
     """
-    def subsets(self, nums: List[int]) -> List[List[int]]:
+    def subsets1(self, nums: List[int]) -> List[List[int]]:
         n = len(nums)
         res = [[]]
         def dfs(idx, sub_set):
@@ -28,4 +28,20 @@ class Solution:
                 dfs(i + 1, sub_set)
                 sub_set.pop()
         dfs(0, [])
+        return res
+    
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        n = len(nums)
+        res = [[]]
+        def back_track(path: list, idx: int):
+            if path:
+                path.sort()
+                res.append(path)
+            if idx == n:
+                return
+            for i in range(idx, n):
+                back_track(path + [nums[i]], i + 1)
+        
+        back_track([], 0)
+
         return res

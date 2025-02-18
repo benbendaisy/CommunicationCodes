@@ -25,7 +25,7 @@ class Solution:
                     return True
         return False
 
-    def exist(self, board: List[List[str]], word: str) -> bool:
+    def exist2(self, board: List[List[str]], word: str) -> bool:
         m, n = len(board), len(board[0])
         visited = [[False] * n for _ in range(m)]
         def find_word(r, c, idx):
@@ -47,6 +47,38 @@ class Solution:
                 if board[r][c] == word[0] and find_word(r, c, 1):
                     return True
                 visited[r][c] = False
+        return False
+    
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        if not board:
+            return False
+        rows, cols = len(board), len(board[0])
+        if rows * cols < len(word):
+            return False
+
+        def back_track(row, col, idx):
+            if idx == len(word):
+                return True
+
+            if row < 0 or row >= rows or col < 0 or col >= cols or board[row][col] != word[idx]:
+                return False
+            
+            # Mark as visited (modifies board temporarily)
+            temp, board[row][col] = board[row][col], '#'
+
+            for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                new_x = row + dx
+                new_y = col + dy
+                if back_track(new_x, new_y, idx + 1):
+                    return True
+            board[row][col] = temp    
+            return False
+
+        for i in range(rows):
+            for j in range(cols):
+                if board[i][j] == word[0] and back_track(i, j, 0):
+                    return True
+
         return False
 
 

@@ -76,7 +76,7 @@ class Solution:
 
         return dfs(0)
 
-    def makesquare(self, matchsticks: List[int]) -> bool:
+    def makesquare3(self, matchsticks: List[int]) -> bool:
         # There should be at least 4 matchsticks.
         if len(matchsticks) < 4:
             return False
@@ -117,6 +117,32 @@ class Solution:
             return False
 
         return backtrack(0)
+    
+    def makesquare(self, matchsticks: List[int]) -> bool:
+        if not matchsticks:
+            return False
+        match_sum = sum(matchsticks)
+        if match_sum % 4 != 0:
+            return False
+        
+        side_length = match_sum // 4
+        matchsticks.sort(reverse=True) # not necessary, but it can make the program run faster
+        sides = [0] * 4
+
+        def back_track(idx: int):
+            if idx == len(matchsticks):
+                return all(side == side_length for side in sides)
+            
+            for j in range(4):
+                if sides[j] + matchsticks[idx] <= side_length:
+                    sides[j] += matchsticks[idx]
+                    if back_track(idx + 1):
+                        return True
+                    sides[j] -= matchsticks[idx]
+                
+            return False
+        
+        return back_track(0)
 
 if __name__ == "__main__":
     solution = Solution()

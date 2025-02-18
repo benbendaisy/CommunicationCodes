@@ -25,7 +25,7 @@ class Solution:
     Input: nums = [1], k = 1
     Output: [1]
     """
-    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+    def maxSlidingWindow1(self, nums: List[int], k: int) -> List[int]:
         res = []
         window = deque()
         for i, num in enumerate(nums):
@@ -37,3 +37,16 @@ class Solution:
             if i >= k - 1:
                 res.append(nums[window[0]])
         return res
+    
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        if not nums:
+            return []
+        window = [(-nums[idx], idx) for idx in range(k)]
+        heapq.heapify(window)
+        max_list = [-window[0][0]]
+        for idx in range(k, len(nums)):
+            heapq.heappush(window, (-nums[idx], idx))
+            while idx - window[0][1] >= k:
+                heapq.heappop(window)
+            max_list.append(-window[0][0])
+        return max_list

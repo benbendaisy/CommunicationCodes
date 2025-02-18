@@ -37,3 +37,27 @@ class Solution:
                 recursive(idx + i, temp + t + ("." if cnt < 3 else ""), cnt + 1)
         recursive(0, "", 0)
         return res
+    
+    def restoreIpAddresses(self, s: str) -> List[str]:
+        if not s:
+            return []
+        res = []
+        def is_valid(sub: str):
+            if len(sub) == 1:
+                return True
+            if sub.startswith("0"):
+                return False
+            return 0 <= int(sub) <= 255
+        def back_track(path: list, idx: int):
+            if idx == len(s):
+                if len(path) == 4:
+                    res.append(".".join(path))
+                return
+            if len(path) >= 4:
+                return
+            for i in range(idx, len(s)):
+                sub = s[idx: i + 1]
+                if is_valid(sub):
+                    back_track(path + [sub], i + 1)
+        back_track([], 0)
+        return res
