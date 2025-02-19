@@ -27,7 +27,7 @@ class Solution:
         Output: 42
         Explanation: The optimal path is 15 -> 20 -> 7 with a path sum of 15 + 20 + 7 = 42.
     """
-    def maxPathSum(self, root: Optional[TreeNode]) -> int:
+    def maxPathSum1(self, root: Optional[TreeNode]) -> int:
         max_sum_path = -math.inf
         # post order traversal of subtree rooted at `node`
         def gain_from_subtree(node: Optional[TreeNode]) -> int:
@@ -48,6 +48,19 @@ class Solution:
             return max(gain_from_left + node.val, gain_from_right + node.val)
         gain_from_subtree(root)
         return max_sum_path
+    
+    def maxPathSum(self, root: Optional[TreeNode]) -> int:
+        max_sum = float('-inf')
+        def max_path_sum(node: TreeNode):
+            nonlocal max_sum
+            if not node:
+                return 0
+            left_path = max(max_path_sum(node.left), 0)
+            right_path = max(max_path_sum(node.right), 0)
+            max_sum = max(max_sum, left_path + right_path + node.val)
+            return max(left_path, right_path) + node.val
+        max_path_sum(root)
+        return max_sum
 
 
 

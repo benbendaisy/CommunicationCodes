@@ -24,7 +24,7 @@ class Solution:
     Input: head = [1]
     Output: [1]
     """
-    def swapPairs(self, head: Optional[ListNode]) -> Optional[ListNode]:
+    def swapPairs1(self, head: Optional[ListNode]) -> Optional[ListNode]:
         if not head or not head.next:
             return head
         dummy = ListNode(0)
@@ -38,4 +38,18 @@ class Solution:
             second.next = first
             cur = cur.next.next
 
+        return dummy.next
+    
+    def swapPairs(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        if not head or not head.next:
+            return head
+        dummy = cur = ListNode()
+        cur.next = head
+        while cur.next and cur.next.next:
+            first = cur.next
+            second = cur.next.next
+            cur.next = second
+            first.next = second.next
+            second.next = first
+            cur = cur.next.next
         return dummy.next

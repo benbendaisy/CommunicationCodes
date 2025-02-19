@@ -20,7 +20,7 @@ class Solution:
     Input: rowIndex = 1
     Output: [1,1]
     """
-    def getRow(self, rowIndex: int) -> List[int]:
+    def getRow1(self, rowIndex: int) -> List[int]:
         @cache
         def get_num(row, col):
             if row == 0 or col == 0 or row == col:
@@ -30,3 +30,16 @@ class Solution:
         for i in range(rowIndex + 1):
             ans.append(get_num(rowIndex, i))
         return ans
+    
+    def getRow(self, rowIndex: int) -> List[int]:
+        rowIndex += 1
+        dp = [[0] * i for i in range(1, rowIndex + 1)]
+        for i in range(rowIndex):
+            dp[i][0] = 1
+            dp[i][i] = 1
+        
+        for i in range(rowIndex):
+            for j in range(i):
+                if i != 0 and j != 0:
+                    dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j]
+        return dp[-1]

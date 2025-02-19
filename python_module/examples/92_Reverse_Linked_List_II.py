@@ -26,7 +26,7 @@ class Solution:
         -500 <= Node.val <= 500
         1 <= left <= right <= n
     """
-    def reverseBetween(self, head: Optional[ListNode], left: int, right: int) -> Optional[ListNode]:
+    def reverseBetween1(self, head: Optional[ListNode], left: int, right: int) -> Optional[ListNode]:
         cur, prev = head, None
         while left > 1:
             prev = cur
@@ -47,6 +47,26 @@ class Solution:
             head = prev
         tail.next = cur
         return head
+    
+    def reverseBetween(self, head: Optional[ListNode], left: int, right: int) -> Optional[ListNode]:
+        idx = 1
+        dummy = ListNode()
+        dummy.next = head
+        reverse_start = dummy
+        while reverse_start.next and idx < left:
+            reverse_start = reverse_start.next
+            idx += 1
+        prev = reverse_start
+        cur = reverse_start.next
+        while cur and idx <= right:
+            nxt = cur.next
+            cur.next = prev
+            prev = cur
+            cur = nxt
+            idx += 1
+        reverse_start.next.next = cur
+        reverse_start.next = prev
+        return dummy.next
 
 if __name__ == "__main__":
     # head = ListNode(1)
