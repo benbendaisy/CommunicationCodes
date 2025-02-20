@@ -35,7 +35,7 @@ class Solution:
                 end = farthest
         return ans
 
-    def jump(self, nums: List[int]) -> int:
+    def jump2(self, nums: List[int]) -> int:
         n = len(nums)
         memo = [math.inf for _ in range(n)]
         memo[0] = 0
@@ -46,3 +46,14 @@ class Solution:
                 elif memo[j] > memo[i] + 1:
                     memo[j] = memo[i] + 1
         return memo[n - 1]
+    
+    def jump(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        dp = [float('inf') for _ in range(len(nums))]
+        dp[0] = 0
+        for i, _ in enumerate(nums):
+            for j in range(0, i):
+                if j + nums[j] >= i:
+                    dp[i] = min(dp[i], dp[j] + 1)
+        return dp[-1]

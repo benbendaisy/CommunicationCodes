@@ -18,10 +18,20 @@ class Solution:
         Output: false
         Explanation: You will always arrive at index 3 no matter what. Its maximum jump length is 0, which makes it impossible to reach the last index.
     """
-    def canJump(self, nums: List[int]) -> bool:
+    def canJump1(self, nums: List[int]) -> bool:
         max_step = 0
         for idx, val in enumerate(nums):
             if idx > max_step:
                 return False
             max_step = max(max_step, idx + val)
+        return True
+    
+    def canJump(self, nums: List[int]) -> bool:
+        if not nums:
+            return False
+        max_step = 0
+        for idx, num in enumerate(nums):
+            if max_step < idx:
+                return False
+            max_step = max(max_step, idx + num)
         return True

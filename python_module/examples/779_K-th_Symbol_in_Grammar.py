@@ -38,7 +38,7 @@ class Solution:
                 return helper(n1 - 1, k1, next_root_val)
         return helper(n, k, 0)
     
-    def kthGrammar(self, n: int, k: int) -> int:
+    def kthGrammar2(self, n: int, k: int) -> int:
         def helper(n1, k1):
             if n1 == 1:
                 return 0
@@ -47,4 +47,31 @@ class Solution:
             if k1 > half_elements:
                 return 1 - helper(n1, k1 - half_elements)
             return helper(n1 - 1, k1)
+        return helper(n, k)
+    
+    def kthGrammar3(self, n: int, k: int) -> int:
+        @cache
+        def helper(m):
+            if m == 1:
+                return [0]
+            prev = helper(m - 1)
+            res = []
+            for e in prev:
+                if e == 0:
+                    res.extend([0,1])
+                elif e == 1:
+                    res.extend([1, 0])
+                else:
+                    res.append(e)
+            return res
+        return helper(n)[k - 1]
+    
+    def kthGrammar(self, n: int, k: int) -> int:
+        @cache
+        def helper(n1, k1):
+            if n1 == 1:
+                return 0
+            if k1 % 2 == 1:
+                return helper(n1 - 1, (k1 + 1) // 2)
+            return abs(1 - helper(n1 - 1, k1 // 2))
         return helper(n, k)

@@ -32,7 +32,7 @@ class Solution:
         1 <= numberOfBoxesi, numberOfUnitsPerBoxi <= 1000
         1 <= truckSize <= 106
     """
-    def maximumUnits(self, boxTypes: List[List[int]], truckSize: int) -> int:
+    def maximumUnits1(self, boxTypes: List[List[int]], truckSize: int) -> int:
         boxTypes.sort(key=lambda x: (x[1]), reverse=True)
         units = 0
         boxCnt = 0
@@ -42,6 +42,18 @@ class Solution:
                 count -= 1
                 units += unit
             if boxCnt == truckSize:
+                return units
+        return units
+    
+    def maximumUnits(self, boxTypes: List[List[int]], truckSize: int) -> int:
+        boxTypes.sort(key=lambda x: x[1], reverse=True)
+        units, box_cnt = 0, 0
+        for cnt, unit in boxTypes:
+            while box_cnt < truckSize and cnt > 0:
+                box_cnt += 1
+                cnt -= 1
+                units += unit
+            if box_cnt == truckSize:
                 return units
         return units
 if __name__ == "__main__":

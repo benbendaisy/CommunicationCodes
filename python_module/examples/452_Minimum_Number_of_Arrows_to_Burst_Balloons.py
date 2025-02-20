@@ -29,7 +29,7 @@ class Solution:
         - Shoot an arrow at x = 2, bursting the balloons [1,2] and [2,3].
         - Shoot an arrow at x = 4, bursting the balloons [3,4] and [4,5].
     """
-    def findMinArrowShots(self, points: List[List[int]]) -> int:
+    def findMinArrowShots1(self, points: List[List[int]]) -> int:
         if not points:
             return 0
 
@@ -41,3 +41,15 @@ class Solution:
                 arrows_cnt += 1
                 first_end = end
         return arrows_cnt
+    
+    def findMinArrowShots(self, points: List[List[int]]) -> int:
+        if not points:
+            return 0
+        points.sort(key=lambda x: (x[1], x[0]))
+        end_point = points[0][1]
+        arrow_cnt = 1
+        for point in points:
+            if end_point < point[0]:
+                arrow_cnt += 1
+                end_point = point[1]
+        return arrow_cnt

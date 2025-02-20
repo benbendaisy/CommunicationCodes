@@ -36,7 +36,7 @@ class Solution:
         nums = set(nums)
         return helper("")
     
-    def findDifferentBinaryString(self, nums: List[str]) -> str:
+    def findDifferentBinaryString2(self, nums: List[str]) -> str:
         integers = set()
         for num in nums:
             integers.add(int(num, 2))
@@ -47,3 +47,21 @@ class Solution:
                 ans = bin(num)[2:]
                 return "0" * (n - len(ans)) + ans
         return ""
+    
+    def findDifferentBinaryString(self, nums: List[str]) -> str:
+        if not nums:
+            return ""
+        length = len(nums[0])
+        @cache
+        def helper(path: str):
+            if len(path) == length: 
+                if path not in nums:
+                    return path
+                return ""
+            for ch in ["0", "1"]:
+                res = helper(path + ch)
+                if res:
+                    return res
+            return ""
+        
+        return helper("")

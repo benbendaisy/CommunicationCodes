@@ -34,7 +34,7 @@ class Solution:
         1 <= prices.length <= 3 * 104
         0 <= prices[i] <= 104
     """
-    def maxProfit(self, prices: List[int]) -> int:
+    def maxProfit1(self, prices: List[int]) -> int:
         if not prices or len(prices) < 1:
             return -1
         curMin = prices[0]
@@ -46,3 +46,14 @@ class Solution:
             else:
                 curMin = prices[i]
         return cnt
+    
+    def maxProfit(self, prices: List[int]) -> int:
+        if not prices:
+            return 0
+        cur_min = prices[0]
+        profit = 0
+        for i in range(1, len(prices)):
+            if cur_min < prices[i]:
+                profit += prices[i] - cur_min
+            cur_min = prices[i]
+        return profit
