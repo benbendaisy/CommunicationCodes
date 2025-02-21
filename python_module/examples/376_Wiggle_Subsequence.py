@@ -32,7 +32,7 @@ class Solution:
         1 <= nums.length <= 1000
         0 <= nums[i] <= 1000
     """
-    def wiggleMaxLength(self, nums: List[int]) -> int:
+    def wiggleMaxLength1(self, nums: List[int]) -> int:
         n = len(nums)
         if n < 2:
             return n
@@ -47,3 +47,25 @@ class Solution:
                     down[i] = max(down[i], up[j] + 1)
 
         return 1 + max(down[-1], up[-1])
+    
+    def wiggleMaxLength(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        elif len(nums) == 1:
+            return 1
+        n = len(nums)
+        diffs = [0] * (n - 1)
+
+        for i in range(1, n):
+            diffs[i - 1] = nums[i] - nums[i - 1]
+
+        # To handle special cases where all elements are equal
+        if all(e == 0 for e in diffs):
+            return 1
+
+        dp = [1] * (n - 1)
+        for i in range(n - 1):
+            for j in range(i):
+                if (diffs[i] < 0 and diffs[j] > 0) or (diffs[i] > 0 and diffs[j] < 0):
+                    dp[i] = max(dp[i], dp[j] + 1)
+        return max(dp) + 1

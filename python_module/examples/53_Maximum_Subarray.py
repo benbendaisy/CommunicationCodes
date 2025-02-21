@@ -19,7 +19,7 @@ class Solution:
     Output: 23
     Explanation: The subarray [5,4,-1,7,8] has the largest sum 23.
     """
-    def maxSubArray(self, nums: List[int]) -> int:
+    def maxSubArray1(self, nums: List[int]) -> int:
         if not nums:
             return -1
         if len(nums) == 1:
@@ -33,4 +33,17 @@ class Solution:
                 running_sum += num
             max_sum = max(max_sum, running_sum)
                 
+        return max_sum
+    
+    def maxSubArray(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        
+        max_sum, running_sum = float('-inf'), 0
+        for num in nums:
+            if running_sum < 0:
+                running_sum = num
+            else:
+                running_sum += num
+            max_sum = max(running_sum, max_sum)
         return max_sum

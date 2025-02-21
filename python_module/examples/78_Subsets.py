@@ -30,7 +30,7 @@ class Solution:
         dfs(0, [])
         return res
     
-    def subsets(self, nums: List[int]) -> List[List[int]]:
+    def subsets2(self, nums: List[int]) -> List[List[int]]:
         n = len(nums)
         res = [[]]
         def back_track(path: list, idx: int):
@@ -44,4 +44,18 @@ class Solution:
         
         back_track([], 0)
 
+        return res
+    
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        m = len(nums)
+        res = [[]]
+
+        def back_track(path: List[int], idx: int):
+            if path:
+                res.append(path)
+            if idx == m:
+                return
+            for i in range(idx, m):
+                back_track(path + [nums[i]], i + 1)
+        back_track([], 0)
         return res
