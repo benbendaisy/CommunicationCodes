@@ -42,11 +42,18 @@ class Solution:
             n &= (n - 1)
         return cnt
     
-    def hammingWeight(self, n: int) -> int:
+    def hammingWeight3(self, n: int) -> int:
         cnt = 0
         mask = 1
         for i in range(32):
             if n & mask != 0:
                 cnt += 1
             mask <<= 1
+        return cnt
+    
+    def hammingWeight(self, n: int) -> int:
+        cnt = 0
+        while n:
+            cnt += n & 1
+            n >>= 1
         return cnt
