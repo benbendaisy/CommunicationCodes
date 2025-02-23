@@ -12,7 +12,7 @@ class Solution:
 
         return res
 
-    def singleNumber(self, nums: List[int]) -> List[int]:
+    def singleNumber2(self, nums: List[int]) -> List[int]:
         if not nums:
             return []
 
@@ -33,6 +33,33 @@ class Solution:
                     return [num, xorValue]
             except ValueError:
                 ""
+    
+    def singleNumber(self, nums: List[int]) -> List[int]:
+        """
+        step1: xor all numbers to get xor of the two unique numbers
+        step2: trying to find the rightmost bit that is 1 from the xor result
+        step3: divide elements into two groups based on the rightmost set bit
+        and xor elements in each group
+        """
+        # Step 1: XOR all numbers to get XOR of the two unique numbers
+        xor_result = 0
+        for num in nums:
+            xor_result ^= num
+        
+        # Step 2: Find rightmost set bit in xor_result
+        # This bit will be set in one unique number and unset in the other
+        rightmost_set_bit = xor_result & -xor_result
+        
+        # Step 3: Divide elements into two groups based on the rightmost set bit
+        # and XOR elements in each group
+        x = y = 0
+        for num in nums:
+            if num & rightmost_set_bit:  # Bit is set
+                x ^= num
+            else:  # Bit is not set
+                y ^= num
+        
+        return [x, y]
 
 if __name__ == "__main__":
     nums = [1,2,1,3,2,5]

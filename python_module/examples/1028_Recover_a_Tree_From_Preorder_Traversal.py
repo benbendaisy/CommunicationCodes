@@ -34,7 +34,7 @@ class Solution:
 
         return stack[0]  # Root node
     
-    def recoverFromPreorder(self, traversal: str) -> Optional[TreeNode]:
+    def recoverFromPreorder1(self, traversal: str) -> Optional[TreeNode]:
         idx = 0
 
         def back_track(depth):
@@ -65,3 +65,30 @@ class Solution:
 
         
         return back_track(0)
+    
+    def recoverFromPreorder(self, traversal: str) -> Optional[TreeNode]:
+        n = len(traversal)
+        idx = 0
+        def helper(depth: int):
+            nonlocal idx
+            # calculate the depth
+            dep = 0
+            while idx < n and traversal[idx] == "-":
+                idx += 1
+                dep += 1
+            # if it is not expected depth means it is not a branch
+            if dep != depth:
+                idx -= dep
+                return None
+
+            #calculate num
+            val = 0
+            while idx < n and traversal[idx].isnumeric():
+                val = val * 10 + int(traversal[idx])
+                idx += 1
+
+            node = TreeNode(val)
+            node.left = helper(depth + 1)
+            node.right = helper(depth + 1)
+            return node
+        return helper(0)

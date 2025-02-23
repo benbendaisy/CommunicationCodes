@@ -36,7 +36,7 @@ class Solution:
                 return i
         return len(nums)
 
-    def missingNumber(self, nums: List[int]) -> int:
+    def missingNumber2(self, nums: List[int]) -> int:
         if not nums:
             return 0
 
@@ -48,3 +48,38 @@ class Solution:
             if i != nums[i]:
                 return i
         return len(nums)
+    
+    def missingNumber3(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        n = len(nums)
+        for i in range(n):
+            while nums[i] >= 0 and nums[i] < n and nums[i] != i and nums[nums[i]] != nums[i]:
+                nums[nums[i]], nums[i] = nums[i], nums[nums[i]]
+        
+        for i in range(n):
+            if nums[i] != i:
+                return i
+        return n
+    
+    def findMissingNumber(nums):
+        """
+        Find the missing number in an array containing n distinct numbers in range [0, n]
+        
+        Args:
+            nums: List[int] - Array of n distinct integers in range [0, n]
+            
+        Returns:
+            int - The missing number
+        """
+        # Method 1: Using XOR
+        # XOR all numbers from 0 to n and all numbers in array
+        # The result will be the missing number
+        n = len(nums)
+        result = n  # Start with n since range is [0, n]
+        
+        # XOR with all indices and values
+        for i in range(n):
+            result ^= i ^ nums[i]
+            
+        return result

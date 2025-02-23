@@ -33,7 +33,7 @@ class Solution:
     Output: 10
     Explanation: Place students in available seats in column 1, 3 and 5.
     """
-    def maxStudents(self, seats: List[List[str]]) -> int:
+    def maxStudents1(self, seats: List[List[str]]) -> int:
         m, n = len(seats), len(seats[0])
         valid_rows = []
 
@@ -64,7 +64,7 @@ class Solution:
             mask = row_mask
             while mask >= 0:
                 if (mask & row_mask) == mask and valid(mask):
-                    if (mask & prev_mask) == 0 and ((mask >> 1) & prev_mask) == 0:
+                    if ((mask << 1) & prev_mask) == 0 and ((mask >> 1) & prev_mask) == 0:
                         res = max(res, count_bits(mask) + dfs(idx + 1, mask))
                 
                 if mask == 0:
@@ -74,4 +74,40 @@ class Solution:
             memo[(idx, prev_mask)] = res
             return res
         
+        return dfs(0, 0)
+    
+    def maxStudents(self, seats: List[List[str]]) -> int:
+        m, n = len(seats), len(seats[0])
+        valid_rows = []
+        for row in seats:
+            mask = 0
+            for j in range(n):
+                if row[j] == ".":
+                    mask |= (1 << j)
+            valid_rows.append(mask)
+        
+        def count_bits(x):
+            return bin(x).count("1")
+
+        def valid(mask):
+            return (mask & (mask >> 1)) == 0
+        
+        @cache
+        def dfs(idx, prev_mask):
+            if idx == m:
+                return 0
+            
+            res = 0
+            row_mask = valid_rows[idx]
+
+            mask = row_mask
+            while mask >= 0:
+                if (mask & row_mask) == mask and valid(mask):
+                    if ((mask << 1) & prev_mask) == 0 and ((mask >> 1) & prev_mask) == 0:
+                        res = max(res, count_bits(mask) + dfs(idx + 1, mask))
+                if mask == 0:
+                    break
+                
+                mask = (mask - 1) & row_mask
+            return res
         return dfs(0, 0)

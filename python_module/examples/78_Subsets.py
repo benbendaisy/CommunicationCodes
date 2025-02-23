@@ -46,7 +46,7 @@ class Solution:
 
         return res
     
-    def subsets(self, nums: List[int]) -> List[List[int]]:
+    def subsets3(self, nums: List[int]) -> List[List[int]]:
         m = len(nums)
         res = [[]]
 
@@ -58,4 +58,19 @@ class Solution:
             for i in range(idx, m):
                 back_track(path + [nums[i]], i + 1)
         back_track([], 0)
+        return res
+    
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        m = len(nums)
+        res = [[]]
+
+        def helper(path: List[int], idx: int):
+            if path:
+                res.append(path)
+            if idx == m:
+                return
+            for i in range(idx, m):
+                helper(path + [nums[i]], i + 1)
+        
+        helper([], 0)
         return res
