@@ -40,7 +40,7 @@ class Solution:
 
         return dp[m - 1][n - 1]
 
-    def uniquePaths(self, m: int, n: int) -> int:
+    def uniquePaths2(self, m: int, n: int) -> int:
         @lru_cache(None)
         def paths(r, c):
             if r == m - 1 or c == n - 1:
@@ -51,4 +51,19 @@ class Solution:
             return paths(r, c + 1) + paths(r + 1, c)
 
         return paths(0, 0)
+    
+
+    def uniquePaths(self, m: int, n: int) -> int:
+        
+        @cache
+        def helper(row: int, col: int):
+            if row == m - 1 and col == n - 1:
+                return 1
+            
+            if row >= m or row < 0 or col >= n or col < 0:
+                return 0
+            
+            return helper(row + 1, col) + helper(row, col + 1)
+
+        return helper(0, 0)
 

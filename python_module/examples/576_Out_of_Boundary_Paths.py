@@ -40,7 +40,7 @@ class Solution:
 
         return calculatePaths(startRow, startColumn, maxMove)
     
-    def findPaths(self, m: int, n: int, maxMove: int, startRow: int, startColumn: int) -> int:
+    def findPaths2(self, m: int, n: int, maxMove: int, startRow: int, startColumn: int) -> int:
         @cache
         def calculate_path(row, col, cur_move):
             if row < 0 or row >= m or col < 0 or col >= n:
@@ -54,3 +54,21 @@ class Solution:
                 cur_path += calculate_path(x, y, cur_move - 1)
             return cur_path % ((10**9)+7)
         return calculate_path(startRow, startColumn, maxMove)
+    
+    def findPaths(self, m: int, n: int, maxMove: int, startRow: int, startColumn: int) -> int:
+        mod = 10 ** 9 + 7
+        @cache
+        def helper(row: int, col: int, move: int):
+            if move > maxMove:
+                return 0
+            if row < 0 or row >= m or col < 0 or col >= n:
+                return 1
+            
+            path = 0
+            for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                new_row = row + dx
+                new_col = col + dy
+                path += helper(new_row, new_col, move + 1)
+
+            return path      
+        return helper(startRow, startColumn, 0) % mod

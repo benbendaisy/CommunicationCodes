@@ -31,7 +31,7 @@ class Solution:
     Input: s1 = "a", s2 = "a"
     Output: true
     """
-    def isScramble(self, s1: str, s2: str) -> bool:
+    def isScramble1(self, s1: str, s2: str) -> bool:
         m = {}
         def helper(ss1, ss2):
             if (ss1, ss2) in m:
@@ -46,5 +46,32 @@ class Solution:
                     m[(ss1, ss2)] = True
                     return True
             m[(ss1, ss2)] = False
+            return False
+        return helper(s1, s2)
+    
+    def isScramble(self, s1: str, s2: str) -> bool:
+        if not s1 or not s2:
+            return False
+        
+        if len(s1) != len(s2):
+            return False
+        
+        if sorted(s1) != sorted(s2):
+            return False
+
+        @cache
+        def helper(str1: str, str2: str):
+            if str1 == str2:
+                return True
+            
+            if sorted(str1) != sorted(str2):
+                return False
+            n = len(str1)
+            for i in range(1, n):
+                if helper(str1[:i], str2[:i]) and helper(str1[i:], str2[i:]):
+                    return True
+                
+                if helper(str1[:i], str2[n - i:]) and helper(str1[i:], str2[:n - i]):
+                    return True
             return False
         return helper(s1, s2)

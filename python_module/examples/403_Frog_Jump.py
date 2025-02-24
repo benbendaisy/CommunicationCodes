@@ -21,7 +21,7 @@ class Solution:
         Output: false
         Explanation: There is no way to jump to the last stone as the gap between the 5th and 6th stone is too large.
     """
-    def canCross(self, stones: List[int]) -> bool:
+    def canCross1(self, stones: List[int]) -> bool:
         @lru_cache(None)
         def can_cross(idx, jumpsize):
             for i in range(idx + 1, len(stones)):
@@ -31,3 +31,26 @@ class Solution:
                         return True
             return idx == len(stones) - 1
         return can_cross(0, 0)
+    
+    def canCross(self, stones: List[int]) -> bool:
+        if not stones:
+            return True
+        if stones[1] != 1:
+            return False
+        m = len(stones)
+        positions = set(stones)
+
+        @cache
+        def helper(position: int, last_jump: int):
+            if position == stones[-1]:
+                return True
+            if position not in positions:
+                return False
+            for next_jump in [last_jump - 1, last_jump, last_jump + 1]:
+                next_position = position + next_jump
+                if next_position <= position:
+                    continue
+                if next_position in positions and helper(next_position, next_jump):
+                    return True
+            return False
+        return helper(1, 1)

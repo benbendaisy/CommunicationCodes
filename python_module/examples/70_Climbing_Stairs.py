@@ -30,7 +30,7 @@ class Solution:
 
         return self.climbStairs(n - 1) + self.climbStairs(n - 2)
 
-    def climbStairs(self, n: int) -> int:
+    def climbStairs2(self, n: int) -> int:
         if n == 1:
             return 1
 
@@ -41,7 +41,16 @@ class Solution:
         return dp[n - 1]
     
     @cache
-    def climbStairs(self, n: int) -> int:
+    def climbStairs3(self, n: int) -> int:
         if n <= 1:
             return 1
         return self.climbStairs(n - 1) + self.climbStairs(n - 2) 
+    
+    @cache
+    def climbStairs(self, n: int) -> int:
+        if n == 1:
+            return 1
+        elif n == 2:
+            return 2
+        
+        return self.climbStairs(n - 1) + self.climbStairs(n - 2)

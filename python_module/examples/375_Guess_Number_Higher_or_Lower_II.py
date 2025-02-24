@@ -95,3 +95,16 @@ class Solution:
                     dp[i][j] = min(dp[i][j], nextStep + k)
         return dp[1][n]
 
+    def getMoneyAmount(self, n: int) -> int:
+        @cache
+        def helper(left: int, right: int):
+            if left >= right:
+                return 0
+            
+            min_cost = float("inf")
+            for guess in range(left, right + 1):
+                cost = guess + max(helper(left, guess - 1), helper(guess + 1, right))
+                min_cost = min(min_cost, cost)
+            return min_cost
+        
+        return helper(1, n)
