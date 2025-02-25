@@ -33,7 +33,7 @@ class Solution:
         The number of nodes in the tree is in the range [1, 104].
         -231 <= Node.val <= 231 - 1
     """
-    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+    def isValidBST1(self, root: Optional[TreeNode]) -> bool:
         def valid_bst(cur, less_val, bigger_val):
             if not cur:
                 return True
@@ -41,3 +41,12 @@ class Solution:
                 return False
             return valid_bst(cur.left, less_val, cur.val) and valid_bst(cur.right, cur.val, bigger_val)
         return valid_bst(root, -math.inf, math.inf)
+    
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        def helper(node, lower, upper):
+            if not node:
+                return True
+            if node.val <= lower or node.val >= upper:
+                return False
+            return helper(node.left, lower, node.val) and helper(node.right, node.val, upper)
+        return helper(root, float('-inf'), float('inf'))

@@ -57,7 +57,7 @@ class Solution:
 
         return dp[n - 1]
 
-    def rob(self, nums: List[int]) -> int:
+    def rob2(self, nums: List[int]) -> int:
         if not nums:
             return 0
         n = len(nums)
@@ -70,5 +70,17 @@ class Solution:
             for j in range(0, i - 1):
                 dp[i] = max(dp[i], dp[j] + nums[i])
         return max(dp)
+    
+    def rob(self, nums: List[int]) -> int:
+        m = len(nums)
+        @cache
+        def helper(idx: int):
+            if idx >= m:
+                return 0
+            max_profit = 0
+            for i in range(idx, m):
+                max_profit = max(max_profit,nums[i] + helper(i + 2))
+            return max_profit
+        return helper(0)
 
 

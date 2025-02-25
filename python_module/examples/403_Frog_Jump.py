@@ -32,7 +32,7 @@ class Solution:
             return idx == len(stones) - 1
         return can_cross(0, 0)
     
-    def canCross(self, stones: List[int]) -> bool:
+    def canCross2(self, stones: List[int]) -> bool:
         if not stones:
             return True
         if stones[1] != 1:
@@ -53,4 +53,25 @@ class Solution:
                 if next_position in positions and helper(next_position, next_jump):
                     return True
             return False
+        return helper(1, 1)
+    
+    def canCross(self, stones: List[int]) -> bool:
+        if not stones or len(stones) < 2 or stones[1] != 1:
+            return False
+
+        positions = {v: i for i, v in enumerate(stones)}
+
+        @cache
+        def helper(position: int, last_jump: int):
+            if position == stones[-1]:
+                return True
+
+            for next_jump in (last_jump - 1, last_jump, last_jump + 1):
+                next_position = position + next_jump
+                if next_position <= position:
+                    continue
+                if next_position in positions and helper(next_position, next_jump):
+                    return True
+            return False
+        
         return helper(1, 1)

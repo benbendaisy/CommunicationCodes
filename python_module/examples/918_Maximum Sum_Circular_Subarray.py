@@ -26,7 +26,7 @@ class Solution:
         Output: -2
         Explanation: Subarray [-2] has maximum sum -2.
     """
-    def maxSubarraySumCircular(self, nums: List[int]) -> int:
+    def maxSubarraySumCircular1(self, nums: List[int]) -> int:
         total_sum = 0
         cur_max_sum = 0
         cur_min_sum = 0
@@ -38,4 +38,41 @@ class Solution:
             cur_min_sum = min(cur_min_sum + num, num)
             max_sum = max(max_sum, cur_max_sum)
             min_sum = min(min_sum, cur_min_sum)
+        return max_sum if max_sum < 0 else max(max_sum, total_sum - min_sum)
+    
+    def maxSubarraySumCircular2(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        m = len(nums)
+        def helper(arr: List[int]):
+            max_sum, running_sum = float('-inf'), 0
+            for num in arr:
+                if running_sum < 0:
+                    running_sum = num
+                else:
+                    running_sum += num
+                max_sum = max(max_sum, running_sum)
+            return max_sum
+        
+        total_sum = sum(nums)
+        max_sum = helper(nums)
+        if max_sum < 0:
+            return max_sum
+        invert_nums = [-num for num in nums]
+        min_sum = -helper(invert_nums)
+        max_circular = total_sum - min_sum
+        return max(max_sum, max_circular)
+    
+    def maxSubarraySumCircular(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        m = len(nums)
+        running_max_sum, running_min_sum = 0, 0
+        max_sum, min_sum = float('-inf'), float('inf')
+        total_sum = sum(nums)
+        for num in nums:
+            running_max_sum = max(running_max_sum + num, num)
+            running_min_sum = min(running_min_sum + num, num)
+            max_sum = max(max_sum, running_max_sum)
+            min_sum = min(min_sum, running_min_sum)
         return max_sum if max_sum < 0 else max(max_sum, total_sum - min_sum)

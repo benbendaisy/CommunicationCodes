@@ -71,6 +71,40 @@ class Solution:
             return len(dp)
 
         return lis([x[1] for x in envelopes])
+    
+    def maxEnvelopes(self, envelopes: List[List[int]]) -> int:
+        if not envelopes:
+            return 0
+        
+        # Sort envelopes by width (ascending) and then by height (descending)
+        # This is a key insight: sorting by height in descending order when widths are equal
+        # prevents us from putting envelopes of the same width inside each other
+        envelopes.sort(key=lambda x: (x[0], -x[1]))
+        
+        # Now we just need to find the longest increasing subsequence based on height
+        # Create a list to track the smallest ending value for each subsequence length
+        dp = []
+        
+        for _, h in envelopes:
+            # Binary search to find the position to insert the current height
+            left, right = 0, len(dp)
+            
+            while left < right:
+                mid = (left + right) // 2
+                if dp[mid] < h:
+                    left = mid + 1
+                else:
+                    right = mid
+            
+            # If we're at the end, we're adding a new element to our LIS
+            if left == len(dp):
+                dp.append(h)
+            else:
+                # Otherwise, we're replacing an existing value to keep our sequence optimal
+                dp[left] = h
+        
+        # The length of dp represents the length of the longest increasing subsequence
+        return len(dp)
 
 
 

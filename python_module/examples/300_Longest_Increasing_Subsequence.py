@@ -66,7 +66,7 @@ class Solution:
                     dp[i] = max(dp[i], dp[j] + 1)
         return max(dp)
     
-    def lengthOfLIS(self, nums: List[int]) -> int:
+    def lengthOfLIS4(self, nums: List[int]) -> int:
         sub = [nums[0]]
         for num in nums[1:]:
             if num > sub[-1]:
@@ -78,3 +78,14 @@ class Solution:
                     i += 1
                 sub[i] = num
         return len(sub)
+    
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        m = len(nums)
+        dp = [1] * m
+        for i in range(m):
+            for j in range(i):
+                if nums[j] < nums[i]:
+                    dp[i] = max(dp[i], dp[j] + 1)
+        return max(dp)

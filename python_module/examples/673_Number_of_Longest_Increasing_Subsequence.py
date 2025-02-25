@@ -18,7 +18,7 @@ class Solution:
     Output: 5
     Explanation: The length of the longest increasing subsequence is 1, and there are 5 increasing subsequences of length 1, so output 5.
     """
-    def findNumberOfLIS(self, nums: List[int]) -> int:
+    def findNumberOfLIS1(self, nums: List[int]) -> int:
         n = len(nums)
         if n == 0:
             return 0
@@ -34,3 +34,48 @@ class Solution:
                         count[i] += count[j]
         longest_len = max(dp)
         return sum([count[i] for i in range(n) if dp[i] == longest_len])
+    
+    def findNumberOfLIS(self, nums: List[int]) -> int:
+        """
+        Find the number of longest increasing subsequences in a given array.
+        
+        Args:
+            nums: List of integers
+            
+        Returns:
+            The number of longest increasing subsequences
+        """
+        if not nums:
+            return 0
+            
+        n = len(nums)
+        
+        # lengths[i] = length of longest increasing subsequence ending at nums[i]
+        lengths = [1] * n
+        
+        # counts[i] = number of longest increasing subsequences ending at nums[i]
+        counts = [1] * n
+        
+        # Compute lengths and counts
+        for i in range(n):
+            for j in range(i):
+                if nums[i] > nums[j]:
+                    # If we can extend the subsequence ending at j
+                    if lengths[j] + 1 > lengths[i]:
+                        # Found a longer subsequence
+                        lengths[i] = lengths[j] + 1
+                        counts[i] = counts[j]
+                    elif lengths[j] + 1 == lengths[i]:
+                        # Found another subsequence of the same length
+                        counts[i] += counts[j]
+        
+        # Find the length of the longest increasing subsequence
+        max_length = max(lengths)
+        
+        # Count all subsequences with the max length
+        result = 0
+        for i in range(n):
+            if lengths[i] == max_length:
+                result += counts[i]
+                
+        return result

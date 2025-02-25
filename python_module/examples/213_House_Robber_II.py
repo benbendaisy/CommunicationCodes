@@ -37,7 +37,7 @@ class Solution:
 
         return max(self.rob_simple(nums[:-1]), self.rob_simple(nums[1:]))
 
-    def rob_simple(self, nums: List[int]) -> int:
+    def rob_simple1(self, nums: List[int]) -> int:
         t1 = 0
         t2 = 0
         for current in nums:
@@ -47,7 +47,7 @@ class Solution:
 
         return t1
 
-    def rob(self, nums: List[int]) -> int:
+    def rob2(self, nums: List[int]) -> int:
         def robHelper(start, end):
             dp = [0] * (end - start)
             dp[0] = nums[start]
@@ -64,3 +64,57 @@ class Solution:
             return max(nums[0], nums[1])
 
         return max(robHelper(0, len(nums) - 1), robHelper(1, len(nums)))
+    
+    def rob(nums):
+        """
+        Find the maximum amount of money you can rob without alerting the police,
+        given that houses are arranged in a circle.
+        
+        Args:
+            nums: List of integers representing money in each house
+            
+        Returns:
+            Maximum amount of money that can be robbed
+        """
+        n = len(nums)
+        
+        # Handle edge cases
+        if n == 0:
+            return 0
+        if n == 1:
+            return nums[0]
+        
+        # The key insight: we can break the circle by considering two scenarios:
+        # 1. Rob houses from 0 to n-2 (excluding the last house)
+        # 2. Rob houses from 1 to n-1 (excluding the first house)
+        # Then take the maximum of these two scenarios
+        
+        def rob_simple(houses):
+            """
+            Helper function to solve the non-circular house robber problem.
+            """
+            if not houses:
+                return 0
+            
+            if len(houses) == 1:
+                return houses[0]
+            
+            # dp[i] represents the maximum amount of money that can be robbed
+            # up to and including house i
+            dp = [0] * len(houses)
+            dp[0] = houses[0]
+            dp[1] = max(houses[0], houses[1])
+            
+            for i in range(2, len(houses)):
+                # Either rob the current house (and add to the max up to i-2)
+                # or skip the current house (and keep the max up to i-1)
+                dp[i] = max(dp[i-1], dp[i-2] + houses[i])
+            
+            return dp[-1]
+        
+        # Calculate the two scenarios
+        max_excluding_last = rob_simple(nums[:-1])  # Exclude the last house
+        max_excluding_first = rob_simple(nums[1:])  # Exclude the first house
+        
+        # Return the maximum of the two scenarios
+        return max(max_excluding_last, max_excluding_first)
