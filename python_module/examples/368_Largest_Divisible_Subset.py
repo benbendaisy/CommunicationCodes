@@ -26,7 +26,7 @@ class Solution:
         1 <= nums[i] <= 2 * 109
         All the integers in nums are unique.
     """
-    def largestDivisibleSubset(self, nums: List[int]) -> List[int]:
+    def largestDivisibleSubset1(self, nums: List[int]) -> List[int]:
         @lru_cache(None)
         def ends(idx):
             maxSet = []
@@ -43,7 +43,7 @@ class Solution:
         nums.sort()
         return max([ends(i) for i in range(len(nums))], key=len)
     
-    def largestDivisibleSubset(self, nums: List[int]) -> List[int]:
+    def largestDivisibleSubset2(self, nums: List[int]) -> List[int]:
         @cache
         def helper(idx):
             tail = nums[idx]
@@ -59,4 +59,59 @@ class Solution:
         if len(nums) == 0:
             return []
         nums.sort()
+        return max([helper(i) for i in range(len(nums))], key=len)
+
+    def largestDivisibleSubset3(self, nums: List[int]) -> List[int]:
+        if not nums:
+            return 0
+        
+        n = len(nums)
+        nums.sort()
+        dp = [[num] for num in nums]
+        max_idx = 0
+        for i in range(n):
+            for j in range(i):
+                if nums[i] % nums[j] == 0 and len(dp[j]) + 1 > len(dp[i]):
+                    dp[i] = dp[j] + [nums[i]]
+            if len(dp[i]) > len(dp[max_idx]):
+                max_idx = i
+        return dp[max_idx]
+    
+    def largestDivisibleSubset4(self, nums: List[int]) -> List[int]:
+        """
+        TLE: back stracking
+        """
+        if not nums:
+            return 0
+
+        n = len(nums)
+        nums.sort()
+        
+        dp = []
+        def helper(path: List[int], idx: int):
+            if path:
+                dp.append(path)
+            
+            if idx == n:
+                return
+            
+            for i in range(idx, n):
+                if not path or nums[i] % path[-1] == 0:
+                    helper(path + [nums[i]], i + 1)
+        helper([], 0)
+        return max(dp, key=len)
+    
+    def largestDivisibleSubset(self, nums: List[int]) -> List[int]:
+        if not nums:
+            return []
+        nums.sort()
+        @cache
+        def helper(idx: int):
+            max_subset = []
+            for i in range(idx):
+                if nums[idx] % nums[i] == 0:
+                    subset = helper(i)
+                    if len(max_subset) < len(subset):
+                        max_subset = subset
+            return max_subset + [nums[idx]]
         return max([helper(i) for i in range(len(nums))], key=len)

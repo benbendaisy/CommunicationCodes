@@ -59,7 +59,7 @@ class Solution:
 
         return ans
 
-    def numDecodings(self, s: str) -> int:
+    def numDecodings2(self, s: str) -> int:
         dp = [0 for _ in range(len(s) + 1)]
         dp[0] = 1
         # Ways to decode a string of size 1 is 1. Unless the string is '0'.
@@ -75,6 +75,26 @@ class Solution:
             if twoDigits >= 10 and twoDigits <= 26:
                 dp[i] += dp[i - 2]
         return dp[-1]
+    
+    @cache
+    def numDecodings(self, s: str) -> int:
+        if not s:
+            return 0
+        
+        n = len(s)
+        @cache
+        def helper(idx: int):
+            if idx == n:
+                return 1
+            if s[idx] == '0':
+                return 0
+            cnt = 0
+            for i in range(idx, n):
+                t = int(s[idx:i + 1])
+                if 1 <= t <= 26:
+                    cnt += helper(i + 1)
+            return cnt
+        return helper(0)
 
 
 

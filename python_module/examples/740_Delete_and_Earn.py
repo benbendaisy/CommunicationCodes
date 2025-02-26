@@ -35,7 +35,7 @@ class Solution:
             p1, p2 = max(d[i] + p2, p1), p1
         return max(p1, p2)
     
-    def deleteAndEarn(self, nums: List[int]) -> int:
+    def deleteAndEarn2(self, nums: List[int]) -> int:
         points = defaultdict(int)
         max_num = 0
         for num in nums:
@@ -48,3 +48,19 @@ class Solution:
         for num in range(2, max_num + 1):
             max_points[num] = max(max_points[num - 1], max_points[num - 2] + points[num])
         return max_points[max_num]
+    
+    def deleteAndEarn(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        num_dict = defaultdict(int)
+        for num in nums:
+            num_dict[num] += 1
+        max_num = max(nums)
+        dp = [0] * (max_num + 1)
+        dp[0] = 0
+        dp[1] = num_dict.get(1, 0)
+        for i in range(2, max_num + 1):
+            take = dp[i - 2] + i * num_dict.get(i, 0)
+            skip = dp[i-1]
+            dp[i] = max(take, skip)
+        return dp[-1]

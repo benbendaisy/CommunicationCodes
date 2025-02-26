@@ -47,7 +47,7 @@ class Solution:
         slices(len(nums) - 1)
         return self.x
 
-    def numberOfArithmeticSlices(self, nums: List[int]) -> int:
+    def numberOfArithmeticSlices3(self, nums: List[int]) -> int:
         m = len(nums)
         dp = [0] * m
         sums = 0
@@ -56,3 +56,39 @@ class Solution:
                 dp[i] = 1 + dp[i - 1]
                 sums += dp[i]
         return sums
+    
+    def numberOfArithmeticSlices4(nums):
+        if len(nums) < 3:
+            return 0  # No arithmetic slices possible
+
+        total_count = 0
+        dp = 0  # Stores count of arithmetic subarrays ending at index i
+
+        for i in range(2, len(nums)):
+            if nums[i] - nums[i - 1] == nums[i - 1] - nums[i - 2]:  # Check arithmetic condition
+                dp += 1  # Extend previous arithmetic sequence
+                total_count += dp  # Accumulate count
+            else:
+                dp = 0  # Reset if sequence breaks
+
+        return total_count
+    
+    @cache
+    def numDecodings(self, s: str) -> int:
+        if not s:
+            return 0
+        
+        n = len(s)
+        @cache
+        def helper(idx: int):
+            if idx == n:
+                return 1
+            if s[idx] == '0':
+                return 0
+            cnt = 0
+            for i in range(idx, n):
+                t = int(s[idx:i + 1])
+                if 1 <= t <= 26:
+                    cnt += helper(i + 1)
+            return cnt
+        return helper(0)

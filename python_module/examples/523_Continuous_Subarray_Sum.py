@@ -37,7 +37,7 @@ class Solution:
                     return True
         return False
 
-    def checkSubarraySum(self, nums: List[int], k: int) -> bool:
+    def checkSubarraySum2(self, nums: List[int], k: int) -> bool:
         # initialize the hash map with index 0 for sum 0
         if len(nums) < 2:
             return False
@@ -54,4 +54,37 @@ class Solution:
             elif hashMap[sums % k] < i:
                 return True
         return False
+    
+    def checkSubarraySum3(self, nums: List[int], k: int) -> bool:
+        if not nums:
+            return False
+        
+        running_sum = 0
+        positions = {0:0}
+        for i, num in enumerate(nums):
+            running_sum += num
+            remainder = running_sum % k
+            if remainder not in positions:
+                positions[remainder] = i + 1
+            elif positions[remainder] < i:
+                return True
+        return False
 
+    def checkSubarraySum(self, nums: List[int], k: int) -> bool:
+        if not nums:
+            return False
+        prefix_sum = 0
+        # To handle cases where prefix sum itself is a multiple of k
+        position_dict = {0:-1}
+
+        for i, v in enumerate(nums):
+            prefix_sum += v
+            remainder = prefix_sum % k
+            # Store first occurrence of remainder
+            if remainder not in position_dict:
+                position_dict[remainder] = i
+            else:
+                # Ensure subarray length >= 2
+                if i - position_dict[remainder] > 1:
+                    return True
+        return False
