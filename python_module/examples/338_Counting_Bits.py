@@ -46,7 +46,7 @@ class Solution:
             res.append(cnt)
         return res
     
-    def countBits(self, n: int) -> list[int]:
+    def countBits2(self, n: int) -> list[int]:
         """
         Returns an array where ans[i] is the number of 1's in the binary representation of i.
         Uses dynamic programming with the observation that for any number x, 
@@ -72,3 +72,20 @@ class Solution:
             ans[i] = ans[i & (i-1)] + 1
             
         return ans
+    
+    def countBits(self, n: int) -> List[int]:
+        if n < 0:
+            return []
+        
+        @cache
+        def count_one(m: int):
+            cnt = 0
+            while m > 0:
+                cnt += m & 1
+                m = m >> 1
+            return cnt
+        
+        res = []
+        for i in range(n + 1):
+            res.append(count_one(i))
+        return res

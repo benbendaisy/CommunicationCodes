@@ -55,7 +55,7 @@ class Solution:
 
         return -1
 
-    def minRefuelStops(self, target: int, startFuel: int, stations: List[List[int]]) -> int:
+    def minRefuelStops2(self, target: int, startFuel: int, stations: List[List[int]]) -> int:
         maxHeap = [] # A maxheap is simulated using negative values
         stations.append((target, math.inf)) # add the target into station so that we can check if we can reach
         ans = prev = 0
@@ -71,3 +71,102 @@ class Solution:
             heapq.heappush(maxHeap, -capacity)
             prev = location # refuel the gas
         return ans
+    
+    def minRefuelStops3(self, target: int, startFuel: int, stations: List[List[int]]) -> int:
+        # Early return if we can reach the target directly
+        if startFuel >= target:
+            return 0
+        
+        # Early return if no stations and we can't reach target
+        if not stations:
+            return -1
+        
+        n = len(stations)
+        
+        @cache
+        def helper(position: int, fuel: int, idx: int):
+            # If we have enough fuel to reach the target
+            if fuel >= target - position:
+                return 0
+            
+            # If we've considered all stations and still can't reach
+            if idx == n:
+                return float('inf')
+            
+            # Current station's position and fuel
+            station_pos, station_fuel = stations[idx]
+            
+            # If we can't reach the current station
+            if position + fuel < station_pos:
+                return float('inf')
+            
+            # Option 1: Skip this station
+            skip = helper(position, fuel, idx + 1)
+            
+            # Option 2: Refuel at this station
+            # When we refuel, we're at the station's position with
+            # our remaining fuel plus the station's fuel
+            remaining_fuel = fuel - (station_pos - position)
+            refuel = 1 + helper(station_pos, remaining_fuel + station_fuel, idx + 1)
+            
+            return min(skip, refuel)
+        
+        result = helper(0, startFuel, 0)
+        return -1 if result == float('inf') else result
+    
+    def minRefuelStops4(self, target: int, startFuel: int, stations: List[List[int]]) -> int:
+        if startFuel >= target:
+            return 0
+        if not stations:
+            return -1
+        
+        n = len(stations)
+        @cache
+        def helper(position: int, fuel: int, idx: int):
+            if fuel >= target - position:
+                return 0
+            
+            if idx == n:
+                return float('inf')
+            
+            cur_pos, cur_fuel = stations[idx]
+            if position + fuel < cur_pos:
+                return float('inf')
+            
+            skip = helper(position, fuel, idx + 1)
+
+            remain_fuel = fuel - (cur_pos - position)
+            refuel = 1 + helper(cur_pos, remain_fuel + cur_fuel, idx + 1)
+            return min(skip, refuel)
+        res = helper(0, startFuel, 0)
+        return -1 if res == float('inf') else res
+    
+    def minRefuelStops(self, target: int, startFuel: int, stations: List[List[int]]) -> int:
+        # Early return if we can reach target directly
+        if startFuel >= target:
+            return 0
+        
+        # Max heap to store fuel amounts from stations we've passed
+        max_heap = []
+        
+        current_fuel = startFuel
+        stops = 0
+        i = 0
+        
+        while current_fuel < target:
+            # Add all reachable stations to our heap
+            while i < len(stations) and stations[i][0] <= current_fuel:
+                # Push negative value for max heap (Python only has min heap)
+                heapq.heappush(max_heap, -stations[i][1])
+                i += 1
+            
+            # If no stations are available to refuel
+            if not max_heap:
+                return -1
+            
+            # Refuel at the station with maximum fuel
+            current_fuel += -heapq.heappop(max_heap)
+            stops += 1
+        
+        return stops
+

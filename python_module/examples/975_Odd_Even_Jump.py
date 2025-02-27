@@ -48,7 +48,7 @@ class Solution:
         Output: 3
         Explanation: We can reach the end from starting indices 1, 2, and 4.
     """
-    def oddEvenJumps(self, arr: List[int]) -> int:
+    def oddEvenJumps1(self, arr: List[int]) -> int:
         # find next index of current index that is the least larger/smaller
         def get_next_index(sorted_indexes):
             stack = []
@@ -74,3 +74,66 @@ class Solution:
             if even_indexes[i] is not None:
                 dp[even_indexes[i]][1] += dp[i][0]
         return dp[-1][0] + dp[-1][1]
+    
+
+    def oddEvenJumps2(arr):
+        n = len(arr)
+        if n == 1:
+            return 1  # Only one element, always valid
+
+        # Step 1: Precompute next jumps using monotonic stacks
+        def next_jump(order):
+            result = [None] * n
+            stack = []
+            for i in order:
+                while stack and stack[-1] < i:
+                    result[stack.pop()] = i
+                stack.append(i)
+            return result
+
+        odd_jump = next_jump(sorted(range(n), key=lambda i: (arr[i], i)))  # Increasing order
+        even_jump = next_jump(sorted(range(n), key=lambda i: (-arr[i], i)))  # Decreasing order
+
+        # Step 2: Dynamic Programming
+        odd = [False] * n
+        even = [False] * n
+        odd[-1] = even[-1] = True  # The last index is always valid
+
+        for i in range(n - 2, -1, -1):
+            if odd_jump[i] is not None:
+                odd[i] = even[odd_jump[i]]
+            if even_jump[i] is not None:
+                even[i] = odd[even_jump[i]]
+
+        return sum(odd)  # Count good starting indices
+    
+    def oddEvenJumps(arr):
+        n = len(arr)
+
+        # Helper function to find the next jump index
+        def next_jump(odd):
+            result = [None] * n
+            stack = []
+            for i in sorted(range(n), key=lambda x: (arr[x], x) if odd else (-arr[x], x)):
+                while stack and stack[-1] < i:
+                    result[stack.pop()] = i
+                stack.append(i)
+            return result
+
+        # Precompute next jumps using monotonic stacks
+        odd_jump = next_jump(odd=True)
+        even_jump = next_jump(odd=False)
+
+        @lru_cache(None)  # Memoization to store computed results
+        def dfs(i, odd_turn):
+            if i == n - 1:
+                return True  # Reached the last index
+
+            next_index = odd_jump[i] if odd_turn else even_jump[i]
+            if next_index is None:
+                return False  # No valid jump
+            
+            return dfs(next_index, not odd_turn)
+
+        # Count good starting indices
+        return sum(dfs(i, True) for i in range(n))

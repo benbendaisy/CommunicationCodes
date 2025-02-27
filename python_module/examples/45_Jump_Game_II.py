@@ -47,13 +47,60 @@ class Solution:
                     memo[j] = memo[i] + 1
         return memo[n - 1]
     
-    def jump(self, nums: List[int]) -> int:
+    def jump3(self, nums: List[int]) -> int:
         if not nums:
             return 0
         dp = [float('inf') for _ in range(len(nums))]
         dp[0] = 0
         for i, _ in enumerate(nums):
-            for j in range(0, i):
+            for j in range(i):
                 if j + nums[j] >= i:
                     dp[i] = min(dp[i], dp[j] + 1)
         return dp[-1]
+    
+    def jump(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        
+        n = len(nums)
+        if n <= 1:
+            return 0
+        
+        @cache
+        def helper(position: int):
+            # If we're at or beyond the last position, we're done
+            if position >= n - 1:
+                return 0
+            
+            # Initialize min_jumps to infinity
+            min_jumps = float('inf')
+            
+            # Try all possible jumps from current position
+            max_jump = min(position + nums[position], n - 1)
+            for next_pos in range(position + 1, max_jump + 1):
+                min_jumps = min(min_jumps, 1 + helper(next_pos))
+                
+            return min_jumps
+        
+        # Start from position 0
+        result = helper(0)
+        return result if result != float('inf') else -1
+    
+
+    def jump(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        n = len(nums)
+        if n < 2:
+            return 0
+        @cache # Memoization to avoid redundant calculations
+        def helper(idx: int):
+            if idx >= n - 1: # Base case: reached or exceeded last index
+                return 0
+            min_jumps = float('inf')
+            for i in range(1, nums[idx] + 1): # Try all jumps within range
+                if i + idx < n: # Ensure we don't go out of bounds
+                    min_jumps = min(min_jumps, 1 + helper(i + idx))
+            return min_jumps
+
+        return helper(0)

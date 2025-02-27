@@ -113,3 +113,26 @@ class Solution:
                     total = (vowel_permutation(i - 1, 'i') + vowel_permutation(i - 1, 'o')) % mod
             return total
         return sum(vowel_permutation(n, vowel) for vowel in 'aeiou') % mod
+    
+    def countVowelPermutation(self, n: int) -> int:
+        mod = 10 ** 9 + 7
+        
+        @cache
+        def helper(idx: int, vowel: str):
+            if idx == n:
+                return 1
+            cnt = 0
+            match vowel:
+                case 'a':
+                    cnt = helper(idx + 1, 'e')
+                case 'e':
+                    cnt = helper(idx + 1, 'a') + helper(idx + 1, 'i')
+                case 'i':
+                    cnt = helper(idx + 1, 'a') + helper(idx + 1, 'e') + helper(idx + 1, 'o') + helper(idx + 1, 'u')
+                case 'o':
+                    cnt = helper(idx + 1, 'i') + helper(idx + 1, 'u')
+                case 'u':
+                    cnt = helper(idx + 1, 'a')
+                
+            return cnt % mod
+        return sum([helper(1, vowel) for vowel in 'aeiou']) % mod

@@ -66,3 +66,53 @@ class Solution:
             return minCost
         minCost = findMinCost(0, 0, -1)
         return minCost if minCost != maxCnt else -1
+    
+    def minCost(houses: List[int], cost: List[List[int]], m: int, n: int, target: int) -> int:
+        INF = float('inf')
+
+        @lru_cache(None)  # Memoization to avoid recomputation
+        def dfs(i, last_color, neighborhoods):
+            # Base case: If all houses are painted, check if target is met
+            if i == m:
+                return 0 if neighborhoods == target else INF
+            
+            # If we exceed the target, return INF
+            if neighborhoods > target:
+                return INF
+
+            # If house is already painted, move to the next house
+            if houses[i] != 0:
+                return dfs(i + 1, houses[i], neighborhoods + (houses[i] != last_color))
+
+            # Try painting with all possible colors and pick the minimum cost
+            min_cost = INF
+            for c in range(1, n + 1):
+                new_neighborhoods = neighborhoods + (c != last_color)
+                min_cost = min(min_cost, cost[i][c - 1] + dfs(i + 1, c, new_neighborhoods))
+            
+            return min_cost
+
+        result = dfs(0, 0, 0)
+        return result if result != INF else -1
+    
+    def minCost(self, houses: List[int], cost: List[List[int]], m: int, n: int, target: int) -> int:
+        inf = float('inf')
+
+        @cache
+        def helper(idx: int, last_color: int, neighbor: int):
+            if idx == m:
+                return 0 if neighbor == target else inf
+            
+            if neighbor > target:
+                return inf
+            
+            if houses[idx] != 0:
+                return helper(idx + 1, houses[idx], neighbor + (houses[idx] != last_color))
+            
+            min_cost = inf
+            for c in range(1, n + 1):
+                new_neighbor = neighbor + (c != last_color)
+                min_cost = min(min_cost, cost[idx][c - 1] + helper(idx + 1, c, new_neighbor))
+            return min_cost
+        res = helper(0, 0, 0)
+        return res if res != inf else -1
