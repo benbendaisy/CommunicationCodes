@@ -26,7 +26,7 @@ class Solution:
     Output: 9
     Explanation: Although the events do not overlap, you can only attend 3 events. Pick the highest valued three.
     """
-    def maxValue(self, events: List[List[int]], k: int) -> int:
+    def maxValue1(self, events: List[List[int]], k: int) -> int:
         n = len(events)
         events.sort()
         @lru_cache(None)
@@ -37,7 +37,7 @@ class Solution:
             return max(dp(i + 1, k), events[i][2] + dp(j, k - 1))
         return dp(0, k)
     
-    def maxValue1(self, events: List[List[int]], k: int) -> int:
+    def maxValue2(self, events: List[List[int]], k: int) -> int:
         n = len(events)
         dp = [[0 for _ in range(k + 1)] for _ in range(n + 1)]
         events.sort()
@@ -48,3 +48,30 @@ class Solution:
                 next = bisect.bisect_right(starts, events[i][1])
                 dp[i][j] = max(dp[i + 1][j], events[i][2] + dp[next][j - 1])
         return dp[0][k]
+    
+    def maxValue(self, events: List[List[int]], k: int) -> int:
+        if not events:
+            return 0
+        
+        events.sort()
+        # Extract start days for binary search
+        start_days = [x for x, _, _ in events]
+        n = len(events)
+        
+        @cache
+        def helper(idx: int, e: int):
+            # Base case: No events or no choices left
+            if idx == n or e == 0:
+                return 0
+            
+            # Find the next available event that starts after events[i] ends
+            next_id = bisect.bisect_right(start_days, events[idx][1])
+
+            # Two choices: skip event[i] or attend it and jump to next non-overlapping event
+            return max(
+                helper(idx + 1, e), # Skip this event
+                events[idx][2] + helper(next_id, e - 1) # Attend this event
+            )
+        
+        # Start from first event with k selections available
+        return helper(0, k)

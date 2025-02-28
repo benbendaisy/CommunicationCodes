@@ -27,7 +27,7 @@ class Solution:
         1 <= prices.length <= 105
         0 <= prices[i] <= 104
     """
-    def maxProfit(self, prices: List[int]) -> int:
+    def maxProfit1(self, prices: List[int]) -> int:
         if not prices or len(prices) < 2:
             return 0
 
@@ -37,3 +37,12 @@ class Solution:
             minPrice = min(minPrice, price)
             delta = max(delta, price - minPrice)
         return delta
+    
+    def maxProfit(self, prices: List[int]) -> int:
+        if not prices:
+            return 0
+        min_price, max_profit = float('inf'), float('-inf')
+        for num in prices:
+            min_price = min(min_price, num)
+            max_profit = max(max_profit, num - min_price)
+        return max_profit

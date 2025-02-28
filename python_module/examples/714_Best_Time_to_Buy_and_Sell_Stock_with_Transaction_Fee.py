@@ -24,10 +24,29 @@ class Solution:
     Input: prices = [1,3,7,5,10,3], fee = 3
     Output: 6
     """
-    def maxProfit(self, prices: List[int], fee: int) -> int:
+    def maxProfit1(self, prices: List[int], fee: int) -> int:
         profit_cum = float("-inf")
         profit_sum = 0
         for price in prices:
             profit_cum = max(profit_cum, profit_sum - price) # check whether buy or not
             profit_sum = max(profit_sum, profit_cum + price - fee) # check whether sell or not
         return profit_sum
+    
+    def maxProfit(self, prices: List[int], fee: int) -> int:
+        if not prices or len(prices) < 2:
+            return 0
+        
+        n = len(prices)
+        @cache
+        def helper(idx: int, holding: bool):
+            if idx == n:
+                return 0
+            
+            max_profit = helper(idx + 1, holding)
+            if holding:
+                max_profit = max(max_profit, prices[idx] - fee + helper(idx + 1, False))
+            else:
+                max_profit = max(max_profit, -prices[idx] + helper(idx + 1, True))
+            
+            return max_profit
+        return helper(0, False)

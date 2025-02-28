@@ -58,3 +58,26 @@ class Solution:
                             doSomthing = max(doSomthing, -prices[i] + dp[i + 1][1][0])
                     dp[i][holding][cooldown] = max(doNothing, doSomthing)
         return dp[0][0][0]
+    
+    def maxProfit(self, prices: List[int]) -> int:
+        if not prices or len(prices) < 2:
+            return 0
+        
+        n = len(prices)
+        @cache
+        def helper(idx: int, holding: bool):
+            if idx >= n:
+                return 0
+            
+            # Option 1: Do nothing, move to the next day
+            max_profit = helper(idx + 1, holding)
+
+            if holding:
+                # Option 2: Sell the stock → Move to `idx + 2` due to cooldown
+                max_profit = max(max_profit, prices[idx] + helper(idx + 2, False))
+            else:
+                # Option 3: Buy the stock
+                max_profit = max(max_profit, -prices[idx] + helper(idx + 1, True))
+            return max_profit
+        
+        return helper(0, False)

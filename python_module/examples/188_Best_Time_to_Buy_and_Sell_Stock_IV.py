@@ -131,7 +131,7 @@ class Solution:
                 sell[i] = max(sell[i], buy[i] + price)
         return sell[-1]
 
-    def maxProfit(self, k: int, prices: List[int]) -> int:
+    def maxProfit4(self, k: int, prices: List[int]) -> int:
         # no transaction, no profit
         if k < 1:
             return 0
@@ -151,6 +151,55 @@ class Solution:
         # return max profit at most k transactions
         # or you can write `return dp[-1][1]
         return dp[k][1]
+    
+    def maxProfit5(self, k: int, prices: List[int]) -> int:
+        if not prices or k == 0:
+            return 0
+        
+        n = len(prices)
+
+        @cache
+        def helper(idx: int, transactions_left: int, holding: bool):
+            if idx == n or transactions_left == 0:
+                return 0  # No transactions left or end of list
+            
+            # Option 1: Do nothing, move to the next day
+            max_profit = helper(idx + 1, transactions_left, holding)
+
+            if holding:
+                # Option 2: Sell the stock
+                max_profit = max(max_profit, prices[idx] + helper(idx + 1, transactions_left - 1, False))
+            else:
+                # Option 3: Buy the stock
+                max_profit = max(max_profit, -prices[idx] + helper(idx + 1, transactions_left, True))
+            
+            return max_profit
+
+        return helper(0, k, False)
+    
+    def maxProfit(self, k: int, prices: List[int]) -> int:
+        if not prices or len(prices) < 2:
+            return 0
+        
+        n = len(prices)
+        @cache
+        def helper(idx: int, left: int, holding: bool) -> int:
+            if idx == n or left == 0:
+                return 0 # No transactions left or end of list
+            
+            # Option 1: Do nothing, move to the next day
+            max_profit = helper(idx + 1, left, holding)
+
+            if holding:
+                # Option 2: Sell the stock
+                max_profit = max(max_profit, prices[idx] + helper(idx + 1, left - 1, False))
+            else:
+                # Option 3: Buy the stock
+                max_profit = max(max_profit, -prices[idx] + helper(idx + 1, left, True))
+            return max_profit
+        
+        return helper(0, k, False)
+
 
 if __name__ == "__main__":
     prices = [2,4,1]
