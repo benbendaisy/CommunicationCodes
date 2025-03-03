@@ -58,7 +58,7 @@ class Solution:
             return ans
         return tryAllCombinations(0, 0)
 
-    def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
+    def isInterleave4(self, s1: str, s2: str, s3: str) -> bool:
         n1, n2, n3 = len(s1), len(s2), len(s3)
         if n1 + n2 != n3:
             return False
@@ -74,6 +74,36 @@ class Solution:
                 else:
                     dp[i][j] = (dp[i][j - 1] and s2[j - 1] == s3[i + j - 1]) or (dp[i - 1][j] and s1[i - 1] == s3[i + j - 1])
         return dp[-1][-1]
+
+    def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
+        if not s1 and not s2 and not s3:
+            return True
+        m, n, k = len(s1), len(s2), len(s3)
+
+        @cache
+        def helper(idx1: int, idx2: int, idx3: int) -> bool:
+            if idx1 == m and idx2 == n:
+                return idx3 == k
+            
+            if idx3 == k:
+                return False
+            
+            if idx1 == m:
+                return s2[idx2:] == s3[idx3:]
+            
+            if idx2 == n:
+                return s1[idx1:] == s3[idx3:]
+            
+            if s1[idx1] == s3[idx3] and s2[idx2] == s3[idx3]:
+                return helper(idx1 + 1, idx2, idx3 + 1) or helper(idx1, idx2 + 1, idx3 + 1)
+            elif s1[idx1] == s3[idx3]:
+                return helper(idx1 + 1, idx2, idx3 + 1)
+            elif s2[idx2] == s3[idx3]:
+                return helper(idx1, idx2 + 1, idx3 + 1)
+            
+            return False
+        
+        return helper(0, 0, 0)
 
 if __name__ == "__main__":
     s1 = "aabcc"

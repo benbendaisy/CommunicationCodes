@@ -55,7 +55,7 @@ class Solution:
             return cur_path % ((10**9)+7)
         return calculate_path(startRow, startColumn, maxMove)
     
-    def findPaths(self, m: int, n: int, maxMove: int, startRow: int, startColumn: int) -> int:
+    def findPaths3(self, m: int, n: int, maxMove: int, startRow: int, startColumn: int) -> int:
         mod = 10 ** 9 + 7
         @cache
         def helper(row: int, col: int, move: int):
@@ -72,3 +72,23 @@ class Solution:
 
             return path      
         return helper(startRow, startColumn, 0) % mod
+    
+    def findPaths(self, m: int, n: int, maxMove: int, startRow: int, startColumn: int) -> int:
+        mod = 10 ** 9 + 7
+        @cache
+        def helper(row: int, col: int, moves: int) -> int:
+            if row < 0 or row >= m or col < 0 or col >= n:
+                return 1
+
+            if moves == 0:
+                return 0
+            
+            paths = 0
+            for dx, dy in ((0, -1), (0, 1), (-1, 0), (1, 0)):
+                new_row = row + dx
+                new_col = col + dy
+                paths += helper(new_row, new_col, moves - 1)
+
+            return  paths
+        
+        return helper(startRow, startColumn, maxMove) % mod

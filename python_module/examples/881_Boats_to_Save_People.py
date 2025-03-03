@@ -23,11 +23,23 @@ class Solution:
         Output: 4
         Explanation: 4 boats (3), (3), (4), (5)
     """
-    def numRescueBoats(self, people: List[int], limit: int) -> int:
+    def numRescueBoats1(self, people: List[int], limit: int) -> int:
         people.sort()
         l, r = 0, len(people) - 1
         boats = 0
         while l < r:
+            if people[l] + people[r] <= limit:
+                l, r = l + 1, r - 1
+            else:
+                r -= 1
+            boats += 1
+        return boats
+    
+    def numRescueBoats(self, people: List[int], limit: int) -> int:
+        people.sort()
+        l, r = 0, len(people) - 1
+        boats = 0
+        while l <= r:
             if people[l] + people[r] <= limit:
                 l, r = l + 1, r - 1
             else:

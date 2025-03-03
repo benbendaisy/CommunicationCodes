@@ -30,7 +30,7 @@ class Solution:
 
         return len(word1) + len(word2) - 2 * lcs(0, 0)
 
-    def minDistance(self, word1: str, word2: str) -> int:
+    def minDistance2(self, word1: str, word2: str) -> int:
         m, n = len(word1), len(word2)
         dp = [[0] * (n + 1) for _ in range(m + 1)]
         for i in range(1, m + 1):
@@ -40,3 +40,40 @@ class Solution:
                 else:
                     dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
         return m + n - 2 * dp[m][n]
+    
+    def minDistance3(self, word1: str, word2: str) -> int:
+        """
+        Idea: find the longest common subsequence between word1 and word2 and 
+        delete the rest of the characters in word1 and word2
+        """
+        if not word1 or not word2:
+            return -1
+        m, n = len(word1), len(word2)
+        dp = [[0] * (n + 1) for _ in range(m + 1)]
+        for i in range(1, m + 1):
+            for j in range(1, n + 1):
+                if word1[i - 1] == word2[j - 1]:
+                    dp[i][j] = dp[i - 1][j - 1] + 1
+                else:
+                    dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+        
+        return m + n - 2 * dp[m][n]
+    
+    def minDistance(self, word1: str, word2: str) -> int:
+        if not word1 or not word2:
+            return -1
+        m, n = len(word1), len(word2)
+        @cache
+        def helper(idx1: int, idx2: int) -> int:
+            if idx1 == m:
+                return n - idx2
+            
+            if idx2 == n:
+                return m - idx1
+            
+            if word1[idx1] == word2[idx2]:
+                return helper(idx1 + 1, idx2 + 1)
+            
+            return min(helper(idx1 + 1, idx2), helper(idx1, idx2 + 1)) + 1
+        
+        return helper(0, 0)

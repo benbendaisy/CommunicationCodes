@@ -31,7 +31,7 @@ class Solution:
             ans.append(get_num(rowIndex, i))
         return ans
     
-    def getRow(self, rowIndex: int) -> List[int]:
+    def getRow2(self, rowIndex: int) -> List[int]:
         rowIndex += 1
         dp = [[0] * i for i in range(1, rowIndex + 1)]
         for i in range(rowIndex):
@@ -43,3 +43,16 @@ class Solution:
                 if i != 0 and j != 0:
                     dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j]
         return dp[-1]
+    
+    def getRow(self, rowIndex: int) -> List[int]:
+        @cache
+        def get_row(row, col):
+            if row == 0 or col == 0 or row == col:
+                return 1
+            
+            return get_row(row - 1, col) + get_row(row - 1, col - 1)
+        
+        res = []
+        for i in range(rowIndex + 1):
+            res.append(get_row(rowIndex, i))
+        return res

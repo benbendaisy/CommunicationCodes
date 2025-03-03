@@ -54,3 +54,31 @@ class Solution:
                 ans = first_match and is_match(idx_s + 1, idx_p + 1)
             return ans
         return is_match(0, 0)
+    
+    def isMatch(self, s: str, p: str) -> bool:
+        if not s and not p:
+            return True
+        
+        m, n = len(s), len(p)
+
+        @cache
+        def helper(idx1: int, idx2: int):
+            if idx1 == m and idx2 == n:
+                return True
+            
+            if idx1 > m:
+                return False
+            
+            if idx2 < n - 1:
+                if p[idx2 + 1] == '*':
+                    if (p[idx2] == '.') or (idx1 < m and idx2 < n and s[idx1] == p[idx2]):
+                        return helper(idx1 + 1, idx2 + 2) or helper(idx1 + 1, idx2) or helper(idx1, idx2 + 2)
+                    else:
+                        return helper(idx1, idx2 + 2)
+
+            if idx1 < m and idx2 < n and s[idx1] == p[idx2]:
+                return helper(idx1 + 1, idx2 + 1)
+            if idx2 < n and p[idx2] == '.':
+                return helper(idx1 + 1, idx2 + 1)
+            return False
+        return helper(0, 0)

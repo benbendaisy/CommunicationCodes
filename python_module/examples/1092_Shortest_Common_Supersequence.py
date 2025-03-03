@@ -79,7 +79,7 @@ class Solution:
         return ''.join(result[::-1])
     
 
-    def shortestCommonSupersequence(self, str1: str, str2: str) -> str:
+    def shortestCommonSupersequence3(self, str1: str, str2: str) -> str:
         if not str1 and not str2:
             return ""
         
@@ -116,3 +116,27 @@ class Solution:
             j -= 1
         
         return "".join(res[::-1])
+    
+    def shortestCommonSupersequence(self, str1: str, str2: str) -> str:
+        """
+        Memory Limit Exceeded
+        """
+        if not str1 and not str2:
+            return ""
+        
+        m, n = len(str1), len(str2)
+        @cache
+        def helper(idx1: int, idx2:int):
+            if idx1 == m:
+                return str2[idx2:]
+            if idx2 == n:
+                return str1[idx1:]
+            
+            if str1[idx1] == str2[idx2]:
+                return str1[idx1] + helper(idx1 + 1, idx2 + 1)
+            
+            option1 = str1[idx1] + helper(idx1 + 1, idx2)
+            option2 = str2[idx2] + helper(idx1, idx2 + 1)
+            return option1 if len(option1) < len(option2) else option2
+        
+        return helper(0, 0)

@@ -47,7 +47,7 @@ class Solution:
 
         return minTotals(0, 0)
 
-    def minimumTotal(self, triangle: List[List[int]]) -> int:
+    def minimumTotal2(self, triangle: List[List[int]]) -> int:
         @cache
         def min_path(row, col):
             path = triangle[row][col]
@@ -55,6 +55,16 @@ class Solution:
                 path += min(min_path(row + 1, col), min_path(row + 1, col + 1))
             return path
         return min_path(0, 0)
+    
+    def minimumTotal(self, triangle: List[List[int]]) -> int:
+        rows = len(triangle)
+        @cache
+        def helper(row: int, col: int):
+            if row == rows:
+                return 0
+            return triangle[row][col] + min(helper(row + 1, col), helper(row + 1, col + 1))
+
+        return helper(0, 0)
 
 if __name__ == "__main__":
     triangle = [[-1],[2,3],[1,-1,-3]]

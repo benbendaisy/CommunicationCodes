@@ -34,7 +34,7 @@ class Solution:
 
         return dfs(len(nums) - 1, sums // 2)
 
-    def canPartition(self, nums: List[int]) -> bool:
+    def canPartition2(self, nums: List[int]) -> bool:
         # find sum of array elements
         total_sum = sum(nums)
         if total_sum % 2 != 0:
@@ -53,3 +53,23 @@ class Solution:
                 else:
                     dp[i][j] = dp[i - 1][j] or dp[i - 1][j - cur]
         return dp[n][subset_sum]
+    
+    def canPartition(self, nums: List[int]) -> bool:
+        if not nums:
+            return False
+        
+        sums = sum(nums)
+        if sums % 2 != 0:
+            return False
+        n = len(nums)
+        half = sums // 2
+        @cache
+        def helper(idx: int, sum1: int, sum2: int) -> int:
+            if idx == n:
+                return sum1 == sum2
+            
+            if sum1 > half or sum2 > half:
+                return False
+            
+            return helper(idx + 1, sum1 + nums[idx], sum2) or helper(idx + 1, sum1, sum2 + nums[idx])
+        return helper(0, 0, 0)

@@ -45,7 +45,7 @@ class Solution:
 
         return max(max(row) for row in memo)
 
-    def findLength(self, nums1: List[int], nums2: List[int]) -> int:
+    def findLength3(self, nums1: List[int], nums2: List[int]) -> int:
         m, n = len(nums1), len(nums2)
         memo = [[0] * (n + 1) for _ in range(m + 1)]
         for i in range(1, m + 1):
@@ -54,3 +54,32 @@ class Solution:
                     memo[i][j] = memo[i - 1][j - 1] + 1
 
         return max(max(row) for row in memo)
+    
+    def findLength4(self, nums1: List[int], nums2: List[int]) -> int:
+        if not nums1 or not nums2:
+            return 0
+        
+        m, n = len(nums1), len(nums2)
+        @cache
+        def helper(idx1: int, idx2: int, cnt: int) -> int:
+            if idx1 >= m or idx2 >= n:
+                return cnt
+            
+            if nums1[idx1] == nums2[idx2]:
+                cnt = helper(idx1 + 1, idx2 + 1, cnt + 1)
+            
+            return max(cnt, helper(idx1 + 1, idx2, 0), helper(idx1, idx2 + 1, 0))
+        
+        return helper(0, 0, 0)
+    
+    def findLength(self, nums1: List[int], nums2: List[int]) -> int:
+        if not nums1 or not nums2:
+            return 0
+        
+        m, n = len(nums1), len(nums2)
+        dp = [[0] * (n + 1) for _ in range(m + 1)]
+        for i in range(1, m + 1):
+            for j in range(1, n + 1):
+                if nums1[i - 1] == nums2[j - 1]:
+                    dp[i][j] = dp[i - 1][j - 1] + 1
+        return max(max(row) for row in dp)

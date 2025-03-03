@@ -25,7 +25,7 @@ class Solution:
 
         1 <= n <= 104
     """
-    def numSquares(self, n: int) -> int:
+    def numSquares0(self, n: int) -> int:
         square_nums = [i ** 2 for i in range(1, int(sqrt(n)) + 1)]
 
         dp = [math.inf] * (n + 1)
@@ -68,3 +68,37 @@ class Solution:
                 min_num = min(min_num, new_num)
             return min_num
         return helper(n)
+    
+    def numSquares3(self, n: int) -> int:
+        squares = [i ** 2 for i in range(1, int(sqrt(n)) + 1)]
+        
+        @cache
+        def helper(sum_cnt: int):
+            if sum_cnt == n:
+                return 0
+            
+            min_nums = float('inf')
+            for i in range(0, len(squares)):
+                t = sum_cnt + squares[i]
+                if t <= n:
+                    min_nums = min(min_nums, 1 + helper(t))
+            return min_nums
+        
+        return helper(0)
+    
+    def numSquares(self, n: int) -> int:
+        squares = [i ** 2 for i in range(1, int(sqrt(n)) + 1)]
+
+        @cache
+        def helper(cur_sum: int):
+            if cur_sum == n:
+                return 0
+
+            min_nums = float('inf')
+            for square in squares:
+                t = cur_sum + square
+                if t <= n:
+                    min_nums = min(min_nums, 1 + helper(t))
+            return min_nums
+        
+        return helper(0)

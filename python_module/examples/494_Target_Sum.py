@@ -22,7 +22,7 @@ class Solution:
     Input: nums = [1], target = 1
     Output: 1
     """
-    def findTargetSumWays(self, nums: List[int], target: int) -> int:
+    def findTargetSumWays1(self, nums: List[int], target: int) -> int:
         if not nums:
             return 0
         
@@ -36,4 +36,31 @@ class Solution:
                 return 0
             
             return helper(idx + 1, path_sum + nums[idx]) + helper(idx + 1, path_sum - nums[idx])
+        return helper(0, 0)
+    
+    def findTargetSumWays2(self, nums: List[int], target: int) -> int:
+        if not nums:
+            return 0
+
+        n = len(nums)
+        @cache
+        def helper(idx: int, t: int) -> int:
+            if idx == n:
+                return t == target
+            
+            return helper(idx + 1, t + nums[idx]) + helper(idx + 1, t - nums[idx])
+        
+        return helper(0, 0)
+    
+    def findTargetSumWays(self, nums: List[int], target: int) -> int:
+        if not nums:
+            return 0
+        n = len(nums)
+        @cache
+        def helper(idx: int, sums: int):
+            if idx == n:
+                return sums == target
+            
+            return helper(idx + 1, sums + nums[idx]) + helper(idx + 1, sums - nums[idx])
+        
         return helper(0, 0)

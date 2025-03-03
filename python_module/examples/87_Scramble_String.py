@@ -76,7 +76,7 @@ class Solution:
             return False
         return helper(s1, s2)
     
-    def isScramble(self, s1: str, s2: str) -> bool:
+    def isScramble3(self, s1: str, s2: str) -> bool:
         if not s1 or not s2 or len(s1) != len(s2):
             return False
         
@@ -100,4 +100,30 @@ class Solution:
                     return True
             return False
         
+        return helper(s1, s2)
+    
+    def isScramble(self, s1: str, s2: str) -> bool:
+        if not s1 and not s2:
+            return True
+        elif not s1 or not s2:
+            return False
+        elif len(s1) != len(s2):
+            return False
+        elif sorted(s1) != sorted(s2):
+            return False
+        
+        @cache
+        def helper(ss1: str, ss2: str) -> bool:
+            if ss1 == ss2:
+                return True
+            if sorted(ss1) != sorted(ss1):
+                return False
+            n = len(ss1)
+            for i in range(1, n):
+                if helper(ss1[:i], ss2[:i]) and helper(ss1[i:], ss2[i:]):
+                    return True
+                
+                if helper(ss1[:i], ss2[n - i:]) and helper(ss1[i:], ss2[:n - i]):
+                    return True
+            return False
         return helper(s1, s2)

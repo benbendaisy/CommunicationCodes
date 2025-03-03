@@ -27,7 +27,7 @@ class Solution:
                 dp[i] = max(j * (i-j), j * dp[i-j], dp[i])
         return dp[-1]
 
-    def integerBreak(self, n: int) -> int:
+    def integerBreak2(self, n: int) -> int:
         @cache
         def dp(num):
             if num <= 3:
@@ -39,3 +39,33 @@ class Solution:
         if n <= 3:
             return n - 1
         return dp(n)
+    
+    def integerBreak(self, n: int) -> int:
+        factors = [i for i in range(1, n)]
+        max_product = float('-inf')
+        @cache
+        def helper(sums: int, product: int):
+            nonlocal max_product
+            if sums == n:
+                max_product = max(max_product, product)
+                return
+            
+            for i in range(len(factors)):
+                t = sums + factors[i]
+                if t <= n:
+                    helper(t, product * factors[i])
+        helper(0, 1)    
+        return max_product
+    
+    def integerBreak(self, n: int) -> int:
+        if n <= 3:
+            return n - 1
+        @cache
+        def helper(num: int):
+            if num <= 3:
+                return num
+            max_product = num
+            for i in range(2, num):
+                max_product = max(max_product, i * helper(num - i))
+            return max_product
+        return helper(n)

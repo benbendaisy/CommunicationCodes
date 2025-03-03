@@ -26,7 +26,7 @@ class Solution:
             triangle.append(row)
         return triangle
     
-    def generate(self, numRows: int) -> List[List[int]]:
+    def generate2(self, numRows: int) -> List[List[int]]:
         if numRows == 0:
             return []
         elif numRows == 1:
@@ -40,7 +40,7 @@ class Solution:
             tri.append(row)
         return tri
     
-    def generate(self, numRows: int) -> List[List[int]]:
+    def generate3(self, numRows: int) -> List[List[int]]:
         def getRow(rowIndex: int) -> List[int]:
             @cache
             def get_num(row, col):
@@ -57,7 +57,7 @@ class Solution:
             ans.append(row)
         return ans
     
-    def generate(self, numRows: int) -> List[List[int]]:
+    def generate4(self, numRows: int) -> List[List[int]]:
         dp = [[0] * i for i in range(1, numRows + 1)]
         for i in range(numRows):
             dp[i][0] = 1
@@ -70,3 +70,15 @@ class Solution:
                     dp[i][j] = dp[i - 1][j] + dp[i - 1][j - 1]
             res.append(dp[i])
         return res
+    
+    def generate(self, numRows: int) -> List[List[int]]:
+        dp = [[0] * i for i in range(1, numRows + 1)]
+
+        for i in range(numRows):
+            dp[i][0] = dp[i][-1] = 1
+        
+        for i in range(numRows):
+            for j in range(i):
+                if i != 0 and j != 0:
+                    dp[i][j] = dp[i - 1][j] + dp[i - 1][j - 1]
+        return dp

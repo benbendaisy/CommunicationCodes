@@ -37,7 +37,7 @@ class Solution:
                 return idx
             idx += 1
 
-    def nthUglyNumber(self, n: int) -> int:
+    def nthUglyNumber2(self, n: int) -> int:
         ugly = [1]
         i2 = i3 = i5 = 0
         while len(ugly) < n:
@@ -46,4 +46,39 @@ class Solution:
             while ugly[i5] * 5 <= ugly[-1]: i5 += 1
             ugly.append(min(ugly[i2] * 2, ugly[i3] * 3, ugly[i5] * 5))
 
+        return ugly[-1]
+    
+    def nthUglyNumber3(self, n: int) -> int:
+        seen = {1}
+        heap = [1]
+
+        @cache
+        def helper(cnt: int):
+            if cnt == n:
+                return heapq.heappop(heap)
+            
+            ugly = heapq.heappop(heap)
+            for f in (2, 3, 5):
+                new_num = f * ugly
+                if new_num not in seen:
+                    seen.add(new_num)
+                    heapq.heappush(heap, new_num)
+            return helper(cnt + 1)
+        
+        return helper(1)
+    
+    def nthUglyNumber(self, n: int) -> int:
+        i2 = i3 = i5 = 0
+        ugly = [1]
+        while len(ugly) < n:
+            while ugly[i2] * 2 <= ugly[-1]:
+                i2 += 1
+            
+            while ugly[i3] * 3 <= ugly[-1]:
+                i3 += 1
+
+            while ugly[i5] * 5 <= ugly[-1]:
+                i5 += 1
+            
+            ugly.append(min(ugly[i2] * 2, ugly[i3] * 3, ugly[i5] * 5))
         return ugly[-1]

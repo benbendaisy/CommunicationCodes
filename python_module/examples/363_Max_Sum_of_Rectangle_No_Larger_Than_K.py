@@ -31,7 +31,7 @@ class Solution:
     def transpose(matrix):
         return [[matrix[i][j] for i in range(len(matrix))] for j in range(len(matrix[0]))]
 
-    def maxSumSubmatrix(self, matrix, k):
+    def maxSumSubmatrix1(self, matrix, k):
         """
         :type matrix: List[List[int]]
         :type k: int
@@ -69,3 +69,65 @@ class Solution:
                     bisect.insort(sortedSums, nextSum)
 
         return ret
+    
+    def maxSumSubmatrix2(self, matrix: List[List[int]], k: int) -> int:
+        if not matrix or not matrix[0]:
+            return 0
+    
+        rows, cols = len(matrix), len(matrix[0])
+        result = float('-inf')
+        
+        # For each possible left column
+        for left in range(cols):
+            # Initialize row sums for the current left boundary
+            row_sums = [0] * rows
+            
+            # For each possible right column
+            for right in range(left, cols):
+                # Update row_sums to include the current column
+                for i in range(rows):
+                    row_sums[i] += matrix[i][right]
+                
+                # Find max subarray sum no more than k for the current set of columns
+                # using prefix sums and a sorted list for efficient searching
+                prefix_sum = 0
+                sorted_sums = SortedList([0])  # Include 0 to handle full array sum
+                
+                for sum_val in row_sums:
+                    prefix_sum += sum_val
+                    # Find the smallest prefix sum y such that prefix_sum - y <= k
+                    # This is equivalent to finding the smallest y where y >= prefix_sum - k
+                    target = prefix_sum - k
+                    idx = sorted_sums.bisect_left(target)
+                    
+                    if idx < len(sorted_sums):
+                        result = max(result, prefix_sum - sorted_sums[idx])
+                    
+                    # Add current prefix sum to the sorted list
+                    sorted_sums.add(prefix_sum)
+                
+        return result
+    
+    def maxSumSubmatrix(self, matrix: List[List[int]], k: int) -> int:
+        if not matrix or not matrix[0]:
+            return 0
+        
+        rows, cols = len(matrix), len(matrix[0])
+        res = float('-inf')
+
+        for left in range(cols):
+            row_sums = [0] * rows
+            for right in range(left, cols):
+                for i in range(rows):
+                    row_sums[i] += matrix[i][right]
+                
+                prefix_sum = 0
+                sorted_sums = SortedList([0])
+                for val in row_sums:
+                    prefix_sum += val
+                    target = prefix_sum - k
+                    idx = sorted_sums.bisect_left(target)
+                    if idx < len(sorted_sums):
+                        res = max(res, prefix_sum - sorted_sums[idx])
+                    sorted_sums.add(prefix_sum)
+        return res

@@ -58,7 +58,7 @@ class Solution:
             min_path_sum = min(min_path_sum, dp[0][c])
         return min_path_sum
 
-    def minFallingPathSum(self, matrix: List[List[int]]) -> int:
+    def minFallingPathSum3(self, matrix: List[List[int]]) -> int:
         rows, cols = len(matrix), len(matrix[0])
         @cache
         def falling_path_sum(r, c):
@@ -74,3 +74,39 @@ class Solution:
         for c in range(cols):
             min_sum = min(min_sum, falling_path_sum(0, c))
         return min_sum
+    
+    def minFallingPathSum4(self, matrix: List[List[int]]) -> int:
+        rows, cols = len(matrix), len(matrix[0])
+
+        @cache
+        def helper(row: int, col: int) -> int:
+            if row == rows - 1:
+                if 0 <= col < cols:
+                    return matrix[row][col]
+                return float('inf')
+            if col < 0 or col >= cols:
+                return float('inf')
+
+            return min(helper(row + 1, col - 1), helper(row + 1, col), helper(row + 1, col + 1)) + matrix[row][col]
+        
+        min_sum = float('inf')
+        for col in range(cols):
+            min_sum = min(min_sum, helper(0, col))
+        return min_sum
+    
+    def minFallingPathSum(self, matrix: List[List[int]]) -> int:
+        rows, cols = len(matrix), len(matrix[0])
+
+        dp = [[0] * cols for _ in range(rows)]
+
+        for row in range(rows):
+            for col in range(cols):
+                if row == 0:
+                    dp[row][col] = matrix[row][col]
+                elif col == 0:
+                    dp[row][col] = min(dp[row - 1][col], dp[row - 1][col + 1]) + matrix[row][col]
+                elif col == cols - 1:
+                    dp[row][col] = min(dp[row - 1][col], dp[row - 1][col - 1]) + matrix[row][col]
+                else:
+                    dp[row][col] = min(dp[row - 1][col - 1], dp[row - 1][col], dp[row - 1][col + 1]) + matrix[row][col]
+        return min(dp[-1])

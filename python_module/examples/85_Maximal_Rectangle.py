@@ -16,7 +16,7 @@ class Solution:
     Input: matrix = [["1"]]
     Output: 1
     """
-    def maximalRectangle(self, matrix: List[List[str]]) -> int:
+    def maximalRectangle1(self, matrix: List[List[str]]) -> int:
         if not matrix:
             return 0
         rows, cols = len(matrix), len(matrix[0])
@@ -31,5 +31,23 @@ class Solution:
                     h = heights[stack.pop()]
                     w = i if not stack else i - stack[-1] - 1
                     max_area = max(max_area, h * w)
+                stack.append(i)
+        return max_area
+    
+    def maximalRectangle(self, matrix: List[List[str]]) -> int:
+        m, n = len(matrix), len(matrix[0])
+
+        heights = [0] * (n + 1)
+        max_area = 0
+        for row in matrix:
+            for col in range(n):
+                heights[col] = heights[col] + 1 if row[col] == '1' else 0
+            
+            stack = []
+            for i in range(n + 1):
+                while stack and heights[i] < heights[stack[-1]]:
+                    h = heights[stack.pop()]
+                    w = i if not stack else i - stack[-1] - 1
+                    max_area = max(max_area, w * h)
                 stack.append(i)
         return max_area

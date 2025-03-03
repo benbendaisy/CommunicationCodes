@@ -20,7 +20,7 @@ class Solution:
     Output: 3
     Explanation: Modify the array from [1,2,4,1,2,5,1,2,6] to [1,2,3,1,2,3,1,2,3].
     """
-    def minChanges(self, nums: List[int], k: int) -> int:
+    def minChanges1(self, nums: List[int], k: int) -> int:
         freq = defaultdict(lambda: defaultdict(int))
         for i, x in enumerate(nums): freq[i%k][x] += 1 # freq by row
         
@@ -34,3 +34,34 @@ class Solution:
                     tmp[x^xx] = max(tmp[x^xx], c + cc, mx)
             dp = tmp 
         return len(nums) - dp[0]
+    
+    def minChanges(self, nums: List[int], k: int) -> int:
+        # Group the elements into k groups and count frequencies
+        freq = defaultdict(lambda: defaultdict(int))
+        total_counts = [0] * k  # Store total numbers in each group
+        for i, x in enumerate(nums):
+            freq[i % k][x] += 1
+            total_counts[i % k] += 1
+        
+        # Recursive function to compute the minimum changes
+        @cache
+        def helper(idx: int, current_xor: int) -> int:
+            if idx == k:
+                return 0 if current_xor == 0 else float('inf')
+            
+            min_changes = float('inf')
+            
+            # Try all possible values for the current group
+            for num, count in freq[idx].items():
+                changes = (total_counts[idx] - count) + helper(idx + 1, current_xor ^ num)
+                min_changes = min(min_changes, changes)
+            
+            # Also consider changing all elements in the current group to a new value
+            # This ensures that the XOR can be zero even if no existing value works
+            changes = total_counts[idx] + helper(idx + 1, current_xor ^ 0)
+            min_changes = min(min_changes, changes)
+            
+            return min_changes
+        
+        # Start the recursion with the first group and initial XOR value of 0
+        return helper(0, 0)

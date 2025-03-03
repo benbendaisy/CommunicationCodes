@@ -13,7 +13,7 @@ class Solution:
             prev_row = curr_row
         return prev_row[-1]
     
-    def minimumDeleteSum(self, s1: str, s2: str) -> int:
+    def minimumDeleteSum2(self, s1: str, s2: str) -> int:
         def lcs(s, p):
             m, n = len(s), len(p)
             dp = [[0] * (n + 1) for _ in range(m + 1)]
@@ -32,4 +32,28 @@ class Solution:
             total += ord(c)
         res = total - common_cs * 2
         return res
+    
+    def minimumDeleteSum(self, s1: str, s2: str) -> int:
+        if not s1 and not s2:
+            return 0
+        m, n = len(s1), len(s2)
+        def calculate_ascii(s: str):
+            char_sum = 0
+            for ch in s:
+                char_sum += ord(ch)
+            return char_sum
+
+        @cache
+        def helper(idx1: int, idx2: int) -> int:
+            if idx1 == m:
+                return calculate_ascii(s2[idx2:])
+            if idx2 == n:
+                return calculate_ascii(s1[idx1:])
+            
+            if s1[idx1] == s2[idx2]:
+                return helper(idx1 + 1, idx2 + 1)
+            
+            return min(helper(idx1 + 1, idx2) + calculate_ascii(s1[idx1]), helper(idx1, idx2 + 1) + calculate_ascii(s2[idx2]))
+        
+        return helper(0, 0)
 

@@ -49,13 +49,31 @@ class Solution:
 
         return coinChanges(amount)
 
-    def coinChange(self, coins: List[int], amount: int) -> int:
+    def coinChange2(self, coins: List[int], amount: int) -> int:
         dp = [math.inf for _ in range(amount + 1)]
         dp[0] = 0
         for coin in coins:
             for x in range(coin, amount + 1):
                 dp[x] = min(dp[x], dp[x - coin] + 1)
         return dp[amount] if dp[amount] != math.inf else -1
+    
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        if not coins:
+            return -1
+        
+        @cache
+        def helper(cur_sum: int):
+            if cur_sum == amount:
+                return 0
+            
+            min_num = float('inf')
+            for coin in coins:
+                t = cur_sum + coin
+                if t <= amount:
+                    min_num = min(min_num, 1 + helper(t))
+            return min_num
+        res = helper(0)
+        return -1 if res == float('inf') else res
 
 if __name__ == "__main__":
     coins = [474,83,404,3]
