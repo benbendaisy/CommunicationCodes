@@ -138,6 +138,6 @@ class Solution:
                 helper(idx + 1, absences, 0) +  # Adding 'P'
                 helper(idx + 1, absences + 1, 0) +  # Adding 'A'
                 helper(idx + 1, absences, consecutive_lates + 1)  # Adding 'L'
-            ) % MOD
+            ) % mod
         
         return helper(0, 0, 0)

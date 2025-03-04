@@ -47,7 +47,7 @@ class Solution:
 
         return combinationSum(target)
 
-    def combinationSum4(self, nums: List[int], target: int) -> int:
+    def combinationSum4_2(self, nums: List[int], target: int) -> int:
         nums.sort()
         dp = [0] * (target + 1)
         dp[0] = 1
@@ -57,3 +57,22 @@ class Solution:
                     dp[t] += dp[t - num]
 
         return dp[target]
+    
+    def combinationSum4(self, nums: List[int], target: int) -> int:
+        if not nums:
+            return 0
+        
+        n = len(nums)
+        @cache
+        def helper(running_sum: int) -> int:
+            if running_sum == target:
+                return 1
+
+            num_ways = 0
+            for num in nums:
+                new_running_sum = num + running_sum
+                if new_running_sum <= target:
+                    num_ways += helper(new_running_sum)
+            return num_ways
+        
+        return helper(0)

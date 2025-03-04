@@ -34,7 +34,7 @@ class Solution:
             return not (predict_the_winner(left + 1, right, player1, player2 + nums[left], True) or predict_the_winner(left, right - 1, player1, player2 + nums[right], True))
         return predict_the_winner(0, len(nums) - 1, 0, 0, True)
     
-    def PredictTheWinner(self, nums: List[int]) -> bool:
+    def PredictTheWinner2(self, nums: List[int]) -> bool:
         def dfs(l: int, r: int):
             if l == r:
                 return nums[l]
@@ -42,3 +42,17 @@ class Solution:
             right = nums[r] - dfs(l, r - 1)
             return max(left, right)
         return True if dfs(0, len(nums) - 1) >= 0 else False
+    
+    def predictTheWinner(self, nums: List[int]) -> bool:
+        @cache
+        def helper(left: int, right: int) -> int:
+            if left == right:
+                return nums[left]  # Base case: only one element left
+            
+            # Choose the leftmost or rightmost element and subtract the opponent's best response
+            pick_left = nums[left] - helper(left + 1, right)
+            pick_right = nums[right] - helper(left, right - 1)
+
+            return max(pick_left, pick_right)  # Player 1 maximizes their advantage
+        
+        return helper(0, len(nums) - 1) >= 0  # If Player 1 can secure a non-negative score, they win

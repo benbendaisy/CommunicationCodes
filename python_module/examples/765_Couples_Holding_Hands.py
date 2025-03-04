@@ -49,7 +49,7 @@ class Solution:
             pos_dict[row[i]] = i
             pos_dict[row[j]] = j
         
-        for i in range(0, len(row) - 1, 2):
+        for i in range(0, len(row), 2):
             first = row[i]
             partner = first ^ 1
             if row[i + 1] != partner:

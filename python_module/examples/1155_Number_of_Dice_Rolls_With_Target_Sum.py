@@ -56,7 +56,7 @@ class Solution:
                 dp[idx][curSum] = ways
         return dp[0][0]
 
-    def numRollsToTarget(self, n: int, k: int, target: int) -> int:
+    def numRollsToTarget3(self, n: int, k: int, target: int) -> int:
         mod = 10**9 + 7
         dp = [[0] * (target + 1) for _ in range(n + 1)]
         dp[0][0] = 1
@@ -67,6 +67,25 @@ class Solution:
                     ways = (ways + dp[idx - 1][currSum - i]) % mod
                 dp[idx][currSum] = ways
         return dp[n][target]
+    
+    def numRollsToTarget(self, n: int, k: int, target: int) -> int:
+        mod = 10 ** 9 + 7
+
+        @cache
+        def helper(idx: int, remaining: int) -> int:
+            if remaining == 0:
+                return idx == n
+            
+            if idx == n:
+                return 0
+            
+            ways = 0
+            for i in range(1, k + 1):
+                if remaining - i >= 0:
+                    ways += helper(idx + 1, remaining - i)
+            return ways
+        
+        return helper(0, target) % mod
 
 if __name__ == "__main__":
     arr = [1,2,3,4,5,6,7,8,9,10]

@@ -57,7 +57,7 @@ class Solution:
                 dp[x] = min(dp[x], dp[x - coin] + 1)
         return dp[amount] if dp[amount] != math.inf else -1
     
-    def coinChange(self, coins: List[int], amount: int) -> int:
+    def coinChange3(self, coins: List[int], amount: int) -> int:
         if not coins:
             return -1
         
@@ -74,6 +74,26 @@ class Solution:
             return min_num
         res = helper(0)
         return -1 if res == float('inf') else res
+    
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        if amount == 0:
+            return 0
+        if not coins:
+            return -1
+        
+        n = len(coins)
+        @cache
+        def helper(idx: int, running_sum: int) -> int:
+            if running_sum == amount:
+                return 0
+            
+            if idx == n or running_sum > amount:
+                return float('inf')
+            
+            return min(1 + helper(idx, running_sum + coins[idx]), helper(idx + 1, running_sum))
+        
+        t = helper(0, 0)
+        return t if t != float('inf') else -1
 
 if __name__ == "__main__":
     coins = [474,83,404,3]

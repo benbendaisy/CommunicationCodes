@@ -58,7 +58,8 @@ class Solution:
         @cache
         def helper(idx: int, cur_sum: int) -> int:
             """
-            try to split the stones into two subsets, the difference between the two subsets is as small as possible
+            try to split the stones into two subsets, 
+            the sum difference between the two subsets is as small as possible
             """
             if idx == n:
                 # Difference between two subsets
