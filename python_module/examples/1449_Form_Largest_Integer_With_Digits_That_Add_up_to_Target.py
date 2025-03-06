@@ -28,7 +28,7 @@ class Solution:
     Output: "85"
     Explanation: The cost to paint the digit '8' is 7, and the digit '5' is 5. Then cost("85") = 7 + 5 = 12.
     """
-    def largestNumber(self, cost: List[int], target: int) -> str:
+    def largestNumber0(self, cost: List[int], target: int) -> str:
         if not cost:
             return ""
         
@@ -47,7 +47,7 @@ class Solution:
 
         return str(helper("", 0)) if helper("", 0) != float('-inf') else "0"
     
-    def largestNumber(self, cost: List[int], target: int) -> str:
+    def largestNumber1(self, cost: List[int], target: int) -> str:
         if not cost or target == 0:
             return "0" # Base case: exact match
 
@@ -64,5 +64,25 @@ class Solution:
                     candidate = helper(new_cost)
                     if candidate != "0": # Ensure we only take valid numbers
                         max_num = max(max_num, candidate + str(i), key=lambda x: (len(x), x))
+            return max_num
+        return helper(target)
+    
+    def largestNumber(self, cost: List[int], target: int) -> str:
+        if not cost or target == 0:
+            return "0"
+        n = len(cost)
+
+        @cache
+        def helper(remaining: int) -> str:
+            if remaining == 0:
+                return ""
+            
+            max_num = "0"
+            for i in range(1, n + 1):
+                new_remaining = remaining - cost[i - 1]
+                if new_remaining >= 0:
+                    candidate = helper(new_remaining)
+                    if candidate != "0":
+                        max_num = max(max_num, str(i) + candidate, key=lambda x: (len(x), x))
             return max_num
         return helper(target)

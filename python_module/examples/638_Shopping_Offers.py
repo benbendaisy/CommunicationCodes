@@ -25,7 +25,7 @@ class Solution:
     You need to buy 1A ,2B and 1C, so you may pay $4 for 1A and 1B (special offer #1), and $3 for 1B, $4 for 1C. 
     You cannot add more items, though only $9 for 2A ,2B and 1C.
     """
-    def shoppingOffers(self, price: List[int], special: List[List[int]], needs: List[int]) -> int:
+    def shoppingOffers0(self, price: List[int], special: List[List[int]], needs: List[int]) -> int:
         """
         this is a backtracking problem with brute force solution
         got TLE
@@ -60,7 +60,7 @@ class Solution:
         res = helper(bought, 0)
         return -1 if res == float('inf') else res
     
-    def shoppingOffers(self, price: List[int], special: List[List[int]], needs: List[int]) -> int:
+    def shoppingOffers1(self, price: List[int], special: List[List[int]], needs: List[int]) -> int:
         if not price or not needs:
             return 0
         
@@ -84,6 +84,30 @@ class Solution:
                 new_needs = tuple(remaining[i] - offer[i] for i in range(n))
                 if all(x >= 0 for x in new_needs):
                     min_cost = min(min_cost, offer[-1] + helper(new_needs))
+            return min_cost
+        
+        return helper(tuple(needs))
+    
+    def shoppingOffers(self, price: List[int], special: List[List[int]], needs: List[int]) -> int:
+        if not special:
+            return -1
+        
+        valid_offers = []
+        n = len(needs)
+        for offer in special:
+            if all(offer[i] <= needs[i] for i in range(n)):
+                valid_offers.append(offer)
+        
+        @cache
+        def helper(remainings: tuple):
+            if all(x == 0 for x in remainings):
+                return 0
+           
+            min_cost = sum(price[i] * remainings[i] for i in range(n))
+            for offer in special:
+                new_needs = [remainings[i] - offer[i] for i in range(n)]
+                if all(new_needs[i] >= 0 for i in range(n)):
+                    min_cost = min(min_cost, offer[-1] + helper(tuple(new_needs)))
             return min_cost
         
         return helper(tuple(needs))

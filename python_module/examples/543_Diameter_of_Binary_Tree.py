@@ -39,7 +39,7 @@ class Solution:
         dfs(root)
         return diameter
     
-    def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
+    def diameterOfBinaryTree2(self, root: Optional[TreeNode]) -> int:
         diameter = 0
         @cache
         def helper(node):
@@ -52,3 +52,37 @@ class Solution:
             return max(left, right) + 1
         helper(root)
         return diameter
+    
+    def diameterOfBinaryTree3(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+        
+        max_len = float('-inf')
+
+        def helper(node: TreeNode):
+            nonlocal max_len
+            if not node:
+                return 0
+            
+            left = helper(node.left)
+            right = helper(node.right)
+            max_len = max(max_len, left + right)
+            return max(left, right) + 1
+        helper(root)
+        return max_len
+    
+    def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+        
+        def helper(node: TreeNode):
+            if not node:
+                return (0, 0)
+            left_depth, left_diameter = helper(node.left)
+            right_depth, right_diameter = helper(node.right)
+            cur_diameter = left_depth + right_depth
+            max_diameter = max(left_diameter, right_diameter, cur_diameter)
+            depth = max(left_depth, right_depth) + 1
+            return depth, max_diameter
+        
+        return helper(root)[1]

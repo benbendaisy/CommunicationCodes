@@ -28,7 +28,7 @@ class Solution:
     Explanation: If you try the given cuts ordering the cost will be 25.
     There are much ordering with total cost <= 25, for example, the order [4, 6, 5, 2, 1] has total cost = 22 which is the minimum possible.
     """
-    def minCost(self, n: int, cuts: List[int]) -> int:
+    def minCost0(self, n: int, cuts: List[int]) -> int:
         cuts.extend([0, n])
         cuts.sort()
         @lru_cache(None)
@@ -47,3 +47,42 @@ class Solution:
             for j in range(i + 2, n):
                 dp[i][j] = cuts[j] - cuts[i] + min(dp[i][k] + dp[k][j] for k in range(i + 1, j))
         return dp[0][-1]
+    
+    def minCost2(self, n: int, cuts: List[int]) -> int:
+        if not cuts:
+            return 0  # If no cuts, cost is 0
+        
+        cuts.extend([0, n])
+        cuts.sort()
+        
+        @lru_cache(None)
+        def helper(left, right):
+            if right - left == 1:
+                return 0  # No space to cut
+            
+            min_cost = float('inf')
+            for i in range(left + 1, right):
+                cost = cuts[right] - cuts[left] + helper(left, i) + helper(i, right)
+                min_cost = min(min_cost, cost)
+            
+            return min_cost if min_cost != float('inf') else 0
+        
+        return helper(0, len(cuts) - 1)
+    
+    def strangePrinter(self, s: str) -> int:
+        n = len(s)
+        
+        @cache
+        def helper(left, right):
+            if left > right:
+                return 0
+            
+            res = helper(left, right - 1) + 1  # Printing s[right] separately
+            
+            for i in range(left, right):
+                if s[i] == s[right]:  # Try merging prints
+                    res = min(res, helper(left, i) + helper(i + 1, right - 1))
+            
+            return res
+        
+        return helper(0, n - 1)

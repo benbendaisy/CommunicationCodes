@@ -35,7 +35,7 @@ class Solution:
     Output: 1
     Explanation: You can only earn 18 points by answering all questions.
     """
-    def waysToReachTarget(self, target: int, types: List[List[int]]) -> int:
+    def waysToReachTarget1(self, target: int, types: List[List[int]]) -> int:
         if not types:
             return 0
         mod = 10 ** 9 + 7
@@ -57,6 +57,31 @@ class Solution:
             return ways
         
         return helper(0, 0) % mod
+    
+    def waysToReachTarget(self, target: int, types: List[List[int]]) -> int:
+        if not types:
+            return 0
+
+        mod = 10 ** 9 + 7
+        n = len(types)
+        @cache
+        def helper(idx: int, running_sum: int) -> int:
+            if running_sum == target:
+                return 1
+            
+            if idx == n:
+                return 0
+            
+            ways = 0
+            cnt, mark = types[idx]
+            for i in range(cnt + 1):
+                new_sum = running_sum + i * mark
+                if new_sum <= target:
+                    ways += helper(idx + 1, new_sum)
+                
+            return ways % mod
+        
+        return helper(0, 0)
 
 
 

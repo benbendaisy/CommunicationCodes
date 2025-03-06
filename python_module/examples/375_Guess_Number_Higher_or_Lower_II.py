@@ -67,7 +67,7 @@ class Solution:
             return cache[(s, e)]
         return helper(1, n)
 
-    def getMoneyAmount(self, n: int) -> int:
+    def getMoneyAmount2(self, n: int) -> int:
         """
         passed leet code
         :param n:
@@ -84,7 +84,7 @@ class Solution:
         return dfs(1, n)
 
 
-    def getMoneyAmount2(self, n: int) -> int:
+    def getMoneyAmount3(self, n: int) -> int:
         dp = [[0] * (n + 1) for _ in range(n + 1)]
         for length in range(2, n + 1):
             for i in range(1, n - length + 2):
@@ -95,7 +95,7 @@ class Solution:
                     dp[i][j] = min(dp[i][j], nextStep + k)
         return dp[1][n]
 
-    def getMoneyAmount(self, n: int) -> int:
+    def getMoneyAmount4(self, n: int) -> int:
         @cache
         def helper(left: int, right: int):
             if left >= right:
@@ -106,5 +106,19 @@ class Solution:
                 cost = guess + max(helper(left, guess - 1), helper(guess + 1, right))
                 min_cost = min(min_cost, cost)
             return min_cost
+        
+        return helper(1, n)
+    
+    def getMoneyAmount(self, n: int) -> int:
+        @cache
+        def helper(left: int, right: int) -> int:
+            if left >= right:
+                return 0
+            
+            min_max_num = float('inf')
+            for guess in range(left, right + 1):
+                max_num = guess + max(helper(left, guess - 1), helper(guess + 1, right))
+                min_max_num = min(min_max_num, max_num)
+            return min_max_num
         
         return helper(1, n)

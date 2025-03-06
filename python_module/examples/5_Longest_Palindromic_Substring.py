@@ -88,7 +88,7 @@ class Solution:
         
         return ans
 
-    def longestPalindrome(self, s: str) -> str:
+    def longestPalindrome5(self, s: str) -> str:
         def check(i, j):
             left = i
             right = j - 1
@@ -103,6 +103,26 @@ class Solution:
                 if check(start, start + length):
                     return s[start:start + length]
         return ""
+    
+    def longestPalindrome(self, s: str) -> str:
+        n = len(s)
+        def expand(l: int, r: int) -> str:
+            if l < 0 or r >= n or s[l] != s[r]:
+                return ""
+            
+            return expand(l - 1, r + 1) if l > 0 and r < n - 1 and s[l - 1] == s[r + 1] else s[l:r + 1] 
+        
+        max_pal = ""
+        for i in range(n):
+            # Odd length palindromes
+            odd = expand(i, i)
+            if len(odd) > len(max_pal):
+                max_pal = odd
+            # Even length palindromes
+            even = expand(i, i + 1)
+            if len(even) > len(max_pal):
+                max_pal = even
+        return max_pal
     
 if __name__ == "__main__":
     s = "boqylncwfahjzvawrojyhqiymirlkfzkhtvmbjnbfjxzewqqqcfnximdnrxtrbafkimcqvuprgrjetrecqkltforcudmbpofcxqdcirnaciggflvsialdjtjnbrayeguklcbdbkouodxbmhgtaonzqftkebopghypjzfyqutytbcfejhddcrinopynrprohpbllxvhitazsjeyymkqkwuzfenhphqfzlnhenldbigzmriikqkgzvszztmvylzhbfjoksyvfdkvshjzdleeylqwsapapduxrfbwskpnhvmagkolzlhakvfbvcewvdihqceecqhidvwecvbfvkahlzlokgamvhnpkswbfrxudpapaswqlyeeldzjhsvkdfvyskojfbhzlyvmtzzsvzgkqkiirmzgibdlnehnlzfqhphnefzuwkqkmyyejszatihvxllbphorprnyponircddhjefcbtytuqyfzjpyhgpobektfqznoatghmbxdouokbdbclkugeyarbnjtjdlaisvlfggicanricdqxcfopbmducroftlkqcertejrgrpuvqcmikfabrtxrndmixnfcqqqwezxjfbnjbmvthkzfklrimyiqhyjorwavzjhafwcnlyqob"

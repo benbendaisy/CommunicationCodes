@@ -41,3 +41,27 @@ class Solution:
         if left * left - total_sum == 0:
             return left
         return -1
+    
+    def waysToReachTarget(self, target: int, types: List[List[int]]) -> int:
+        if not types:
+            return 0
+
+        mod = 10 ** 9 + 7
+        @cache
+        def helper(idx: int, running_sum: int) -> int:
+            if running_sum == target:
+                return 1
+            
+            if idx == len(types):
+                return 0
+            
+            ways = 0
+            for i in range(idx, len(types)):
+                cnt, mark = types[i]
+                for j in range(cnt):
+                    new_sum = running_sum + (j + 1) * mark
+                    if new_sum <= target:
+                        ways += helper(i + 1, new_sum)
+            return ways % mod
+        
+        return helper(0, 0)
