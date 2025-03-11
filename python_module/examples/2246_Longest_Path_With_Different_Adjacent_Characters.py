@@ -22,7 +22,7 @@ class Solution:
         Output: 3
         Explanation: The longest path where each two adjacent nodes have different characters is the path: 2 -> 0 -> 3. The length of this path is 3, so 3 is returned.
     """
-    def longestPath(self, parent: List[int], s: str) -> int:
+    def longestPath1(self, parent: List[int], s: str) -> int:
         # Construct the tree using the parent list.
         tree = defaultdict(list)
         for end, start in enumerate(parent):
@@ -59,3 +59,85 @@ class Solution:
             return max1 + 1
         dfs(0)
         return res
+    
+    def longestPath2(self, parent: List[int], s: str) -> int:
+        # Step 1: Construct the graph as an adjacency list
+        graph = defaultdict(list)
+        for child, par in enumerate(parent):
+            if par != -1:
+                graph[par].append(child)
+        
+        self.max_length = 0  # To store the longest valid path
+        
+        # Step 2: DFS function to return the longest path from a node downwards
+        def dfs(node: int) -> int:
+            longest1, longest2 = 0, 0  # Store top two longest valid paths
+
+            for neighbor in graph[node]:
+                path_length = dfs(neighbor)  # Recursive DFS call
+
+                if s[neighbor] != s[node]:  # Only consider if characters differ
+                    if path_length > longest1:
+                        longest2 = longest1
+                        longest1 = path_length
+                    elif path_length > longest2:
+                        longest2 = path_length
+
+            # Update global max path (including both longest children)
+            self.max_length = max(self.max_length, longest1 + longest2 + 1)
+
+            return longest1 + 1  # Return longest path including current node
+
+        dfs(0)  # Start DFS from root (node 0)
+        return self.max_length
+    
+    def longestPath3(self, parent: List[int], s: str) -> int:
+        # Step 1: Construct the graph as an adjacency list
+        graph = defaultdict(list)
+        for child, par in enumerate(parent):
+            graph[par].append(child)
+        
+        self.max_length = 0  # To store the longest valid path
+        
+        # Step 2: DFS function to return the longest path from a node downwards
+        def helper(node: int) -> int:
+            longest1, longest2 = 0, 0  # Store top two longest valid paths
+
+            for neighbor in graph[node]:
+                path_length = helper(neighbor)  # Recursive DFS call
+
+                if s[neighbor] != s[node]:  # Only consider if characters differ
+                    if path_length > longest1:
+                        longest2 = longest1
+                        longest1 = path_length
+                    elif path_length > longest2:
+                        longest2 = path_length
+
+            # Update global max path (including both longest children)
+            self.max_length = max(self.max_length, longest1 + longest2 + 1)
+
+            return longest1 + 1  # Return longest path including current node
+
+        helper(0)  # Start DFS from root (node 0)
+        return self.max_length
+    
+    def longestPath(self, parent: List[int], s: str) -> int:
+        graph = defaultdict(list)
+        for child, par in enumerate(parent):
+            graph[par].append(child)
+        self.max_len = 0
+        @cache
+        def helper(node: int) -> int:
+            longest1, longest2 = 0, 0
+            for neighbor in graph[node]:
+                path_len = helper(neighbor)
+                if s[neighbor] != s[node]:
+                    if path_len > longest1:
+                        longest2 = longest1
+                        longest1 = path_len
+                    elif path_len > longest2:
+                        longest2 = path_len
+            self.max_len = max(self.max_len, longest1 + longest2 + 1)
+            return longest1 + 1
+        helper(0)
+        return self.max_len

@@ -49,7 +49,7 @@ class Solution:
         gain_from_subtree(root)
         return max_sum_path
     
-    def maxPathSum(self, root: Optional[TreeNode]) -> int:
+    def maxPathSum2(self, root: Optional[TreeNode]) -> int:
         max_sum = float('-inf')
         def max_path_sum(node: TreeNode):
             nonlocal max_sum
@@ -60,6 +60,24 @@ class Solution:
             max_sum = max(max_sum, left_path + right_path + node.val)
             return max(left_path, right_path) + node.val
         max_path_sum(root)
+        return max_sum
+    
+    def maxPathSum3(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+        
+        max_sum = float('-inf')
+        def helper(node: TreeNode):
+            nonlocal max_sum
+            if not node:
+                return 0
+            
+            left_path = max(helper(node.left), 0)
+            right_path = max(helper(node.right), 0)
+            cur_sum = left_path + right_path + node.val
+            max_sum = max(max_sum, cur_sum)
+            return max(left_path, right_path) + node.val
+        helper(root)
         return max_sum
 
 

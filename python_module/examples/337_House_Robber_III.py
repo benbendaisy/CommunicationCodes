@@ -48,3 +48,23 @@ class Solution:
             return (robbed, notRob)
 
         return max(robHelper(root))
+    
+    def rob(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+        
+        @cache
+        def helper(node: TreeNode):
+            """
+            the return type is tuple with the format (not rob, rob) the root node
+            """
+            if not node:
+                return (0, 0)
+            left_path = helper(node.left)
+            right_path = helper(node.right)
+            # If we do NOT rob this node, we can take the best of each child's robbed or not robbed state
+            not_robbed = max(left_path) + max(right_path)
+            # If we rob this node, we can't rob children, so take only their 'not_robbed' values
+            robbed = left_path[0] + right_path[0] + node.val
+            return (not_robbed, robbed)
+        return max(helper(root))

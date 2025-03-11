@@ -31,7 +31,7 @@ class Solution:
         All the pairs (ai, bi) are distinct.
         The given input is guaranteed to be a tree and there will be no repeated edges.
     """
-    def findMinHeightTrees(self, n: int, edges: List[List[int]]) -> List[int]:
+    def findMinHeightTrees1(self, n: int, edges: List[List[int]]) -> List[int]:
         if n <= 2:
             return [x for x in range(n)]
 
@@ -63,5 +63,49 @@ class Solution:
             leaves = newLeaves
         return leaves
 
+    def findMinHeightTrees2(self, n: int, edges: List[List[int]]) -> List[int]:
+        graph = defaultdict(list)
+        for u, v in edges:
+            graph[u].append(v)
+            graph[v].append(u)
+        
+        @cache
+        def helper(node: int, parent: int) -> int:
+            depth = 0
+            for neighbor in graph[node]:
+                if neighbor != parent:
+                    depth = max(depth, helper(neighbor, node))
+            return depth + 1
+        heights = [helper(i, -1) for i in range(n)]
+        min_height = min(heights)
+        return [i for i in range(n) if heights[i] == min_height]
+    
+    def findMinHeightTrees(self, n: int, edges: List[List[int]]) -> List[int]:
+        if n == 1:
+            return [0] # Only one node, so it's the root
+        
+        # Step 1: Build adjacency list and degree
+        graph = defaultdict(list)
+        degree = [0] * n
+        for u, v in edges:
+            graph[u].append(v)
+            graph[v].append(u)
+            degree[u] += 1
+            degree[v] += 1
+
+        # Step 2: Find initial leaf nodes (nodes with only one connection)
+        que = deque([node for node in graph if degree[node] == 1])
+        # Step 3: Remove leaf nodes layer by layer
+        remaining_nodes = n
+        while remaining_nodes > 2:
+            level_size = len(que)
+            remaining_nodes -= level_size
+            for _ in range(level_size):
+                leaf = que.popleft()
+                for neighbor in graph[leaf]:
+                    degree[neighbor] -= 1
+                    if degree[neighbor] == 1:
+                        que.append(neighbor)
+        return list(que)
 
 

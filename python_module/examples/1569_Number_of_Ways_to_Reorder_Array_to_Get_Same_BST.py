@@ -31,7 +31,7 @@ class Solution:
     Output: 0
     Explanation: There are no other orderings of nums that will yield the same BST.
     """
-    def numOfWays(self, nums: List[int]) -> int:
+    def numOfWays1(self, nums: List[int]) -> int:
         mod = (10**9) + 7
         
         def func(arr):
@@ -42,3 +42,44 @@ class Solution:
             return comb(len(left) + len(right), len(right)) * func(left) * func(right)
         
         return (func(nums) - 1) % mod
+    
+    def numOfWays2(self, nums: List[int]) -> int:
+        mod = 10 ** 9 + 7
+        # Recursive function to count ways to form the same BST
+        @lru_cache(None)
+        def countWays(arr):
+            if len(arr) <= 2:
+                return 1  # Base case: Only 1 way to arrange a list of ≤2 elements
+            
+            root = arr[0]
+            left_subtree = [x for x in arr if x < root]
+            right_subtree = [x for x in arr if x > root]
+            
+            # Compute number of ways recursively
+            left_ways = countWays(tuple(left_subtree))
+            right_ways = countWays(tuple(right_subtree))
+
+            # Compute the number of ways to merge left and right while keeping order
+            interleave_ways = comb(len(left_subtree) + len(right_subtree), len(left_subtree))
+
+            return (left_ways * right_ways * interleave_ways) % mod
+
+        return (countWays(tuple(nums)) - 1) % mod  # Exclude original ordering
+    
+    def numOfWays(self, nums: List[int]) -> int:
+        mod = 10 ** 9 + 7
+        @cache
+        def helper(arr: tuple) -> int:
+            if len(arr) <= 2:
+                return 1
+            
+            left_sub = [x for x in arr if x < arr[0]]
+            right_sub = [x for x in arr if x > arr[0]]
+
+            left_ways = helper(tuple(left_sub))
+            right_ways = helper(tuple(right_sub))
+
+            inter_ways = comb(len(left_sub) + len(right_sub), len(left_sub))
+            return (left_ways * right_ways * inter_ways) % mod
+        
+        return (helper(tuple(nums)) - 1)

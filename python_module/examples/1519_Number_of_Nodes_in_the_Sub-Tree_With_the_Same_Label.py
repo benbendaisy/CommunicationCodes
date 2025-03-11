@@ -31,7 +31,7 @@ class Solution:
     Input: n = 5, edges = [[0,1],[0,2],[1,3],[0,4]], labels = "aabab"
     Output: [3,2,1,1,1]
     """
-    def countSubTrees(self, n: int, edges: List[List[int]], labels: str) -> List[int]:
+    def countSubTrees1(self, n: int, edges: List[List[int]], labels: str) -> List[int]:
         ans = [0] * n
         graph = defaultdict(list)
         for u, v in edges:
@@ -49,5 +49,59 @@ class Solution:
             return c
         dfs(0)
         return ans
+    
+    def countSubTrees2(self, n: int, edges: List[List[int]], labels: str) -> List[int]:
+        graph = defaultdict(list)
+        for u, v in edges:
+            graph[u].append(v)
+            graph[v].append(u)
+        
+        res = [0] * n
+        
+        def helper(node: int, parent: int) -> dict:
+            # Create a frequency counter for each character
+            char_dict = defaultdict(int)
+            
+            # Add current node's label
+            current_label = labels[node]
+            char_dict[current_label] += 1
+            
+            # Process all neighbors except parent
+            for neighbor in graph[node]:
+                if neighbor != parent:
+                    # Get character counts from child subtree
+                    child_dict = helper(neighbor, node)
+                    
+                    # Merge child counts with current node's counts
+                    for char, count in child_dict.items():
+                        char_dict[char] += count
+            
+            # Store result for this node (number of nodes with same label in subtree)
+            res[node] = char_dict[current_label]
+            
+            return char_dict
+        
+        helper(0, -1)
+        return res
 
+    def countSubTrees(self, n: int, edges: List[List[int]], labels: str) -> List[int]:
+        graph = defaultdict(list)
+        for u, v in edges:
+            graph[u].append(v)
+            graph[v].append(u)
+        res = [0] * n
+        def helper(node: int, parent: int):
+            char_dict = defaultdict(int)
+            current_label = labels[node]
+            char_dict[current_label] = 1
+            for neighbor in graph[node]:
+                if neighbor != parent:
+                    child_dict = helper(neighbor, node)
+                    for ch, cnt in child_dict.items():
+                        char_dict[ch] += cnt
+            res[node] = char_dict[current_label]
+            return char_dict
+        
+        helper(0, -1)
+        return res
 

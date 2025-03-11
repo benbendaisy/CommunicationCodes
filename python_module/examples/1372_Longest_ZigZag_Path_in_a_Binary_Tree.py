@@ -37,7 +37,7 @@ class Solution:
     Input: root = [1]
     Output: 0
     """
-    def longestZigZag(self, root: Optional[TreeNode]) -> int:
+    def longestZigZag1(self, root: Optional[TreeNode]) -> int:
         @lru_cache(None)
         def dfs(node):
             #  For each node, it computes three values: the length of
@@ -55,3 +55,25 @@ class Solution:
                 max(left[1] + 1, right[0] + 1, left[2], right[2])
             ]
         return dfs(root)[-1]
+    
+    def longestZigZag(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+        
+        self.max_dep = 0
+        @cache
+        def helper(node: TreeNode, is_left: bool, depth: int):
+            if not node:
+                return
+            
+            self.max_dep = max(self.max_dep, depth)
+            if is_left:
+                helper(node.right, False, depth + 1)
+                helper(node.left, True, 1)
+            else:
+                helper(node.left, True, depth + 1)
+                helper(node.right, False, 1)
+            
+        helper(root.left, True, 1)
+        helper(root.right, False, 1)
+        return self.max_dep

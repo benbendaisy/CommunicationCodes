@@ -34,7 +34,7 @@ class Solution:
         The number of nodes in the tree is in the range [0, 104].
         -104 <= Node.val <= 104
     """
-    def largestBSTSubtree(self, root: Optional[TreeNode]) -> int:
+    def largestBSTSubtree1(self, root: Optional[TreeNode]) -> int:
         def check(node, lb, ub):
             """
             check if current tree is a valid binary search tree
@@ -73,3 +73,22 @@ class Solution:
 
         return largestBSTSubtree(root)
 
+
+    def largestBSTSubtree(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+        
+        @cache
+        def helper(node: TreeNode) -> tuple:
+            if not node:
+                return (float('inf'), float('-inf'), 0)
+            
+            left_min, left_max, left_cnt = helper(node.left)
+            right_min, right_max, right_cnt = helper(node.right)
+
+            if left_max < node.val < right_min:
+                return (min(left_min, node.val), max(right_max, node.val), left_cnt + right_cnt + 1)
+            
+            return (float('-inf'), float('inf'), max(left_cnt, right_cnt))
+
+        return helper(root)[2]

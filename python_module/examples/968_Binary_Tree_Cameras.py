@@ -47,7 +47,7 @@ class Solution:
 
         return min(solve(root)[1:])
 
-    def minCameraCover(self, root: Optional[TreeNode]) -> int:
+    def minCameraCover2(self, root: Optional[TreeNode]) -> int:
         self.cnt = 0
         covered = {None}
 
@@ -60,3 +60,37 @@ class Solution:
                     covered.update({node, parent, node.left, node.right})
         dfs(root)
         return self.cnt
+    
+    def minCameraCover(self, root: Optional[TreeNode]) -> int:
+        """
+        Three Possible States for Each Node:
+            0: The node needs a camera.
+            1: The node has a camera.
+            2: The node is covered but does not have a camera.
+        """
+        if not root:
+            return 0
+        self.camera = 0  # Counter to track the number of cameras needed
+        @cache
+        def helper(node: TreeNode) -> int:
+            if not node:
+                return 2 # Null nodes are considered covered
+            
+            left = helper(node.left)
+            right = helper(node.right)
+
+            # If any child needs a camera, install a camera at this node
+            if left == 0 or right == 0:
+                self.camera += 1
+                return 1 # Node has a camera
+            # If a child has a camera, this node is covered
+            if left == 1 or right == 1:
+                return 2 # Node is covered
+            
+            # If both children are covered but don’t have cameras, this node needs a camera
+            return 0 # Node needs a camera
+        
+        # If the root itself needs a camera, increment camera count
+        if helper(root) == 0:
+            self.camera += 1
+        return self.camera
