@@ -32,7 +32,7 @@ class Solution:
 
         1 <= m, n <= 9
     """
-    def numberOfPatterns(self, m: int, n: int) -> int:
+    def numberOfPatterns1(self, m: int, n: int) -> int:
         """
         # 2 lies between 1 and 3
         # 8 lies between 7 and 9
@@ -72,3 +72,90 @@ class Solution:
             # 1, 3, 7, 9 are symmetric so multiplying by 4
             # 2, 4, 6, 8 are symmetric so multiplying by 4
         return sum(backtrack(1, k) * 4 + backtrack(2, k) * 4 + backtrack(5, k) for k in range(m - 1, n))
+    
+    def numberOfPatterns2(self, m: int, n: int) -> int:
+        # Define the skip conditions
+        skip = [[0] * 10 for _ in range(10)]
+        skip[1][3] = skip[3][1] = 2
+        skip[1][7] = skip[7][1] = 4
+        skip[3][9] = skip[9][3] = 6
+        skip[7][9] = skip[9][7] = 8
+        skip[1][9] = skip[9][1] = skip[3][7] = skip[7][3] = skip[2][8] = skip[8][2] = skip[4][6] = skip[6][4] = 5
+
+        # Visited array to keep track of visited dots
+        visited = [False] * 10
+
+        # Recursive function to count valid patterns
+        def backtrack(current, remaining):
+            if remaining < 0:
+                return 0
+            if remaining == 0:
+                return 1
+            visited[current] = True
+            count = 0
+            for next_dot in range(1, 10):
+                if not visited[next_dot]:
+                    # Check if the move is valid
+                    if skip[current][next_dot] == 0 or visited[skip[current][next_dot]]:
+                        count += backtrack(next_dot, remaining - 1)
+            visited[current] = False
+            return count
+
+        # Calculate the total number of patterns
+        total = 0
+        for length in range(m, n + 1):
+            for start in range(1, 10):
+                total += backtrack(start, length - 1)
+        return total
+    
+    def numberOfPatterns3(self, m: int, n: int) -> int:
+        skip = {
+            (1, 3): 2, (3, 1): 2, (1, 7): 4, (7, 1): 4,
+            (3, 9): 6, (9, 3): 6, (7, 9): 8, (9, 7): 8,
+            (1, 9): 5, (9, 1): 5, (3, 7): 5, (7, 3): 5,
+            (2, 8): 5, (8, 2): 5, (4, 6): 5, (6, 4): 5
+        }
+        
+        @cache
+        def helper(curr: int, remaining: int, mask: int) -> int:
+            if remaining == 0:
+                return 1
+            cnt = 0
+            for nxt in range(1, 10):
+                if (mask & (1 << nxt)) == 0 and (
+                    (curr, nxt) not in skip or (mask & (1 << skip[(curr, nxt)])) != 0
+                ):
+                    cnt += helper(nxt, remaining - 1, mask | (1 << nxt))
+            return cnt
+        
+        res = 0
+        for length in range(m, n + 1):
+            for start in range(1, 10):
+                res += helper(start, length - 1, 1 << start)
+        
+        return res
+    
+    def numberOfPatterns(self, m: int, n: int) -> int:
+        skip = {}
+        skip[(1, 3)] = skip[(3, 1)] = 2
+        skip[(1, 7)] = skip[(7, 1)] = 4
+        skip[(3, 9)] = skip[(9, 3)] = 6
+        skip[(7, 9)] = skip[(9, 7)] = 8
+        skip[(1, 9)] = skip[(9, 1)] = skip[(3, 7)] = skip[(7, 3)] = skip[(2, 8)] = skip[(8, 2)] = skip[(4, 6)] = skip[(6, 4)] = 5
+        @cache
+        def helper(curr: int, remaining: int, mask: int):
+            if remaining == 0:
+                return 1
+            cnt = 0
+            for nxt in range(1, 10):
+                if (mask & (1 << nxt)) == 0 and (
+                    (curr, nxt) not in skip or (mask & (1 << skip[(curr, nxt)])) != 0
+                ):
+                        new_mask = mask | (1 << nxt)
+                        cnt += helper(nxt, remaining - 1, new_mask)
+            return cnt
+        res = 0
+        for length in range(m, n + 1):
+            for start in range(1, 10):
+                res += helper(start, length - 1, 1 << start)
+        return res

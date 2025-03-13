@@ -41,7 +41,7 @@ class Solution:
                 deque.heappush(que, (dis + 1, nei, nei_state))
                 visited.add((nei, nei_state))
     
-    def shortestPathLength(self, graph: List[List[int]]) -> int:
+    def shortestPathLength2(self, graph: List[List[int]]) -> int:
         n = len(graph)
         final_mask = (1 << n) - 1
 
@@ -56,5 +56,39 @@ class Solution:
                 if (neighbor, new_mask) not in visited:
                     visited.add((neighbor, new_mask))
                     que.append([neighbor, new_mask, steps + 1])
+        return -1
+    
+    def shortestPathLength3(self, graph: List[List[int]]) -> int:
+        n = len(graph)
+        all_mask = (1 << n) - 1
+        que = deque([i, 1 << i, 0] for i in range(n))
+        visited = set((i, 1 << i) for i in range(n))
+
+        while que:
+            node, mask, steps = que.popleft()
+            if mask == all_mask:
+                return steps
+            for neighbor in graph[node]:
+                new_mask = mask | (1 << neighbor)
+                if (neighbor, new_mask) not in visited:
+                    visited.add((neighbor, new_mask))
+                    que.append([neighbor, new_mask, steps + 1])
+        return -1
+    
+    def shortestPathLength(self, graph: List[List[int]]) -> int:
+        n = len(graph)
+        all_mask = (1 << n) - 1
+        que = deque([i, 1 << i, 0] for i in range(n))
+        visited = set((i, 1 << i) for i in range(n))
+        while que:
+            node, mask, steps = que.popleft()
+            if mask == all_mask:
+                return steps
+
+            for neighbor in graph[node]:
+                new_mask = mask | 1 << neighbor
+                if (neighbor, new_mask) not in visited:
+                    visited.add((neighbor, new_mask))
+                    que.append((neighbor, new_mask, steps + 1))
         return -1
 

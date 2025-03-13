@@ -34,7 +34,7 @@ class Solution:
     Explanation: The optimal choice of operations is:
     (1 * gcd(1, 5)) + (2 * gcd(2, 4)) + (3 * gcd(3, 6)) = 1 + 4 + 9 = 14
     """
-    def maxScore(self, nums: List[int]) -> int:
+    def maxScore1(self, nums: List[int]) -> int:
         @lru_cache(None)
         def fn(array, n):
             if not array:
@@ -48,3 +48,22 @@ class Solution:
             return ans
         
         return fn(tuple(nums), 1)
+    
+    def maxScore(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        n = (len(nums) // 2)
+        @cache
+        def helper(idx: int, mask: int):
+            if idx == n + 1:
+                return 0
+            max_sum = float('-inf')
+            for i in range(2 * n):
+                for j in range(i + 1, 2 * n):
+                    if ((1 << i) & mask) == 0 and ((1 << j) & mask) == 0:
+                        new_mask = mask | (1 << i)
+                        new_mask = new_mask | (1 << j)
+                        local_sum = idx * gcd(nums[i], nums[j]) + helper(idx + 1, new_mask)
+                        max_sum = max(max_sum, local_sum)
+            return max_sum
+        return helper(1, 0)

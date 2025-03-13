@@ -88,7 +88,7 @@ class Solution:
         
         return helper(tuple(needs))
     
-    def shoppingOffers(self, price: List[int], special: List[List[int]], needs: List[int]) -> int:
+    def shoppingOffers2(self, price: List[int], special: List[List[int]], needs: List[int]) -> int:
         if not special:
             return -1
         
@@ -110,4 +110,22 @@ class Solution:
                     min_cost = min(min_cost, offer[-1] + helper(tuple(new_needs)))
             return min_cost
         
+        return helper(tuple(needs))
+    
+    def shoppingOffers(self, price: List[int], special: List[List[int]], needs: List[int]) -> int:
+        if not needs:
+            return 0
+        n = len(needs)
+
+        @cache
+        def helper(remaining_needs: tuple) -> int:
+            if all(i == 0 for i in remaining_needs):
+                return 0
+            
+            min_price = sum(price[i] * remaining_needs[i] for i in range(n))
+            for i in range(len(special)):
+                if all(remaining_needs[j] >= special[i][j] for j in range(n)):
+                    new_needs = [remaining_needs[j] - special[i][j] for j in range(n)]
+                    min_price = min(min_price, special[i][-1] + helper(tuple(new_needs)))
+            return min_price
         return helper(tuple(needs))

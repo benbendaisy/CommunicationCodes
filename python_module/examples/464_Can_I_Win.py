@@ -50,7 +50,7 @@ class Solution:
             return False
         return can_i_win(0)
 
-    def canIWin(self, maxChoosableInteger: int, desiredTotal: int) -> bool:
+    def canIWin2(self, maxChoosableInteger: int, desiredTotal: int) -> bool:
         if desiredTotal == 0:
             return True
         if sum([i for i in range(1, maxChoosableInteger + 1)]) < desiredTotal:
@@ -64,6 +64,35 @@ class Solution:
                     if not can_i_win(left_total - i - 1, bit_mask | 1 << i):
                         return True
         return can_i_win(desiredTotal, 0)
+    
+    def canIWin3(self, maxChoosableInteger: int, desiredTotal: int) -> bool:
+        if (maxChoosableInteger * (maxChoosableInteger + 1)) // 2 < desiredTotal:
+            return False  # If sum of all numbers is less than desiredTotal, no one can win.
+
+        @cache
+        def helper(remaining: int, mask: int) -> bool:
+            for i in range(1, maxChoosableInteger + 1):
+                if mask & (1 << i) == 0:
+                    # If choosing i makes us reach or exceed the remaining total, we win
+                    if remaining - i <= 0 or not helper(remaining - i, mask | (1 << i)):
+                        return True
+            return False
+
+        return helper(desiredTotal, 0)
+    
+    def canIWin(self, maxChoosableInteger: int, desiredTotal: int) -> bool:
+        if (maxChoosableInteger * (maxChoosableInteger + 1)) // 2 < desiredTotal:
+            return False
+        @cache
+        def helper(remaining: int, mask: int) -> bool:
+            for i in range(1, maxChoosableInteger + 1):
+                if mask & (1 << i) == 0 and (remaining <= i or not helper(remaining - i, mask | (1 << i))):
+                    return True
+            return False
+        
+        return helper(desiredTotal, 0)
+
+
 
 if __name__ == "__main__":
     solution = Solution()
