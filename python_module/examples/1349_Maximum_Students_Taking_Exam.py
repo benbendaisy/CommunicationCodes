@@ -76,7 +76,7 @@ class Solution:
         
         return dfs(0, 0)
     
-    def maxStudents(self, seats: List[List[str]]) -> int:
+    def maxStudents2(self, seats: List[List[str]]) -> int:
         m, n = len(seats), len(seats[0])
         valid_rows = []
         for row in seats:
@@ -111,3 +111,79 @@ class Solution:
                 mask = (mask - 1) & row_mask
             return res
         return dfs(0, 0)
+    
+    def maxStudents3(self, seats: List[List[str]]) -> int:
+        m, n = len(seats), len(seats[0])
+
+        # @cache
+        def is_safe(row, col):
+            # Check if the current seat is safe to place a student
+            # Check left
+            if col > 0 and seats[row][col-1] == 'S':
+                return False
+            # Check right
+            if col < n-1 and seats[row][col+1] == 'S':
+                return False
+            # Check upper left
+            if row > 0 and col > 0 and seats[row-1][col-1] == 'S':
+                return False
+            # Check upper right
+            if row > 0 and col < n-1 and seats[row-1][col+1] == 'S':
+                return False
+            return True
+        
+        # @cache
+        def backtrack(row, col, count):
+            if row == m:
+                return count
+            if col == n:
+                return backtrack(row+1, 0, count)
+            
+            max_count = backtrack(row, col+1, count)  # Skip the current seat
+        
+            if seats[row][col] == '.' and is_safe(row, col):
+                seats[row][col] = 'S'  # Place a student
+                max_count = max(max_count, backtrack(row, col+1, count+1))
+                seats[row][col] = '.'  # Backtrack (remove the student)
+            
+            return max_count
+        
+        return backtrack(0, 0, 0)
+    
+    def maxStudents(self, seats: List[List[str]]) -> int:
+        m, n = len(seats), len(seats[0])
+
+        # @cache
+        def is_valid(row, col):
+            # check left
+            if col > 0 and seats[row][col - 1] == 'S':
+                return False
+            # check right
+            if col < n - 1 and seats[row][col + 1] == 'S':
+                return False
+            # check upper left
+            if row > 0 and col > 0 and seats[row - 1][col - 1] == 'S':
+                return False
+            # check upper right
+            if row < n - 1 and col < n - 1 and seats[row - 1][col + 1] == 'S':
+                return False
+            return True
+        
+        def helper(row: int, col: int, cnt: int) -> int:
+            if row == m:
+                return cnt
+            if col == n:
+                return helper(row + 1, 0, cnt)
+            # skip the current position
+            max_cnt = helper(row, col + 1, cnt)
+            
+            #check if it is valid position
+            if seats[row][col] == '.' and is_valid(row, col):
+                #take the position
+                seats[row][col] = 'S'
+                max_cnt = max(max_cnt, helper(row, col + 1, cnt + 1))
+                #reset the position
+                seats[row][col] = '.'
+            return max_cnt
+        
+        return helper(0, 0, 0)

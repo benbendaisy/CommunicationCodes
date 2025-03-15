@@ -44,7 +44,7 @@ class Solution:
 
         return uniquePaths(0, 0)
 
-    def uniquePathsWithObstacles(self, obstacleGrid: List[List[int]]) -> int:
+    def uniquePathsWithObstacles2(self, obstacleGrid: List[List[int]]) -> int:
         m, n = len(obstacleGrid), len(obstacleGrid[0])
         if obstacleGrid[0][0] ==  1:
             return 0
@@ -68,6 +68,27 @@ class Solution:
                     dp[i][j] = 0
 
         return dp[m - 1][n - 1]
+    
+    def uniquePathsWithObstacles(self, obstacleGrid: List[List[int]]) -> int:
+        mod = 2 * 10 ** 9
+        m, n = len(obstacleGrid), len(obstacleGrid[0])
+
+        @cache
+        def helper(row: int, col: int) -> int:
+            if row == m - 1 and col == n - 1:
+                if obstacleGrid[row][col] == 1:
+                    return 0 
+                return 1
+            
+            if row == m or col == n:
+                return 0
+            
+            if obstacleGrid[row][col] == 1:
+                return 0
+            
+            return helper(row + 1, col) + helper(row, col + 1)
+        
+        return helper(0, 0)
 
 if __name__ == "__main__":
     solution = Solution()

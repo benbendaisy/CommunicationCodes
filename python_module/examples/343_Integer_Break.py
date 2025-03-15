@@ -40,7 +40,7 @@ class Solution:
             return n - 1
         return dp(n)
     
-    def integerBreak(self, n: int) -> int:
+    def integerBreak3(self, n: int) -> int:
         factors = [i for i in range(1, n)]
         max_product = float('-inf')
         @cache
@@ -57,7 +57,7 @@ class Solution:
         helper(0, 1)    
         return max_product
     
-    def integerBreak(self, n: int) -> int:
+    def integerBreak4(self, n: int) -> int:
         if n <= 3:
             return n - 1
         @cache
@@ -69,3 +69,31 @@ class Solution:
                 max_product = max(max_product, i * helper(num - i))
             return max_product
         return helper(n)
+    
+    def integerBreak5(self, n: int) -> int:
+        @cache
+        def helper(remaining: int, product: int, step: int) -> int:
+            if remaining == 0:
+                if step >= 2:
+                    return product
+                return 0
+            max_prod = float('-inf')
+            for i in range(1, remaining + 1):
+                max_prod = max(max_prod, helper(remaining - i, product * i, step + 1))
+            return max_prod
+        
+        return helper(n, 1, 0)
+    
+    def integerBreak(self, n: int) -> int:
+        @cache
+        def helper(remaining: int, product: int, steps: int):
+            if remaining == 0:
+                if steps >= 2:
+                    return product
+                return 0
+            
+            max_product = float('-inf')
+            for i in range(1, remaining + 1):
+                max_product = max(max_product, helper(remaining - i, product * i, steps + 1))
+            return max_product
+        return helper(n, 1, 0)

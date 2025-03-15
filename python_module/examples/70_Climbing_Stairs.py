@@ -47,10 +47,19 @@ class Solution:
         return self.climbStairs(n - 1) + self.climbStairs(n - 2) 
     
     @cache
-    def climbStairs(self, n: int) -> int:
+    def climbStairs4(self, n: int) -> int:
         if n == 1:
             return 1
         elif n == 2:
             return 2
         
         return self.climbStairs(n - 1) + self.climbStairs(n - 2)
+    @cache
+    def climbStairs(self, n: int) -> int:
+        @cache
+        def helper(m: int) -> int:
+            if m == 1: return 1
+            if m == 2: return 2
+            return helper(m - 1) + helper(m - 2)
+        
+        return helper(n)
