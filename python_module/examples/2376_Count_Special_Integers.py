@@ -42,7 +42,7 @@ class Solution:
                 cnt += 1
         return cnt
     
-     def countSpecialNumbers2(self, n: int) -> int:
+    def countSpecialNumbers2(self, n: int) -> int:
         digits = list(map(int, str(n)))  # Convert n to a list of digits
         length = len(digits)
         
@@ -78,7 +78,7 @@ class Solution:
 
         return dp(0, 0, True, False)
     
-    def countSpecialNumbers(self, n: int) -> int:
+    def countSpecialNumbers3(self, n: int) -> int:
         def is_special(m: int) -> bool:
             digits = list(map(int, str(m)))
             mask = 0
@@ -92,4 +92,61 @@ class Solution:
         for i in range(1, n + 1):
             if is_special(i):
                 cnt += 1
+        return cnt
+    
+    def countSpecialNumbers4(self, n: int) -> int:
+        str_n = str(n)
+        len_n = len(str_n)
+        
+        # Count numbers with fewer digits
+        cnt = 0
+        for i in range(1, len_n):
+            f = 9
+            for j in range(1, i):
+                f *= (10 - j)  # Ensure digits remain unique
+            cnt += f
+        
+        # Count numbers with same length as n using DFS
+        @cache
+        def helper(idx: int, is_prefix_limit: bool, used_mask: int) -> int:
+            if idx == len_n:
+                return 1  # Reached a valid number
+
+            total = 0
+            upper_bound = int(str_n[idx]) if is_prefix_limit else 9
+            for digit in range(0 if idx > 0 else 1, upper_bound + 1):  # No leading zeros
+                if (used_mask >> digit) & 1:  # Ensure uniqueness
+                    continue
+                total += helper(idx + 1, is_prefix_limit and digit == upper_bound, used_mask | (1 << digit))
+            return total
+
+        cnt += helper(0, True, 0)
+        return cnt
+
+    def countSpecialNumbers(self, n: int) -> int:
+        str_n = str(n)
+        len_n = len(str_n)
+
+        cnt = 0
+        for i in range(1, len_n):
+            f = 9
+            for j in range(1, i):
+                f *= (10 - j)
+            cnt += f
+        
+        @cache
+        def helper(idx: int, is_prefix_limit: bool, mask: int) -> int:
+            if idx == len_n:
+                return 1
+            
+            total = 0
+            upper_bound = int(str_n[idx]) if is_prefix_limit else 9
+            for digit in range(0 if idx > 0 else 1, upper_bound + 1):
+                if (mask & (1 << digit)) != 0:
+                    continue
+                
+                total += helper(idx + 1, is_prefix_limit and digit == upper_bound, mask | (1 << digit))
+            return total
+        
+        cnt += helper(0, True, 0)
         return cnt
