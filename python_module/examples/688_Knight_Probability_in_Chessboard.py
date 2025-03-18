@@ -25,7 +25,7 @@ class Solution:
     Input: n = 1, k = 0, row = 0, column = 0
     Output: 1.00000
     """
-    def knightProbability(self, n: int, k: int, row: int, column: int) -> float:
+    def knightProbability1(self, n: int, k: int, row: int, column: int) -> float:
         adj_list = defaultdict(list)
         directions = ((-2, -1), (-2, 1), (-1, 2), (1, 2), (2, 1), (2, -1), (1, -2), (-1, -2))
         # find all the moves for a given position
@@ -47,3 +47,26 @@ class Solution:
         leafs_num = get_leafs_num((row, column), 0)
         # there are 8 ** k possible moves for k steps
         return leafs_num / (8**k)
+    
+    def knightProbability(self, n: int, k: int, row: int, column: int) -> float:
+        next_moves = defaultdict(list)
+        directions = ((-1, -2), (-2, -1), (-2, 1), (-1, 2), (1, 2), (2, 1), (2, -1), (1, -2))
+        for r in range(n):
+            for c in range(n):
+                for dx, dy in directions:
+                    new_pos = (r + dx, c + dy)
+                    if 0 <= new_pos[0] < n and 0 <= new_pos[1] < n:
+                        next_moves[(r, c)].append(new_pos)
+        
+        @cache
+        def helper(moves: int, current_pos: tuple) -> int:
+            if moves == k:
+                return 1
+            
+            cnt = 0
+            for next_pos in next_moves[current_pos]:
+                cnt += helper(moves + 1, next_pos)
+            return cnt
+        
+        valid_moves = helper(0, (row, column))
+        return valid_moves * 1.0 / (8 ** k)

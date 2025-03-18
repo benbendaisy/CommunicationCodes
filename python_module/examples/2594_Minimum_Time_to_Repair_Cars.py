@@ -71,7 +71,7 @@ class Solution:
         
         return left  # Minimum required time
     
-    def repairCars(self, ranks: List[int], cars: int) -> int:
+    def repairCars3(self, ranks: List[int], cars: int) -> int:
         ranks.sort()
 
         def is_valid(time: int) -> bool:
@@ -83,6 +83,26 @@ class Solution:
             return False
         
         left, right = 1, ranks[0] * (cars ** 2)
+        while left < right:
+            mid = (left + right) // 2
+            if is_valid(mid):
+                right = mid
+            else:
+                left = mid + 1
+        return left
+    
+    def repairCars(self, ranks: List[int], cars: int) -> int:
+        ranks.sort()
+
+        def is_valid(time: int) -> bool:
+            cnt = 0
+            for rank in ranks:
+                cnt += int((time // rank) ** 0.5)
+                if cnt >= cars:
+                    return True
+            return False
+        
+        left, right = 1, ranks[0] * cars ** 2
         while left < right:
             mid = (left + right) // 2
             if is_valid(mid):
