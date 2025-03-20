@@ -25,7 +25,7 @@ class Solution:
     Input: candidates = [2], target = 1
     Output: []
     """
-    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+    def combinationSum1(self, candidates: List[int], target: int) -> List[List[int]]:
         if not candidates:
             return []
         res = []
@@ -38,4 +38,24 @@ class Solution:
             for i in range(idx, len(candidates)):
                 back_track(path + [candidates[i]], i)
         back_track([], 0)
+        return res
+    
+    def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+        if not candidates:
+            return []
+        n = len(candidates)
+        res = []
+        def helper(path: list, idx: int):
+            if sum(path) == target:
+                res.append(path)
+                return
+
+            if idx >= n:
+                return
+            
+            for i in range(idx, n):
+                path_sum = sum(path)
+                if path_sum + candidates[i] <= target:
+                    helper(path + [candidates[i]], i)
+        helper([], 0)
         return res

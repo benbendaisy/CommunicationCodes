@@ -136,7 +136,7 @@ class Solution:
             else:
                 low = p_x + 1
 
-    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
+    def findMedianSortedArrays7(self, nums1: List[int], nums2: List[int]) -> float:
         # Ensure nums1 is the smaller array to optimize binary search
         if len(nums1) > len(nums2):
             nums1, nums2 = nums2, nums1
@@ -170,3 +170,103 @@ class Solution:
                 left = partition1 + 1  # Move right in nums1
 
         raise ValueError("Input arrays are not sorted!")  # Should never happen
+    
+    def findMedianSortedArrays8(self, nums1: List[int], nums2: List[int]) -> float:
+        if not nums1 and not nums2:
+            return -1
+        n1, n2 = len(nums1), len(nums2)
+        n = n1 + n2
+        def helper(k, n1_start, n1_end, n2_start, n2_end):
+            if n1_start > n1_end:
+                return nums2[k - n1_start]
+            if n2_start > n2_end:
+                return nums1[k - n2_start]
+            
+            n1_mid, n2_mid = (n1_start + n1_end) // 2, (n2_start + n2_end) // 2
+            if n1_mid + n2_mid < k:
+                if nums1[n1_mid] > nums2[n2_mid]:
+                    return helper(k, n1_start, n1_end, n2_mid + 1, n2_end)
+                else:
+                    return helper(k, n1_mid + 1, n1_end, n2_start, n2_end)
+            else:
+                if nums1[n1_mid] > nums2[n2_mid]:
+                    return helper(k, n1_start, n1_mid - 1, n2_start, n2_end)
+                else:
+                    return helper(k, n1_start, n1_end, n2_start, n2_end - 1)
+
+        if n % 2:
+            return helper(n // 2, 0, n1 - 1, 0, n2 - 1)
+
+        return (helper(n // 2 - 1, 0, n1 - 1, 0, n2 - 1) + helper(n // 2, 0, n1 - 1, 0, n2 - 1)) / 2
+    
+    def findMedianSortedArrays9(self, nums1: List[int], nums2: List[int]) -> float:
+        # Ensure nums1 is the smaller array
+        if len(nums1) > len(nums2):
+            nums1, nums2 = nums2, nums1
+        
+        n1, n2 = len(nums1), len(nums2)
+        total = n1 + n2
+        half = (total + 1) // 2  # Ensure the left partition has one more element if total is odd
+        
+        # Binary search on the smaller array
+        left, right = 0, n1
+        while left <= right:
+            partition1 = (left + right) // 2  # Partition for nums1
+            partition2 = half - partition1   # Partition for nums2
+            
+            # Handle edge cases where partitions are out of bounds
+            max_left1 = float('-inf') if partition1 == 0 else nums1[partition1 - 1]
+            min_right1 = float('inf') if partition1 == n1 else nums1[partition1]
+            
+            max_left2 = float('-inf') if partition2 == 0 else nums2[partition2 - 1]
+            min_right2 = float('inf') if partition2 == n2 else nums2[partition2]
+            
+            # Check if the partition is correct
+            if max_left1 <= min_right2 and max_left2 <= min_right1:
+                # If total number of elements is odd, return the max of the left partition
+                if total % 2 == 1:
+                    return max(max_left1, max_left2)
+                # If even, return the average of the max of the left partition and the min of the right partition
+                else:
+                    return (max(max_left1, max_left2) + min(min_right1, min_right2)) / 2
+            elif max_left1 > min_right2:
+                # Move the partition to the left in nums1
+                right = partition1 - 1
+            else:
+                # Move the partition to the right in nums1
+                left = partition1 + 1
+        
+        # If the input arrays are not sorted or other edge cases, return -1
+        return -1
+    
+    def findMedianSortedArrays9(self, nums1: List[int], nums2: List[int]) -> float:
+        if not nums1 and not nums2:
+            return -1
+        if len(nums1) > len(nums2):
+            nums1, nums2 = nums2, nums1
+        n1, n2 = len(nums1), len(nums2)
+        total = n1 + n2
+        half = (total + 1) // 2
+
+        left, right = 0, n1
+        while left <= right:
+            p1 = (left + right) // 2
+            p2 = half - p1
+
+            max_left1 = float('-inf') if p1 == 0 else nums1[p1 - 1]
+            min_right1 = float('inf') if p1 == n1 else nums1[p1]
+
+            max_left2 = float('-inf') if p2 == 0 else nums2[p2 - 1]
+            min_right2 = float('inf') if p2 == n2 else nums2[p2]
+
+            if max_left1 <= min_right2 and max_left2 <= min_right1:
+                if total % 2 == 1:
+                    return max(max_left1, max_left2)
+                else:
+                    return (max(max_left1, max_left2) + min(min_right1, min_right2)) / 2
+            
+            elif max_left1 > min_right2:
+                right = p1 - 1
+            else:
+                left = p1 + 1
+        return -1

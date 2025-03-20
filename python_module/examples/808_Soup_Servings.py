@@ -25,7 +25,7 @@ class Solution:
     Input: n = 100
     Output: 0.71875
     """
-    def soupServings(self, n: int) -> float:
+    def soupServings1(self, n: int) -> float:
         @lru_cache(None)
         def dfs(a, b):
             if a <= 0 and b <= 0:
@@ -36,3 +36,37 @@ class Solution:
                 return 0
             return 0.25 * (dfs(a-100, b) + dfs(a-75, b-25) + dfs(a-50, b-50) + dfs(a-25, b-75))
         return 1 if n > 4450 else dfs(n, n)
+    
+    def soupServings2(self, n: int) -> float:
+        if n > 5000:
+            return 1.0  # Approximates to 1 for large n due to diminishing returns
+        
+        @lru_cache(None)
+        def dp(a, b):
+            if a <= 0 and b <= 0:
+                return 0.5
+            if a <= 0:
+                return 1.0
+            if b <= 0:
+                return 0.0
+            
+            return 0.25 * (dp(a - 100, b) + dp(a - 75, b - 25) + dp(a - 50, b - 50) + dp(a - 25, b - 75))
+        
+        return dp(n, n)
+    
+    def soupServings(self, n: int) -> float:
+        if n > 5000:
+            return 1.0
+        
+        @cache
+        def helper(x, y):
+            if x <= 0 and y <= 0:
+                return 0.5
+            if x <= 0:
+                return 1.0
+            if y <= 0:
+                return 0.0
+            
+            return 0.25 * (helper(x - 100, y) + helper(x - 75, y - 25) + helper(x - 50, y - 50) + helper(x - 25, y - 75))
+        
+        return helper(n, n)

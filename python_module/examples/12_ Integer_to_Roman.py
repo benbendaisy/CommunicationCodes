@@ -35,9 +35,38 @@ class Solution:
         Output: "MCMXCIV"
         Explanation: M = 1000, CM = 900, XC = 90 and IV = 4.
     """
-    def intToRoman(self, num: int) -> str:
+    def intToRoman1(self, num: int) -> str:
         thousands = ["", "M", "MM", "MMM"]
         hundreds = ["", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"]
         tens = ["", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"]
         ones = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"]
         return thousands[num // 1000] + hundreds[num % 1000 // 100] + tens[num % 100 // 10] + ones[num % 10]
+    
+    def intToRoman2(self, num: int) -> str:
+        roman_numerals = [
+            (1000, "M"), (900, "CM"), (500, "D"), (400, "CD"),
+            (100, "C"), (90, "XC"), (50, "L"), (40, "XL"),
+            (10, "X"), (9, "IX"), (5, "V"), (4, "IV"), (1, "I")
+        ]
+        
+        result = ""
+        for value, symbol in roman_numerals:
+            while num >= value:
+                result += symbol
+                num -= value
+        
+        return result
+    
+    def intToRoman(self, num: int) -> str:
+        roman_numerics = [
+            (1000, "M"), (900, "CM"), (500, "D"), (400, "CD"),
+            (100, "C"), (90, "XC"), (50, "L"), (40, "XL"), 
+            (10, "X"), (9, "IX"), (5, "V"), (4, "IV"), (1, "I")
+        ]
+
+        res = ""
+        for value, symbol in roman_numerics:
+            while num >= value:
+                res += symbol
+                num -= value
+        return res

@@ -47,11 +47,28 @@ class Solution:
                 sum_window -= dp[i - maxPts]
         return prob
     
-    def new21Game(self, n: int, k: int, maxPts: int) -> float:
+    def new21Game2(self, n: int, k: int, maxPts: int) -> float:
         dp = [0] * (n + 1)
         dp[0] = 1
         for i in range(1, n + 1):
             for j in range(1, maxPts + 1):
                 if i - j >= 0 and i - j < k:
                     dp[i] += dp[i - j] / maxPts
-        return sum(dp[k:]) 
+        return sum(dp[k:])
+    
+    def new21Game(self, n: int, k: int, maxPts: int) -> float:
+        """
+        Time limit exceeded
+        """
+        if k == 0 or n >= k + maxPts:
+            return 1.0  # If we never stop drawing or we always reach `n`, return 1
+        
+        @cache
+        def helper(curr: int) -> float:
+            if curr >= k:  # If we reach or exceed `k`, stop drawing
+                return 1.0 if curr <= n else 0.0
+            
+            # Expected probability from drawing any of the `maxPts` cards
+            return sum(helper(curr + i) for i in range(1, maxPts + 1)) / maxPts
+
+        return helper(0)

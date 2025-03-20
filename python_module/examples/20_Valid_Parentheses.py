@@ -36,7 +36,7 @@ class Solution:
                 stack.append(ch)
         return len(stack) == 0
 
-    def isValid(self, s: str) -> bool:
+    def isValid2(self, s: str) -> bool:
         if not s:
             return False
         char_map = {'}':'{', ']':'[', ')':'('}
@@ -49,3 +49,15 @@ class Solution:
             else:
                 stack.append(ch)
         return not stack 
+    
+    def isValid(self, s: str) -> bool:
+        close_characters = {')': '(', '}': '{', ']': '['}
+        stack = []
+        for ch in s:
+            if ch in close_characters:
+                if not stack or stack[-1] != close_characters[ch]:
+                    return False
+                stack.pop()
+            else:
+                stack.append(ch)
+        return not stack

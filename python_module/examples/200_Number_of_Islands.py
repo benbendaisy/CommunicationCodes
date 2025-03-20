@@ -52,7 +52,7 @@ class Solution:
                     dfs(i, j)
         return cnt
 
-    def numIslands(self, grid: List[List[str]]) -> int:
+    def numIslands2(self, grid: List[List[str]]) -> int:
         cnt = 0
         m, n = len(grid), len(grid[0])
         def blood_search(row, col):
@@ -70,3 +70,23 @@ class Solution:
                     cnt += 1
                     blood_search(r, c)
         return cnt
+    
+    def numIslands(self, grid: List[List[str]]) -> int:
+        cnt = 0
+        rows, cols = len(grid), len(grid[0])
+        def helper(row: int, col: int) -> int:
+            if row < 0 or row >= rows or col < 0 or col >= cols or grid[row][col] != "1":
+                return
+            grid[row][col] = "2"
+            for dx, dy in ((0, -1), (0, 1), (-1, 0), (1, 0)):
+                new_row = row + dx
+                new_col = col + dy
+                helper(new_row, new_col)
+            
+        for i in range(rows):
+            for j in range(cols):
+                if grid[i][j] == "1":
+                    cnt += 1
+                    helper(i, j)
+        return cnt
+

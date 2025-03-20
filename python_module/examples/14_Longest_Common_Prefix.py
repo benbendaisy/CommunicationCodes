@@ -9,7 +9,7 @@ class Solution:
                     return strs[j - 1][:i]
         return strs[0][:min_length]
 
-    def longestCommonPrefix(self, strs: List[str]) -> str:
+    def longestCommonPrefix2(self, strs: List[str]) -> str:
         class TreeNode:
             def __init__(self):
                 self.child = {}
@@ -47,3 +47,16 @@ class Solution:
         for word in strs:
             trie.insert(word)
         return trie.longest_prefix()
+    
+    def longestCommonPrefix(self, strs: List[str]) -> str:
+        if not strs:
+            return ""
+        length = len(min(strs, key=len))
+        res = ""
+        for i in range(length):
+            new_res = res + strs[0][i]
+            for word in strs:
+                if word[i] != new_res[i]:
+                    return res
+            res = new_res
+        return res

@@ -20,11 +20,22 @@ class Solution:
     Input: head = []
     Output: []
     """
-    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+    def reverseList1(self, head: Optional[ListNode]) -> Optional[ListNode]:
         prev, cur = None, head
         while cur:
             next = cur.next
             cur.next = prev
             prev = cur
             cur = next
+        return prev
+    
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        if not head:
+            return head
+        prev, cur = None, head
+        while cur:
+            t = cur.next
+            cur.next = prev
+            prev = cur
+            cur = t
         return prev

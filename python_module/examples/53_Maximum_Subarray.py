@@ -48,7 +48,7 @@ class Solution:
             max_sum = max(running_sum, max_sum)
         return max_sum
     
-    def maxSubArray(self, nums: List[int]) -> int:
+    def maxSubArray3(self, nums: List[int]) -> int:
         if not nums:
             return 0
         
@@ -59,4 +59,17 @@ class Solution:
             else:
                 running_sum += num
             max_sum = max(max_sum, running_sum)
+        return max_sum
+    
+    def maxSubArray(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        running_sum, max_sum = 0, float('-inf')
+        for num in nums:
+            if running_sum < 0:
+                running_sum = num
+            else:
+                running_sum += num
+            max_sum = max(max_sum, running_sum)
+            
         return max_sum

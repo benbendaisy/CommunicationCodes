@@ -59,7 +59,7 @@ class Solution:
             res = max(res, i - l + 1)
         return res
     
-    def lengthOfLongestSubstring(self, s: str) -> int:
+    def lengthOfLongestSubstring3(self, s: str) -> int:
         char_set = set()
         left, max_len = 0, 0
         for right in range(len(s)):
@@ -68,6 +68,28 @@ class Solution:
                 left += 1
             char_set.add(s[right])
             max_len = max(max_len, right - left + 1)
+        return max_len
+    
+    def lengthOfLongestSubstring4(self, s: str) -> int:
+        window = []
+        left, max_len = 0, 0
+        for i, v in enumerate(s):
+            while window and v in window:
+                window.pop(0)
+                left += 1
+            window.append(v)
+            max_len = max(max_len, i - left + 1)
+        return max_len
+    
+    def lengthOfLongestSubstring5(self, s: str) -> int:
+        window = set()
+        left, max_len = 0, 0
+        for i, v in enumerate(s):
+            while window and v in window:
+                window.remove(s[left])
+                left += 1
+            window.add(v)
+            max_len = max(max_len, i - left + 1)
         return max_len
 
 

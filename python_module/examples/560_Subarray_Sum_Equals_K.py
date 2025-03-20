@@ -16,7 +16,7 @@ class Solution:
     Input: nums = [1,2,3], k = 3
     Output: 2
     """
-    def subarraySum(self, nums: List[int], k: int) -> int:
+    def subarraySum1(self, nums: List[int], k: int) -> int:
         res = 0
         prefix_sum = 0
         prefix_sum_cache = {0:1}
@@ -29,3 +29,29 @@ class Solution:
             else:
                 prefix_sum_cache[prefix_sum] += 1
         return res
+
+    def subarraySum2(self, nums: List[int], k: int) -> int:
+        prefix_sums = defaultdict(int)
+        prefix_sums[0] = 1  # Base case: empty subarray
+        running_sum = 0
+        cnt = 0
+        
+        for num in nums:
+            running_sum += num
+            if (running_sum - k) in prefix_sums:
+                cnt += prefix_sums[running_sum - k]
+            prefix_sums[running_sum] += 1
+        
+        return cnt
+    
+    def subarraySum(self, nums: List[int], k: int) -> int:
+        prefix_sum = defaultdict(int)
+        prefix_sum[0] = 1
+        running_sum, cnt = 0, 0
+
+        for num in nums:
+            running_sum += num
+            if (running_sum - k) in prefix_sum:
+                cnt += prefix_sum[running_sum - k]
+            prefix_sum[running_sum] += 1
+        return cnt

@@ -39,7 +39,14 @@ class Solution:
             cnt_list[v].append(k)
         return True
     
-    def uniqueOccurrences(self, arr: List[int]) -> bool:
+    def uniqueOccurrences3(self, arr: List[int]) -> bool:
         freq = Counter(arr)
         freq_set = set(freq.values())
         return len(freq) == len(freq_set)
+    
+    def uniqueOccurrences(self, arr: List[int]) -> bool:
+        freq = defaultdict(int)
+        for num in arr:
+            freq[num] += 1
+        values = set(freq.values())
+        return len(freq) == len(values)

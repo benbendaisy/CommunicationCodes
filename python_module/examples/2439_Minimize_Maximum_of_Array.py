@@ -31,9 +31,16 @@ class Solution:
         Explanation:
         It is optimal to leave nums as is, and since 10 is the maximum value, we return 10.
     """
-    def minimizeArrayValue(self, nums: List[int]) -> int:
+    def minimizeArrayValue1(self, nums: List[int]) -> int:
         ans = s = 0
         for i in range(len(nums)):
             s += nums[i]
             ans = max(ans, math.ceil(s / (i + 1)))
         return ans
+    
+    def minimizeArrayValue2(self, nums: List[int]) -> int:
+        res, pre_sum = 0, 0
+        for i in range(len(nums)):
+            pre_sum += nums[i]
+            res = max(res, math.ceil(pre_sum/(i + 1)))
+        return res

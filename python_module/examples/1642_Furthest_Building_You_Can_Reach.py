@@ -55,7 +55,7 @@ class Solution:
 
         return len(heights) - 1
 
-    def furthestBuilding(self, heights: List[int], bricks: int, ladders: int) -> int:
+    def furthestBuilding2(self, heights: List[int], bricks: int, ladders: int) -> int:
         maxHeap = []
         for i in range(len(heights) - 1):
             climb = heights[i + 1] - heights[i]
@@ -69,3 +69,91 @@ class Solution:
                 ladders -= 1
                 bricks += -heapq.heappop(maxHeap)
         return len(heights) - 1
+    
+    def furthestBuilding3(self, heights: List[int], bricks: int, ladders: int) -> int:
+        """
+        Memory Limit Exceeded"""
+        n = len(heights)
+
+        @lru_cache(None)  # Memoization to avoid redundant calculations
+        def helper(idx: int, cur_bricks: int, cur_ladders: int) -> int:
+            # Base Case: Reached the last building
+            if idx == n - 1:
+                return idx
+            
+            diff = heights[idx + 1] - heights[idx]
+
+            # If next building is shorter or same height, move for free
+            if diff <= 0:
+                return helper(idx + 1, cur_bricks, cur_ladders)
+
+            # If no resources left, stop
+            if cur_bricks > bricks and cur_ladders > ladders:
+                return idx
+
+            # Option 1: Use bricks if available
+            opt1 = helper(idx + 1, cur_bricks + diff, cur_ladders) if cur_bricks + diff <= bricks else idx
+
+            # Option 2: Use ladder if available
+            opt2 = helper(idx + 1, cur_bricks, cur_ladders + 1) if cur_ladders + 1 <= ladders else idx
+
+            return max(opt1, opt2)  # Return the farthest reachable building
+
+        return helper(0, 0, 0)
+    
+    def furthestBuilding4(self, heights: List[int], bricks: int, ladders: int) -> int:
+        n = len(heights)
+
+        @cache
+        def helper(idx: int, cur_bricks: int, cur_ladders: int) -> int:
+            # Base Case: Reached the last building
+            if idx == n - 1:
+                return idx
+            
+            diff = heights[idx + 1] - heights[idx]
+            if diff <= 0:
+                return helper(idx + 1, cur_bricks, cur_ladders)
+            
+            if cur_bricks == bricks and cur_ladders == ladders:
+                return idx
+            
+            opt1 = helper(idx + 1, cur_bricks + diff, cur_ladders) if cur_bricks + diff <= bricks else idx
+            opt2 = helper(idx + 1, cur_bricks, cur_ladders + 1) if cur_ladders + 1 <= ladders else idx
+            return max(opt1, opt2)
+
+        return helper(0, 0, 0)
+    
+    def furthestBuilding5(self, heights: List[int], bricks: int, ladders: int) -> int:
+        heap = []  # Min-heap to track largest jumps where bricks were used
+    
+        for i in range(len(heights) - 1):
+            diff = heights[i + 1] - heights[i]
+            
+            if diff > 0:  # Only consider jumps
+                heapq.heappush(heap, diff)
+            
+            # If we exceed available ladders, use bricks instead
+            if len(heap) > ladders:
+                bricks -= heapq.heappop(heap)  # Remove the smallest jump
+                
+            # If bricks run out, return the last valid index
+            if bricks < 0:
+                return i
+
+        return len(heights) - 1  # We reached the last building
+    
+    def furthestBuilding(self, heights: List[int], bricks: int, ladders: int) -> int:
+        heap = []
+        n = len(heights)
+        for i in range(len(heights) - 1):
+            diff = heights[i + 1] - heights[i]
+
+            if diff > 0:
+                heapq.heappush(heap, diff)
+            
+            if len(heap) > ladders:
+                bricks -= heapq.heappop(heap)
+            
+            if bricks < 0:
+                return i
+        return n - 1

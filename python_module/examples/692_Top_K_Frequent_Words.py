@@ -35,7 +35,7 @@ class Solution:
         wordCounter = Counter(words)
         return sorted(list(wordCounter.keys()), key=lambda x: (-wordCounter[x], x))[:k]
 
-    def topKFrequent(self, words: List[str], k: int) -> List[str]:
+    def topKFrequent2(self, words: List[str], k: int) -> List[str]:
         if len(words) < k:
             return []
 
@@ -46,3 +46,19 @@ class Solution:
             if len(heap) > k:
                 heapq.heappop(heap)
         return [p.word for p in sorted(heap, reverse=True)]
+    
+    def topKFrequent3(self, words: List[str], k: int) -> List[str]:
+        # Count word frequencies
+        freq = Counter(words)
+        # Sort by frequency (descending) and then by word (ascending)
+        sorted_items = sorted(freq.items(), key=lambda x: (-x[1], x[0]))
+        # Use a min-heap to get top k frequent words with correct ordering
+        sorted_words = [word for word, _ in sorted_items]
+        return sorted_words[:k]
+    
+    def topKFrequent(self, words: List[str], k: int) -> List[str]:
+        # Count word frequencies
+        freq = Counter(words)
+        
+        # Use a min-heap to get top k frequent words with correct ordering
+        return [word for word, _ in heapq.nsmallest(k, freq.items(), key=lambda x: (-x[1], x[0]))]

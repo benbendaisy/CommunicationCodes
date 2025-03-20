@@ -40,7 +40,7 @@ class Solution:
         s contains only the characters ('I', 'V', 'X', 'L', 'C', 'D', 'M').
         It is guaranteed that s is a valid roman numeral in the range [1, 3999].
     """
-    def romanToInt(self, s: str) -> int:
+    def romanToInt1(self, s: str) -> int:
         values = {
             "I": 1,
             "V": 5,
@@ -60,3 +60,25 @@ class Solution:
                 total += values[s[i]]
                 i += 1
         return total
+    
+    def romanToInt(self, s: str) -> int:
+        value_map = {
+            "I": 1,
+            "V": 5,
+            "X": 10,
+            "L": 50,
+            "C": 100,
+            "D": 500,
+            "M": 1000
+        }
+
+        cnt, idx = 0, 0
+        n = len(s)
+        while idx < n:
+            if idx + 1 < n and value_map[s[idx]] < value_map[s[idx + 1]]:
+                cnt += value_map[s[idx + 1]] - value_map[s[idx]]
+                idx += 2
+            else:
+                cnt += value_map[s[idx]]
+                idx += 1
+        return cnt

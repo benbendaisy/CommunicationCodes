@@ -59,7 +59,7 @@ class Solution:
 
         return res
     
-    def trap(self, height: List[int]) -> int:
+    def trap3(self, height: List[int]) -> int:
         if not height:
             return 0
         water, stack = 0, []
@@ -74,6 +74,23 @@ class Solution:
                 else:
                     break
             stack.append(idx)
+        return water
+    
+    def trap(self, height: List[int]) -> int:
+        if not height:
+            return 0
+        
+        stack, n = [], len(height)
+        water = 0
+        for i in range(n):
+            while stack and height[stack[-1]] < height[i]:
+                bottom = stack.pop()
+                if not stack:
+                    break
+                width = i - stack[-1] - 1
+                h = min(height[stack[-1]], height[i]) - height[bottom]
+                water += h * width
+            stack.append(i)
         return water
 
 

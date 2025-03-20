@@ -36,7 +36,7 @@ class Solution:
            60: 'Sixty',   70: 'Seventy',
            80: 'Eighty',  90: 'Ninety'
         }
-    def smallnumbersToWords(self, num: int) -> str:
+    def smallnumbersToWords1(self, num: int) -> str:
         words = ""
 
         hundreds = num // 100
@@ -64,7 +64,7 @@ class Solution:
 
         return words
 
-    def numberToWords(self, num: int) -> str:
+    def numberToWords2(self, num: int) -> str:
         words = ""
         temp = num
         billions = temp // (10**9)
@@ -105,3 +105,52 @@ class Solution:
             words += self.number_dic[num]
 
         return words
+    
+    def numberToWords3(self, num: int) -> str:
+        self.below_20 = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"]
+        self.tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"]
+        self.thousands = ["", "Thousand", "Million", "Billion"]
+        
+        def helper(num: int) -> str:
+            if num == 0:
+                return ""
+            elif num < 20:
+                return self.below_20[num] + " "
+            elif num < 100:
+                return self.tens[num // 10] + " " + helper(num % 10)
+            else:
+                return self.below_20[num // 100] + " Hundred " + helper(num % 100)
+        
+        if num == 0:
+            return "Zero"
+        res = ""
+        for i in range(len(self.thousands)):
+            if num % 1000 != 0:
+                res = helper(num % 1000) + self.thousands[i] + " " + res
+            num //= 1000
+        
+        return res.strip()
+
+    def numberToWords(self, num: int) -> str:
+        below_20 = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"]
+        tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"]
+        thousands = ["", "Thousand", "Million", "Billion"]
+
+        def helper(value: int):
+            if value == 0:
+                return ""
+            elif value < 20:
+                return below_20[value] + " "
+            elif value < 100:
+                return tens[value // 10] + " " + helper(value % 10)
+            else:
+                return below_20[value // 100] + " Hundred " + helper(value % 100)
+        
+        if num == 0:
+            return "Zero"
+        res = ""
+        for i in range(len(thousands)):
+            if num % 1000 != 0:
+                res = helper(num % 1000) + thousands[i] + " " + res
+            num //= 1000
+        return res.strip()
