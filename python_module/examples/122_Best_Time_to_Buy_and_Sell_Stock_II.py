@@ -58,7 +58,7 @@ class Solution:
             cur_min = prices[i]
         return profit
     
-    def maxProfit(self, prices: List[int]) -> int:
+    def maxProfit3(self, prices: List[int]) -> int:
         if not prices or len(prices) < 2:
             return 0
         n = len(prices)
@@ -68,3 +68,13 @@ class Solution:
             if delta > 0:
                 profit += delta
         return profit
+    
+    def maxProfit(self, prices: List[int]) -> int:
+        if not prices:
+            return 0
+        max_profit, n = 0, len(prices)
+        for i in range(1, n):
+            diff = prices[i] - prices[i - 1]
+            if diff > 0:
+                max_profit += diff
+        return max_profit

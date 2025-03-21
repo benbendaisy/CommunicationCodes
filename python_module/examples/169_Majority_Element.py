@@ -17,6 +17,17 @@ class Solution:
         counts = Counter(nums)
         return max(counts.keys(), key=counts.get)
 
-    def majorityElement(self, nums: List[int]) -> int:
+    def majorityElement2(self, nums: List[int]) -> int:
         nums.sort()
         return nums[len(nums)//2]
+    
+    def majorityElement3(self, nums: List[int]) -> int:
+        freq = Counter(nums)
+        return max(freq.keys(), key=freq.get)
+    
+    def majorityElement(self, nums: List[int]) -> int:
+        if not nums:
+            return -1
+        nums.sort()
+        n = len(nums)
+        return nums[n // 2]

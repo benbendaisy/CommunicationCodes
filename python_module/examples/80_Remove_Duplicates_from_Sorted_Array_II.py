@@ -57,13 +57,24 @@ class Solution:
 
         return p1 + 1
     
-    def removeDuplicates(self, nums: List[int]) -> int:
+    def removeDuplicates2(self, nums: List[int]) -> int:
         counter = Counter(nums)
         idx = 0
         for num, cnt in counter.items():
             nums[idx] = num
             idx += 1
             if cnt > 1:
+                nums[idx] = num
+                idx += 1
+        return idx
+    
+    def removeDuplicates(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        
+        idx = 0
+        for num in nums:
+            if idx < 2 or nums[idx - 2] != num:
                 nums[idx] = num
                 idx += 1
         return idx

@@ -27,10 +27,19 @@ class Solution:
         1 <= n <= 5000
         0 <= citations[i] <= 1000
     """
-    def hIndex(self, citations: List[int]) -> int:
+    def hIndex1(self, citations: List[int]) -> int:
         citations.sort(reverse=True)
         idx = 0
         while idx < len(citations) and citations[idx] > idx:
+            idx += 1
+        return idx
+    
+    def hIndex(self, citations: List[int]) -> int:
+        if not citations:
+            return 0
+        citations.sort(reverse=True)
+        idx, n = 0, len(citations)
+        while idx < n and citations[idx] > idx:
             idx += 1
         return idx
 

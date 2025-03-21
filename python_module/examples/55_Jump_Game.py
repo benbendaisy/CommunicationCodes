@@ -26,7 +26,7 @@ class Solution:
             max_step = max(max_step, idx + val)
         return True
     
-    def canJump(self, nums: List[int]) -> bool:
+    def canJump2(self, nums: List[int]) -> bool:
         if not nums:
             return False
         max_step = 0
@@ -34,4 +34,24 @@ class Solution:
             if max_step < idx:
                 return False
             max_step = max(max_step, idx + num)
+        return True
+    
+    def canJump3(self, nums: List[int]) -> bool:
+        if not nums:
+            return False
+        n, jump = len(nums), nums[0]
+        for i in range(1, n):
+            if jump == 0:
+                return False
+            jump = max(jump - 1, nums[i])
+        return True
+    
+    def canJump(self, nums: List[int]) -> bool:
+        if not nums:
+            return False
+        max_step = 0
+        for i, v in enumerate(nums):
+            if max_step < i:
+                return False
+            max_step = max(max_step, i + v)
         return True

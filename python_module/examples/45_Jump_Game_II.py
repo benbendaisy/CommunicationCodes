@@ -58,7 +58,7 @@ class Solution:
                     dp[i] = min(dp[i], dp[j] + 1)
         return dp[-1]
     
-    def jump(self, nums: List[int]) -> int:
+    def jump4(self, nums: List[int]) -> int:
         if not nums:
             return 0
         
@@ -87,7 +87,7 @@ class Solution:
         return result if result != float('inf') else -1
     
 
-    def jump(self, nums: List[int]) -> int:
+    def jump5(self, nums: List[int]) -> int:
         if not nums:
             return 0
         n = len(nums)
@@ -103,4 +103,42 @@ class Solution:
                     min_jumps = min(min_jumps, 1 + helper(i + idx))
             return min_jumps
 
+        return helper(0)
+    
+    def jump6(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+
+        n = len(nums)
+
+        @cache
+        def helper(idx: int) -> int:
+            if idx >= n - 1:
+                return 0  # No jumps needed if at or beyond last index
+            
+            min_jumps = float('inf')
+            max_jump = nums[idx]  # Maximum jump length from current position
+            
+            for i in range(1, max_jump + 1):
+                if idx + i < n:
+                    min_jumps = min(min_jumps, 1 + helper(idx + i))
+            
+            return min_jumps
+        
+        return helper(0)
+    
+    def jump(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        
+        n = len(nums)
+        @cache
+        def helper(idx: int) -> int:
+            if idx >= n - 1:
+                return 0
+            
+            min_jumps = float('inf')
+            for i in range(1, nums[idx] + 1):
+                min_jumps = min(min_jumps, 1 + helper(idx + i))
+            return min_jumps
         return helper(0)

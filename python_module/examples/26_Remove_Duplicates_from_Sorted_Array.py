@@ -74,7 +74,7 @@ class Solution:
                 seen.add(num)
         return idx
     
-    def removeDuplicates(self, nums: List[int]) -> int:
+    def removeDuplicates3(self, nums: List[int]) -> int:
         if not nums:
             return 0
         n, idx = len(nums), 0
@@ -83,4 +83,14 @@ class Solution:
                 idx += 1
                 nums[idx] = nums[i]
         return idx + 1
+    
+    def removeDuplicates(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        n, idx = len(nums), 0
+        for i in range(1, n):
+            if nums[idx] != nums[i]:
+                idx += 1
+                nums[idx] = nums[i]
+        return idx + 1 
 

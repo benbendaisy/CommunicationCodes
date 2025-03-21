@@ -40,10 +40,20 @@ class Solution:
     Note that the five elements can be returned in any order.
     It does not matter what you leave beyond the returned k (hence they are underscores).
     """
-    def removeElement(self, nums: List[int], val: int) -> int:
+    def removeElement1(self, nums: List[int], val: int) -> int:
         idx = 0
         for num in nums:
             if num != val:
                 nums[idx] = num
+                idx += 1
+        return idx
+    
+    def removeElement(self, nums: List[int], val: int) -> int:
+        if not nums:
+            return 0
+        idx, n = 0, len(nums)
+        for i in range(n):
+            if nums[i] != val:
+                nums[idx] = nums[i]
                 idx += 1
         return idx

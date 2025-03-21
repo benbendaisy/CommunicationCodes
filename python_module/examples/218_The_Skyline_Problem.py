@@ -200,7 +200,7 @@ class Solution:
                     prev = cur
             return ans
     
-    def getSkyline(self, buildings: List[List[int]]) -> List[List[int]]:
+    def getSkyline6(self, buildings: List[List[int]]) -> List[List[int]]:
         if not buildings:
             return []
         res, points = [], []
@@ -213,6 +213,52 @@ class Solution:
         sorted_height = SortedList([prev])
         for point in points:
             x, height = point[0], point[1]
+            if height < 0:
+                sorted_height.add(-height)
+            else:
+                sorted_height.remove(height)
+            cur = sorted_height[-1]
+            if prev != cur:
+                res.append((x, cur))
+                prev = cur
+        return res
+    
+    def getSkyline7(self, buildings: List[List[int]]) -> List[List[int]]:
+        if not buildings:
+            return []
+        res, points = [], []
+        for building in buildings:
+            left, right, height = building[0], building[1], building[2]
+            points.append((left, -height))
+            points.append((right, height))
+        points.sort(key=lambda x: (x[0], x[1]))
+        prev = 0
+        sorted_height = SortedList([prev])
+        for point in points:
+            x, height = point[0], point[1]
+            if height < 0:
+                sorted_height.add(-height)
+            else:
+                sorted_height.remove(height)
+            cur = sorted_height[-1]
+            if prev != cur:
+                res.append((x, cur))
+                prev = cur
+        return res
+    
+    def getSkyline(self, buildings: List[List[int]]) -> List[List[int]]:
+        if not buildings:
+            return []
+        res, points = [], []
+        for building in buildings:
+            left, right, height = building
+            points.append((left, -height))
+            points.append((right, height))
+        points.sort(key=lambda x: (x[0], x[1]))
+        prev = 0
+        sorted_height = SortedList([prev])
+        for point in points:
+            x, height = point
             if height < 0:
                 sorted_height.add(-height)
             else:
