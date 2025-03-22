@@ -50,7 +50,7 @@ class Solution:
     "do                  "
     ]
     """
-    def fullJustify(self, words: List[str], maxWidth: int) -> List[str]:
+    def fullJustify1(self, words: List[str], maxWidth: int) -> List[str]:
         res, cur, num_of_letters = [], [], 0
 
         for word in words:
@@ -63,3 +63,101 @@ class Solution:
             cur += [word]
             num_of_letters += len(word)
         return res + [' '.join(cur).ljust(maxWidth)]
+    
+    def fullJustify2(self, words: List[str], maxWidth: int) -> List[str]:
+        def transforming(left: int, right: int, length: int) -> str:
+            space_bucket = right - left
+            extra_space = maxWidth - length
+
+            if space_bucket == 0:  # Single word case
+                return words[left] + " " * extra_space
+
+            spaces = [" " * (extra_space // space_bucket) for _ in range(space_bucket)]
+            
+            # Distribute the remaining spaces one by one from the left
+            for i in range(extra_space % space_bucket):
+                spaces[i] += " "
+
+            res = ""
+            for i in range(space_bucket):
+                res += words[left + i] + spaces[i]
+            res += words[right]  # Add the last word without extra space after it
+
+            return res
+
+        res = []
+        left, right, running_length, n = 0, 0, 0, len(words)
+
+        while right < n:
+            if running_length + len(words[right]) + (right - left) > maxWidth:
+                res.append(transforming(left, right - 1, running_length))
+                left = right
+                running_length = 0
+            
+            running_length += len(words[right])
+            right += 1
+
+        # Last line (left-justified)
+        last_line = " ".join(words[left:right])
+        last_line += " " * (maxWidth - len(last_line))  # Pad spaces at the end
+        res.append(last_line)
+
+        return res
+    
+    def fullJustify3(self, words: List[str], maxWidth: int) -> List[str]:
+        def transforming(left: int, right: int, length: int) -> str:
+            space_bucket = right - left
+            extra_space = maxWidth - length
+            if space_bucket == 0:
+                return words[left] + " " * extra_space
+            spaces = [" " * (extra_space // space_bucket) for _ in range(space_bucket)]
+            for i in range(extra_space % space_bucket):
+                spaces[i] += " "
+            res = ""
+            for i in range(space_bucket):
+                res += words[left + i] + spaces[i]
+            return res + words[right]
+        left, right, running_length, n = 0, 0, 0, len(words)
+        res = []
+        while right < n:
+            if running_length + len(words[right]) + (right - left) > maxWidth:
+                res.append(transforming(left, right - 1, running_length))
+                left = right
+                running_length = 0
+            running_length += len(words[right])
+            right += 1
+
+        last_line = " ".join(words[left:])
+        last_line += " " * (maxWidth - len(last_line))
+        res.append(last_line)
+        return res
+    
+    def fullJustify(self, words: List[str], maxWidth: int) -> List[str]:
+        def transforming(left: int, right: int, length: int) -> str:
+            space_bucket = right - left
+            space_cnt = maxWidth - length
+            if space_bucket == 0:
+                return words[left] + " " * space_cnt
+            spaces = [" " * (space_cnt // space_bucket) for _ in range(space_bucket)]
+            for i in range(space_cnt % space_bucket):
+                spaces[i] += " "
+            res = ""
+            for i in range(space_bucket):
+                res += words[left + i] + spaces[i]
+            res += words[right]
+            return res
+
+        left, right, n, running_length = 0, 0, len(words), 0
+        ans = []
+        while right < n:
+            if running_length + len(words[right]) + right - left > maxWidth:
+                ans.append(transforming(left, right - 1, running_length))
+                left = right
+                running_length = 0
+            running_length += len(words[right])
+            right += 1
+        
+        last_line = " ".join(words[left:])
+        last_line += " " * (maxWidth - len(last_line))
+        ans.append(last_line)
+        return ans

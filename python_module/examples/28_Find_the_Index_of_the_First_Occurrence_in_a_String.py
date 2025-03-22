@@ -28,7 +28,7 @@ class Solution:
                 return i
         return -1
 
-    def strStr(self, haystack: str, needle: str) -> int:
+    def strStr2(self, haystack: str, needle: str) -> int:
         m, n = len(needle), len(haystack)
         if m == 0:
             return 0
@@ -48,4 +48,19 @@ class Solution:
                 j += 1
             if j == m:
                 return i - m + 1
+        return -1
+    
+    def strStr3(self, haystack: str, needle: str) -> int:
+        if not needle or not haystack or len(needle) > len(haystack):
+            return -1
+        m, n = len(haystack), len(needle)
+        for idx, ch in enumerate(haystack):
+            if ch == needle[0] and idx + n <= m:
+                is_matching = True
+                for i in range(n):
+                    if haystack[idx + i] != needle[i]:
+                        is_matching = False
+                        break
+                if is_matching:
+                    return idx
         return -1

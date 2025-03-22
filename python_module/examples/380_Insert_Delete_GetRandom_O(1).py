@@ -57,7 +57,7 @@ class RandomizedSet2:
         return random.choice(self.arr)
     
 
-class RandomizedSet:
+class RandomizedSet3:
 
     def __init__(self):
         self.set_dict = {}
@@ -79,5 +79,31 @@ class RandomizedSet:
             return True
         return False
 
+    def getRandom(self) -> int:
+        return choice(self.set_list)
+
+class RandomizedSet:
+
+    def __init__(self):
+        self.set_dict = {}
+        self.set_list = []
+
+    def insert(self, val: int) -> bool:
+        if val in self.set_dict:
+            return False
+        self.set_dict[val] = len(self.set_list)
+        self.set_list.append(val)
+        return True
+
+    def remove(self, val: int) -> bool:
+        if val not in self.set_dict:
+            return False
+        
+        last_element, idx = self.set_list[-1], self.set_dict[val]
+        self.set_list[idx], self.set_list[-1] = self.set_list[-1], self.set_list[idx]
+        self.set_dict[last_element] = idx
+        del self.set_dict[val]
+        self.set_list.pop() # delete the last element
+        return True
     def getRandom(self) -> int:
         return choice(self.set_list)

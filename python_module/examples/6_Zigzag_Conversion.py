@@ -29,7 +29,7 @@ class Solution:
         Input: s = "A", numRows = 1
         Output: "A"
     """
-    def convert(self, s: str, numRows: int) -> str:
+    def convert1(self, s: str, numRows: int) -> str:
         if numRows == 1:
             return s
         # Create a list of empty strings to store the zigzag pattern
@@ -51,3 +51,23 @@ class Solution:
             # Move to the next row
             row += step
         return "".join(zigzag)
+    
+    def convert(self, s: str, numRows: int) -> str:
+        if numRows == 1 or numRows >= len(s):
+            return s
+        
+        rows = [''] * numRows
+        index, step = 0, 1
+        
+        for char in s:
+            rows[index] += char
+            
+            if index == 0:
+                step = 1
+            elif index == numRows - 1:
+                step = -1
+            
+            index += step
+        
+        return ''.join(rows)
+

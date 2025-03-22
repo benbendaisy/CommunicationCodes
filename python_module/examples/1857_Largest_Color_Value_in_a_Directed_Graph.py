@@ -47,7 +47,7 @@ class Solution:
             max_cnt = max(max_cnt, max(counts[u]))
         return max_cnt if visited == n else -1
 
-    def largestPathValue(self, colors: str, edges: List[List[int]]) -> int:
+    def largestPathValue2(self, colors: str, edges: List[List[int]]) -> int:
         n = len(colors)
         graph = defaultdict(set)
         in_degrees = [0] * n
@@ -70,6 +70,122 @@ class Solution:
                 if in_degrees[v] == 0:
                     que.append(v)
         return ans if visited_cnt == n else -1
+    
+    def largestPathValue3(self, colors: str, edges: List[List[int]]) -> int:
+        n = len(colors)
+        graph = defaultdict(list)
+        indegree = [0] * n
+        
+        # Build graph and compute in-degrees
+        for u, v in edges:
+            graph[u].append(v)
+            indegree[v] += 1
+        
+        # Topological sorting using Kahn’s Algorithm (BFS)
+        queue = deque()
+        dp = [[0] * 26 for _ in range(n)]  # DP table to store max frequency of each color at each node
+        visited_count = 0
+        
+        for i in range(n):
+            if indegree[i] == 0:
+                queue.append(i)
+                dp[i][ord(colors[i]) - ord('a')] = 1  # Initialize color count for starting nodes
+
+        topological_order = []
+        
+        while queue:
+            node = queue.popleft()
+            topological_order.append(node)
+            visited_count += 1
+
+            for neighbor in graph[node]:
+                for c in range(26):  # Propagate color frequencies
+                    dp[neighbor][c] = max(dp[neighbor][c], dp[node][c] + (1 if c == ord(colors[neighbor]) - ord('a') else 0))
+
+                indegree[neighbor] -= 1
+                if indegree[neighbor] == 0:
+                    queue.append(neighbor)
+        
+        # If not all nodes were visited, a cycle exists
+        if visited_count < n:
+            return -1  # Cycle detected
+        
+        # Get the largest color frequency in any node
+        return max(max(row) for row in dp)
+    
+    def largestPathValue4(self, colors: str, edges: List[List[int]]) -> int:
+        n = len(colors)
+        graph = defaultdict(list)
+        indegree = [0] * n
+        
+        # Build graph and compute in-degrees
+        for u, v in edges:
+            graph[u].append(v)
+            indegree[v] += 1
+        
+        # Initialize DP table for color counts
+        dp = [[0] * 26 for _ in range(n)]
+        visited_count = 0
+        
+        # Initialize queue with nodes having 0 indegree
+        queue = deque([i for i in range(n) if indegree[i] == 0])
+        
+        # Process nodes in topological order
+        while queue:
+            node = queue.popleft()
+            color_idx = ord(colors[node]) - ord('a')
+            dp[node][color_idx] += 1  # Count this node's color
+            visited_count += 1
+            
+            for neighbor in graph[node]:
+                # Update DP values more efficiently
+                for c in range(26):
+                    dp[neighbor][c] = max(dp[neighbor][c], dp[node][c])
+                
+                indegree[neighbor] -= 1
+                if indegree[neighbor] == 0:
+                    queue.append(neighbor)
+        
+        # Check for cycles
+        if visited_count < n:
+            return -1
+        
+        # Find maximum color frequency
+        max_freq = 0
+        for i in range(n):
+            max_freq = max(max_freq, max(dp[i]))
+        
+        return max_freq
+
+    def largestPathValue(self, colors: str, edges: List[List[int]]) -> int:
+        n = len(colors)
+        graph = defaultdict(list)
+        in_degree = defaultdict(int)
+        for u, v in edges:
+            graph[u].append(v)
+            in_degree[v] += 1
+        
+        que = deque([node for node in range(n) if in_degree[node] == 0])
+        dp = [[0] * 26 for _ in range(n)]
+        visited_cnt = 0
+        while que:
+            node = que.popleft()
+            color_idx = ord(colors[node]) - ord('a')
+            dp[node][color_idx] += 1
+            visited_cnt += 1
+            for neighbor in graph[node]:
+                for c in range(26):
+                    dp[neighbor][c] = max(dp[neighbor][c], dp[node][c])
+                in_degree[neighbor] -= 1
+                if in_degree[neighbor] == 0:
+                    que.append(neighbor)
+        if visited_cnt < n:
+            return -1
+        
+        max_freq = 0
+        for i in range(n):
+            max_freq = max(max_freq, max(dp[i]))
+        return max_freq
 
 if __name__ == "__main__":
     colors = "abaca"

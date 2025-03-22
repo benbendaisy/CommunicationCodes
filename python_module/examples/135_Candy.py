@@ -23,7 +23,7 @@ class Solution:
     Explanation: You can allocate to the first, second and third child with 1, 2, 1 candies respectively.
     The third child gets 1 candy because it satisfies the above two conditions.
     """
-    def candy(self, ratings: List[int]) -> int:
+    def candy1(self, ratings: List[int]) -> int:
         n = len(ratings)
         # Initialize a list to store the number of candies for each child
         candies = [1] * n
@@ -41,7 +41,7 @@ class Solution:
         total = sum(candies)
         return total
     
-    def candy(self, ratings: List[int]) -> int:
+    def candy2(self, ratings: List[int]) -> int:
         n = len(ratings)
         candies = [1] * n
         for i in range(1, n):
@@ -52,4 +52,16 @@ class Solution:
             if ratings[j] > ratings[j + 1] and candies[j] <= candies[j + 1]:
                 candies[j] = candies[j + 1] + 1
         
+        return sum(candies)
+    
+    def candy(self, ratings: List[int]) -> int:
+        n = len(ratings)
+        candies = [1] * n
+        for i in range(1, n):
+            if ratings[i] > ratings[i - 1]:
+                candies[i] = candies[i - 1] + 1
+        
+        for j in range(n - 2, -1, -1):
+            if ratings[j] > ratings[j + 1]:
+                candies[j] = max(candies[j], candies[j + 1] + 1)
         return sum(candies)

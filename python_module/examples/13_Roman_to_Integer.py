@@ -61,7 +61,7 @@ class Solution:
                 i += 1
         return total
     
-    def romanToInt(self, s: str) -> int:
+    def romanToInt2(self, s: str) -> int:
         value_map = {
             "I": 1,
             "V": 5,
@@ -82,3 +82,23 @@ class Solution:
                 cnt += value_map[s[idx]]
                 idx += 1
         return cnt
+    
+    def romanToInt(self, s: str) -> int:
+        value_map = {
+            "I" : 1,
+            "V": 5,
+            "X": 10,
+            "L": 50,
+            "C": 100,
+            "D": 500,
+            "M": 1000
+        }
+        idx, n, res = 0, len(s), 0
+        while idx < n:
+            if idx + 1 < n and value_map[s[idx]] < value_map[s[idx + 1]]:
+                res += value_map[s[idx + 1]] - value_map[s[idx]]
+                idx += 2
+            else:
+                res += value_map[s[idx]]
+                idx += 1
+        return res

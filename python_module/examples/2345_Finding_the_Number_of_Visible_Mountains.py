@@ -22,7 +22,7 @@ class Solution:
     Explanation: The diagram above shows the mountains (they completely overlap).
     Both mountains are not visible since their peaks lie within each other.
     """
-    def visibleMountains(self, peaks: List[List[int]]) -> int:
+    def visibleMountains1(self, peaks: List[List[int]]) -> int:
         counter = defaultdict(int)
         for x, y in peaks:
             counter[(x, y)] += 1
@@ -43,3 +43,28 @@ class Solution:
             if not stack or not within(stack[-1], (x, y)):
                 stack.append((x, y))
         return len([p for p in stack if counter[p] == 1])
+
+    def visibleMountains(self, peaks: List[List[int]]) -> int:
+        if not peaks:
+            return 0
+        freq = defaultdict(int)
+        for x, y in peaks:
+            freq[(x, y)] += 1
+        
+        peaks = sorted(freq.keys())
+        def within(x, y):
+            x1, y1 = x
+            x2, y2 = y
+            b1 = y1 - x1
+            b2 = y1 + x1
+            return y2 <= x2 + b1 and y2 <= -x2 + b2
+        
+        n = len(peaks)
+        stack = [tuple(peaks[0])]
+        for x, y in peaks[1:]:
+            while stack and within((x, y), stack[-1]):
+                stack.pop()
+            if not stack or not within(stack[-1], (x, y)):
+                stack.append((x, y))
+            
+        return len([p for p in stack if freq[p] == 1])
