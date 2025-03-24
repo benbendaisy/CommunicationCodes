@@ -91,6 +91,17 @@ class Solution:
             window.add(v)
             max_len = max(max_len, i - left + 1)
         return max_len
+    
+    def lengthOfLongestSubstring6(self, s: str) -> int:
+        window = set()
+        left, max_len = 0, 0
+        for i, v in enumerate(s):
+            while window and v in window:
+                window.remove(s[left])
+                left += 1
+            window.add(v)
+            max_len = max(max_len, i - left + 1)
+        return max_len
 
 
 if __name__ == "__main__":

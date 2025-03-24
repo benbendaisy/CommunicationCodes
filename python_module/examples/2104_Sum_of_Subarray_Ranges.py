@@ -109,7 +109,7 @@ class Solution:
 
         return sum_of_extremes(nums.copy(), True) - sum_of_extremes(nums.copy(), False)
     
-    def subArrayRanges(self, nums: List[int]) -> int:
+    def subArrayRanges5(self, nums: List[int]) -> int:
         def sum_of_extremes(nums: List[int], is_max: bool) -> int:
             stack, res = [], 0
             n = len(nums)
@@ -122,3 +122,39 @@ class Solution:
                 stack.append(i)
             return res
         return sum_of_extremes(nums.copy(), True) - sum_of_extremes(nums.copy(), False)
+    
+    def subArrayRanges6(self, nums: List[int]) -> int:
+        def helper(start, end, curr_min, curr_max):
+            # Base case: when end reaches the length of nums
+            if end == len(nums):
+                return 0
+            
+            # Update min and max dynamically
+            curr_min = min(curr_min, nums[end])
+            curr_max = max(curr_max, nums[end])
+            
+            # Compute range and add recursive results
+            range_sum = curr_max - curr_min
+            return range_sum + helper(start, end + 1, curr_min, curr_max)
+        
+        total_sum = 0
+        for i in range(len(nums)):
+            total_sum += helper(i, i, nums[i], nums[i])  # Start recursion from each index
+        
+        return total_sum
+    
+    def subArrayRanges(self, nums: List[int]) -> int:
+        n = len(nums)
+        @cache
+        def helper(idx: int, curr_min: int, curr_max: int) -> int:
+            if idx == n:
+                return 0
+            curr_min = min(curr_min, nums[idx])
+            curr_max = max(curr_max, nums[idx])
+            range_sum = curr_max - curr_min
+            return range_sum + helper(idx + 1, curr_min, curr_max)
+        
+        range_sum = 0
+        for i in range(n):
+            range_sum += helper(i, nums[i], nums[i])
+        return range_sum

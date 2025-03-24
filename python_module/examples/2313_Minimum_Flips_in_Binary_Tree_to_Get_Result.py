@@ -38,7 +38,7 @@ class Solution:
     Explanation:
     The root of the tree already evaluates to false, so 0 nodes have to be flipped.
     """
-    def minimumFlips(self, root: Optional[TreeNode], result: bool) -> int:
+    def minimumFlips1(self, root: Optional[TreeNode], result: bool) -> int:
         def helper(node):
             if node.val == 0: return {True:1, False:0}
             if node.val == 1: return {True:0, False:1}
@@ -67,4 +67,75 @@ class Solution:
             return res
         
         return helper(root)[result]
+    
+    def minimumFlips2(self, root: Optional[TreeNode], result: bool) -> int:
+        @cache
+        def dfs(node, target):
+            if not node:
+                return float('inf')
+            
+            if not node.left and not node.right:  # Leaf node
+                return int(node.val != target)
+            
+            if node.val == 5:  # NOT operation
+                return dfs(node.left or node.right, not target)
+            
+            left_true = dfs(node.left, True)
+            left_false = dfs(node.left, False)
+            right_true = dfs(node.right, True) if node.right else float('inf')
+            right_false = dfs(node.right, False) if node.right else float('inf')
+            
+            if node.val == 2:  # OR operation
+                if target:
+                    return min(left_true, right_true)
+                else:
+                    return left_false + right_false
+            elif node.val == 3:  # AND operation
+                if target:
+                    return left_true + right_true
+                else:
+                    return min(left_false, right_false)
+            elif node.val == 4:  # XOR operation
+                if target:
+                    return min(left_true + right_false, left_false + right_true)
+                else:
+                    return min(left_true + right_true, left_false + right_false)
+            
+            return float('inf')
         
+        return dfs(root, result)
+    
+    def minimumFlips(self, root: Optional[TreeNode], result: bool) -> int:
+        if not root:
+            return -1
+        
+        @cache
+        def helper(node: TreeNode, target: bool):
+            if not node.left and not node.right:
+                return int(node.val != target)
+            if node.val == 5:
+                return helper(node.left or node.right, not target)
+            
+            left_true = helper(node.left, True)
+            left_false = helper(node.left, False)
+            right_true = helper(node.right, True)
+            right_false = helper(node.right, False)
+
+            match node.val:
+                case 2:
+                    if target:
+                        return min(left_true, right_true)
+                    else:
+                        return left_false + right_false
+                case 3:
+                    if target:
+                        return left_true + right_true
+                    else:
+                        return min(left_false, right_false)
+                case 4:
+                    if target:
+                        return min(left_true + right_false, left_false + right_true)
+                    else:
+                        return min(left_true + right_true, left_false + right_false)
+            return float('inf')
+        return helper(root, result)

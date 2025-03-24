@@ -30,7 +30,7 @@ class Solution:
         1 <= words[i].length <= 30
         s and words[i] consist of lowercase English letters.
     """
-    def findSubstring(self, s: str, words: List[str]) -> List[int]:
+    def findSubstring0(self, s: str, words: List[str]) -> List[int]:
         n = len(s)
         k = len(words)
         word_length = len(words[0])
@@ -118,3 +118,75 @@ class Solution:
                 answer.append(i)
 
         return answer
+    
+    def findSubstring2(self, s: str, words: List[str]) -> List[int]:
+        if not s or not words:
+            return []
+        
+        word_len = len(words[0])
+        word_count = len(words)
+        total_len = word_len * word_count
+        word_freq = Counter(words)
+        
+        result = []
+        
+        for i in range(word_len):  # Shift window starting point
+            left = i
+            right = i
+            window_words = Counter()
+            count = 0  # Count of valid words in the window
+            
+            while right + word_len <= len(s):
+                word = s[right:right + word_len]
+                right += word_len
+                
+                if word in word_freq:
+                    window_words[word] += 1
+                    count += 1
+                    
+                    while window_words[word] > word_freq[word]:
+                        left_word = s[left:left + word_len]
+                        window_words[left_word] -= 1
+                        count -= 1
+                        left += word_len
+                    
+                    if count == word_count:
+                        result.append(left)
+                else:
+                    window_words.clear()
+                    count = 0
+                    left = right
+        
+        return result
+    
+    def findSubstring(self, s: str, words: List[str]) -> List[int]:
+        if not s or not words:
+            return []
+        word_len = len(words[0])
+        word_cnt = len(words)
+        freq = Counter(words)
+
+        res = []
+        for i in range(word_len):
+            left, right = i, i
+            window_words = Counter()
+            cnt = 0
+
+            while right + word_len <= len(s):
+                word = s[right:right + word_len]
+                right += word_len
+                if word in freq:
+                    window_words[word] += 1
+                    cnt += 1
+                    while window_words[word] > freq[word]:
+                        left_word = s[left:left + word_len]
+                        window_words[left_word] -= 1
+                        cnt -= 1
+                        left += word_len
+                    if cnt == word_cnt:
+                        res.append(left)
+                else:
+                    window_words.clear()
+                    cnt = 0
+                    left = right
+        return res

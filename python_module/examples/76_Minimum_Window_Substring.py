@@ -25,7 +25,7 @@ class Solution:
     Explanation: Both 'a's from t must be included in the window.
     Since the largest window of s only has one 'a', return empty string.
     """
-    def minWindow(self, s: str, t: str) -> str:
+    def minWindow1(self, s: str, t: str) -> str:
         if not s or not t:
             return ""
 
@@ -67,7 +67,7 @@ class Solution:
             r += 1
         return "" if ans[0] == float("inf") else s[ans[1] : ans[2] + 1]
 
-    def minWindow(self, s: str, t: str) -> str:
+    def minWindow2(self, s: str, t: str) -> str:
         """
         1, two dict: dict_t and dict_window
         2, two lengths: one required length and the length of window that only includes characters in target string
@@ -97,3 +97,32 @@ class Solution:
                 l += 1
             r += 1
         return "" if res[0] == float("inf") else s[res[1] : res[2] + 1]
+    
+    def minWindow3(self, s: str, t: str) -> str:
+        if not s or not t or len(s) < len(t):
+            return ""
+        
+        freq1 = Counter(t)
+        m = len(s)
+        freq2 = defaultdict(int)
+        left, min_str = 0, ""
+        formed_chars, required_chars = 0, len(freq1)
+        min_len = float('inf')
+        for i in range(m):
+            ch = s[i]
+            if ch in freq1:
+                freq2[ch] += 1
+                if freq2[ch] == freq1[ch]:
+                    formed_chars += 1 
+            while formed_chars == required_chars:
+                if i - left + 1 < min_len:
+                    min_len = i - left + 1
+                    min_str = s[left: i + 1]
+                
+                if s[left] in freq1:
+                    freq2[s[left]] -= 1
+                    if freq2[s[left]] < freq1[s[left]]:
+                        formed_chars -= 1
+                left += 1
+
+        return min_str

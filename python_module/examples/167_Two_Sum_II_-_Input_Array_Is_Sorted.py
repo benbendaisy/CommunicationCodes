@@ -35,7 +35,7 @@ class Solution:
         -1000 <= target <= 1000
         The tests are generated such that there is exactly one solution.
     """
-    def twoSum(self, numbers: List[int], target: int) -> List[int]:
+    def twoSum1(self, numbers: List[int], target: int) -> List[int]:
         l, r = 0, len(numbers) - 1
         while l < r:
             t = numbers[l] + numbers[r]
@@ -46,3 +46,16 @@ class Solution:
             else:
                 l += 1
         return []
+    
+    def twoSum(self, numbers: List[int], target: int) -> List[int]:
+        n = len(numbers)
+        left, right = 0, n - 1
+        while left < right:
+            plus = numbers[left] + numbers[right]
+            if plus == target:
+                return [left + 1, right + 1]
+            elif plus < target:
+                left += 1
+            else:
+                right -= 1
+        return [-1, -1]

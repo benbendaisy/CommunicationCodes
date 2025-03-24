@@ -20,7 +20,7 @@ class Solution:
         s and t consist only of lowercase English letters.
     """
 
-    def isSubsequence(self, s: str, t: str) -> bool:
+    def isSubsequence1(self, s: str, t: str) -> bool:
         ls, lt = len(s), len(t)
         idx_s, idx_t = 0, 0
         while idx_s < ls and idx_t < lt:
@@ -30,4 +30,42 @@ class Solution:
             else:
                 idx_t += 1
         return idx_s == ls
+    
+    def isSubsequence2(self, s: str, t: str) -> bool:
+        if not s:
+            return True  # An empty string is always a subsequence
+        
+        m, n = len(s), len(t)
+        
+        @lru_cache(None)
+        def helper(i: int, j: int) -> bool:
+            if i == m:  
+                return True  # Found all characters in `s` within `t`
+            if j == n:  
+                return False  # Reached the end of `t` without fully matching `s`
+            
+            if s[i] == t[j]:  
+                return helper(i + 1, j + 1)  # Move both pointers if characters match
+            
+            return helper(i, j + 1)  # Otherwise, move only `t` pointer
+
+        return helper(0, 0)
+    
+    def isSubsequence(self, s: str, t: str) -> bool:
+        if len(s) > len(t):
+            return False
+        m, n = len(s), len(t)
+        @cache
+        def helper(idx: int, sub_seq: str) -> bool:
+            if sub_seq == s:
+                return True
+            if idx == n or len(sub_seq) >= m:
+                return False
+            
+            
+            for i in range(idx, n):
+                if helper(i + 1, sub_seq + t[i]):
+                    return True
+            return False
+        return helper(0, "")
 
