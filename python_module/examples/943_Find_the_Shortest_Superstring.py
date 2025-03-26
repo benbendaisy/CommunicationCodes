@@ -21,7 +21,7 @@ class Solution:
         def getOverlap(a, b):
             l, i = 0, 1
             while i <= min(len(a), len(b)):
-                if a[len(a)-i:] == b[:i]:
+                if a[-i:] == b[:i]:
                     l = i
                 i += 1
             return b[l:]

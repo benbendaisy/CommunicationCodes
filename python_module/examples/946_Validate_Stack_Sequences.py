@@ -20,7 +20,7 @@ class Solution:
         Output: false
         Explanation: 1 cannot be popped before 2.
     """
-    def validateStackSequences(self, pushed: List[int], popped: List[int]) -> bool:
+    def validateStackSequences1(self, pushed: List[int], popped: List[int]) -> bool:
         stack = []
         j = 0
         for x in pushed:
@@ -29,3 +29,13 @@ class Solution:
                 stack.pop()
                 j += 1
         return j == len(popped)
+    
+    def validateStackSequences2(self, pushed: List[int], popped: List[int]) -> bool:
+        stack, idx = [], 0
+        n = len(popped)
+        for num in pushed:
+            stack.append(num)
+            while stack and idx < n and stack[-1] == popped[idx]:
+                stack.pop()
+                idx += 1
+        return idx == n

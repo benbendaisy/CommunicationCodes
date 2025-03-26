@@ -19,7 +19,7 @@ class Solution:
         Input: nums = [1,2,3,1,2,3], k = 2
         Output: false
     """
-    def containsNearbyDuplicate(self, nums: List[int], k: int) -> bool:
+    def containsNearbyDuplicate1(self, nums: List[int], k: int) -> bool:
         if not nums or len(nums) < 2:
             return False
 
@@ -31,3 +31,16 @@ class Solution:
                         return True
             numDict[num].append(idx)
         return False
+    
+    def containsNearbyDuplicate(self, nums: List[int], k: int) -> bool:
+        if not nums:
+            return False
+        n = len(nums)
+        pos_dict = {}
+        for i, v in enumerate(nums):
+            if v in pos_dict and i - pos_dict[v] <= k:
+                return True
+            pos_dict[v] = i
+        return False
+
+

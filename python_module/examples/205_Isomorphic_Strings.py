@@ -30,7 +30,7 @@ class Solution:
                 return False
         return True
     
-    def isIsomorphic(self, s: str, t: str) -> bool:
+    def isIsomorphic2(self, s: str, t: str) -> bool:
         def transform_string(str1):
             index_map = {}
             new_str = []
@@ -40,4 +40,15 @@ class Solution:
                 new_str.append(str(index_map[c]))
             return " ".join(new_str)
         return transform_string(s) == transform_string(t)
+    
+    def isIsomorphic(self, s: str, t: str) -> bool:
+        def transform(str1: str):
+            idx_dict = {}
+            new_str = []
+            for ch in str1:
+                if ch not in idx_dict:
+                    idx_dict[ch] = len(idx_dict) + 1
+                new_str.append(str(idx_dict[ch]))
+            return "".join(new_str)
+        return transform(s) == transform(t)
 

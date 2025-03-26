@@ -59,7 +59,6 @@ class Solution:
             b2 = y1 + x1
             return y2 <= x2 + b1 and y2 <= -x2 + b2
         
-        n = len(peaks)
         stack = [tuple(peaks[0])]
         for x, y in peaks[1:]:
             while stack and within((x, y), stack[-1]):

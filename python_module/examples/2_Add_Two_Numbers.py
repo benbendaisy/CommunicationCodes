@@ -54,7 +54,7 @@ class Solution:
 
         return prev.next
 
-    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+    def addTwoNumbers2(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
         dummy = ListNode()
         cur = dummy
         carrier = 0
@@ -69,4 +69,20 @@ class Solution:
             cur.next = ListNode(val % 10)
             cur = cur.next
             carrier = val // 10
+        return dummy.next
+    
+    def addTwoNumbers3(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        dummy = cur = ListNode()
+        carry = 0
+        while l1 or l2 or carry:
+            val = carry
+            if l1:
+                val += l1.val
+                l1 = l1.next
+            if l2:
+                val += l2.val
+                l2 = l2.next
+            cur.next = ListNode(val % 10)
+            cur = cur.next
+            carry = val // 10
         return dummy.next

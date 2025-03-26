@@ -81,7 +81,7 @@ class Solution:
                 stack.append(int(token))
         return stack.pop()
     
-    def evalRPN(self, tokens: List[str]) -> int:
+    def evalRPN3(self, tokens: List[str]) -> int:
         operations = {
             "+": lambda a, b: a + b,
             "-": lambda a, b: a - b,
@@ -89,7 +89,6 @@ class Solution:
             "/": lambda a, b: int(a / b) 
         }
         stack = []
-        res = 0
         for token in tokens:
             if token in operations:
                 b = stack.pop()
@@ -100,3 +99,22 @@ class Solution:
                 stack.append(int(token))
         return stack.pop()
 
+    def evalRPN(self, tokens: List[str]) -> int:
+        operations = {
+            "+": lambda x, y: x + y,
+            "-": lambda x, y: x - y,
+            "*": lambda x, y: x * y,
+            "/": lambda x, y: int(x / y)
+        }
+
+        stack = []
+        for token in tokens:
+            if token in operations:
+                y, x = stack.pop(), stack.pop()
+                operation = operations[token]
+                val = operation(x, y)
+                stack.append(val)
+            else:
+                stack.append(int(token))
+                
+        return stack.pop()

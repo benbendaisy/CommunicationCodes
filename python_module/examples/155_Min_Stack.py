@@ -50,7 +50,7 @@ class MinStack1:
     def getMin(self) -> int:
         return self.min_stack[-1]
 
-class MinStack:
+class MinStack2:
     def __init__(self):
         self.stack = []
     
@@ -77,3 +77,32 @@ class MinStack:
     
     def getMin(self) -> int:
         return self.stack[-1].min_val
+    
+class MinStack:
+    class Node:
+        def __init__(self, val: int, min_val: int):
+            self.val = val
+            self.min_val = min_val
+
+    def __init__(self):
+        self.stack = []
+    
+    def push(self, val: int) -> None:
+        min_val = val
+        if self.stack:
+            min_val = min(min_val, self.stack[-1].min_val)
+        node = self.Node(val, min_val)
+        self.stack.append(node)
+    
+    def pop(self) -> None:
+        if self.stack:
+            self.stack.pop()
+    
+    def top(self) -> int:
+        if self.stack:
+            return self.stack[-1].val
+        return None
+    def getMin(self) -> int:
+        if self.stack:
+            return self.stack[-1].min_val
+        return None

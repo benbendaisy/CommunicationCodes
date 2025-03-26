@@ -61,7 +61,7 @@ class Solution:
                 operand = 0
         return res + sign * operand
 
-    def calculate(self, s: str) -> int:
+    def calculate2(self, s: str) -> int:
         def evaluate_expr(stack):
             # If stack is empty or the expression starts with
             # a symbol, then append 0 to the stack.
@@ -109,6 +109,76 @@ class Solution:
 
         # Evaluate any left overs in the stack.
         return evaluate_expr(stack)
+    
+    def calculate3(self, s: str) -> int:
+        stack = []
+        num = 0
+        sign = 1  # 1 for positive, -1 for negative
+        result = 0
+        
+        for char in s:
+            if char.isdigit():
+                num = num * 10 + int(char)
+            elif char in "+-":
+                result += sign * num
+                num = 0
+                sign = 1 if char == "+" else -1
+            elif char == "(":
+                stack.append(result)
+                stack.append(sign)
+                result = 0
+                sign = 1
+            elif char == ")":
+                result += sign * num
+                num = 0
+                result *= stack.pop()  # pop sign
+                result += stack.pop()  # pop previous result
+        
+        return result + (sign * num)
+    
+    def calculate4(self, s: str) -> int:
+        stack, num = [], 0
+        sign, res = 1, 0
+        for ch in s:
+            if ch.isdigit():
+                num = num * 10 + int(ch)
+            elif ch in "+-":
+                res += sign * num
+                num = 0
+                sign = 1 if ch == "+" else -1
+            elif ch == "(":
+                stack.append(res)
+                stack.append(sign)
+                res = 0
+                sign = 1
+            elif ch == ")":
+                res += sign * num
+                num = 0
+                res *= stack.pop()
+                res += stack.pop()
+        return res + (sign * num)
+    
+    def calculate(self, s: str) -> int:
+        stack, num = [], 0
+        sign, res = 1, 0
+        for ch in s:
+            if ch.isdigit():
+                num = num * 10 + int(ch)
+            elif ch in "+-":
+                res += sign * num
+                num = 0
+                sign = 1 if ch == "+" else -1
+            elif ch == "(":
+                stack.append(res)
+                stack.append(sign)
+                res = 0 # starting calculating expression within ()
+                sign = 1
+            elif ch == ")":
+                res += sign * num
+                num = 0
+                res *= stack.pop() # handle sign
+                res += stack.pop() # handle value
+        return res + (sign * num)
 
 
 

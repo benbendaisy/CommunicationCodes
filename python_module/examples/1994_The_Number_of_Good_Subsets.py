@@ -55,23 +55,16 @@ class Solution:
             """Check if n is a product of distinct prime factors."""
             if n < 2:
                 return False
-                
             factors = set()
-            i = 2
-            
-            while i <= n:
+            for i in range(1, n):
                 if n % i == 0 and is_prime(i):
                     # If we've seen this prime factor before, it's not a product of distinct primes
                     if i in factors:
                         return False
-                    
                     # Add prime factor to our set
                     factors.add(i)
-                    
                     # Divide n by the prime factor
                     n //= i
-                else:
-                    i += 1
     
             # If we've factored n completely and all prime factors are distinct, return True
             return n == 1

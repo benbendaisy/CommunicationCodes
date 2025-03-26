@@ -36,7 +36,7 @@ class Solution:
     The path from node 0 to node 0 consists of the node 0.
     Since 0 is the only node on the path, the answer to the first query is 0.
     """
-    def closestNode(self, n: int, edges: List[List[int]], query: List[List[int]]) -> List[int]:
+    def closestNode1(self, n: int, edges: List[List[int]], query: List[List[int]]) -> List[int]:
         graph = defaultdict(list)
         for i, j in edges:
             graph[i].append(j)
@@ -75,4 +75,136 @@ class Solution:
                 res.append(q[2])
                 continue
             res.append(bfs([q[2]], stack))
+        return res
+    
+    def closestNode2(self, n: int, edges: List[List[int]], query: List[List[int]]) -> List[int]:
+        """
+        Time Limit Exceeded
+        """
+        if not query:
+            return []
+        
+        graph = defaultdict(list)
+        for u, v in edges:
+            graph[u].append(v)
+            graph[v].append(u)
+        
+        def helper(node: int, end: int, mask: int, path: list) -> list:
+            if node == end:
+                return path
+
+            for neighbor in graph[node]:
+                if (1 << neighbor) & mask != 0:
+                    continue
+                res = helper(neighbor, end, mask | (1 << neighbor), path + [neighbor])
+                if res:
+                    return res
+            return []
+        res = []
+        for q in query:
+            path = helper(q[0], q[1], 1 << q[0], [q[0]])
+            if q[2] in path:
+                res.append(q[2])
+                continue
+            que = deque([(node, node) for node in path])
+            while que:
+                close_node, node = que.popleft()
+                if node == q[2]:
+                    res.append(close_node)
+                    break
+                for neighbor in graph[node]:
+                    que.append((close_node, neighbor))
+        return res
+
+    def closestNode3(self, n: int, edges: List[List[int]], query: List[List[int]]) -> List[int]:
+        if not query:
+            return []
+        
+        # Build the graph
+        graph = defaultdict(list)
+        for u, v in edges:
+            graph[u].append(v)
+            graph[v].append(u)
+
+        # BFS to find shortest path from start to end
+        def bfs_path(start, end):
+            parent = {start: None}
+            queue = deque([start])
+            
+            while queue:
+                node = queue.popleft()
+                if node == end:
+                    break
+                for neighbor in graph[node]:
+                    if neighbor not in parent:
+                        parent[neighbor] = node
+                        queue.append(neighbor)
+            
+            # Reconstruct path
+            path = set()
+            while end is not None:
+                path.add(end)
+                end = parent[end]
+            
+            return path
+        
+        result = []
+        for start, end, target in query:
+            path_nodes = bfs_path(start, end)  # Get set of path nodes
+            if target in path_nodes:
+                result.append(target)
+            else:
+                # Find the closest node in path using BFS
+                queue = deque([target])
+                visited = set([target])
+                
+                while queue:
+                    node = queue.popleft()
+                    if node in path_nodes:
+                        result.append(node)
+                        break
+                    for neighbor in graph[node]:
+                        if neighbor not in visited:
+                            visited.add(neighbor)
+                            queue.append(neighbor)
+        
+        return result
+    
+    def closestNode4(self, n: int, edges: List[List[int]], query: List[List[int]]) -> List[int]:
+        if not query:
+            return []
+        
+        graph = defaultdict(list)
+        for u, v in edges:
+            graph[u].append(v)
+            graph[v].append(u)
+        
+        def helper(node: int, end: int, mask: int, path: list) -> list:
+            if node == end:
+                return path
+
+            for neighbor in graph[node]:
+                if (1 << neighbor) & mask != 0:
+                    continue
+                res = helper(neighbor, end, mask | (1 << neighbor), path + [neighbor])
+                if res:
+                    return res
+            return []
+        res = []
+        for q in query:
+            path = helper(q[0], q[1], 1 << q[0], [q[0]])
+            if q[2] in path:
+                res.append(q[2])
+                continue
+            que = deque([q[2]])
+            seen = set()
+            while que:
+                node = que.popleft()
+                seen.add(node)
+                if node in path:
+                    res.append(node)
+                    break
+                for neighbor in graph[node]:
+                    if neighbor not in seen:
+                        que.append(neighbor)
         return res

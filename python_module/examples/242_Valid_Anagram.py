@@ -21,7 +21,7 @@ class Solution:
         1 <= s.length, t.length <= 5 * 104
         s and t consist of lowercase English letters.
     """
-    def isAnagram(self, s: str, t: str) -> bool:
+    def isAnagram1(self, s: str, t: str) -> bool:
         if not s or not t or len(s) != len(t):
             return False
         s_counter = Counter(s)
@@ -36,7 +36,7 @@ class Solution:
         return True
 
     
-    def isAnagram(self, s: str, t: str) -> bool:
+    def isAnagram2(self, s: str, t: str) -> bool:
         if not s or not t or len(s) != len(t):
             return False
         s_chars = list(s)
@@ -44,3 +44,12 @@ class Solution:
         s_chars.sort()
         t_chars.sort()
         return s_chars == t_chars
+    
+    def isAnagram(self, s: str, t: str) -> bool:
+        freq1 = Counter(s)
+        freq2 = Counter(t)
+
+        if len(freq1) != len(freq2):
+            return False
+        
+        return all((key in freq2 and freq1[key] == freq2[key]) for key in freq1)

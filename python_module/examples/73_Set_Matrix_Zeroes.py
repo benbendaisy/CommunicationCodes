@@ -21,7 +21,7 @@ class Solution:
                 for i in range(m):
                     matrix[i][j] = 0
     
-    def setZeroes(self, matrix: List[List[int]]) -> None:
+    def setZeroes2(self, matrix: List[List[int]]) -> None:
         """
         Given an m x n integer matrix matrix, if an element is 0, set its entire row and column to 0's.
 
@@ -49,3 +49,21 @@ class Solution:
         for j in zero_cols:
             for i in range(m):
                 matrix[i][j] = 0
+    
+    def setZeroes3(self, matrix: List[List[int]]) -> None:
+        """
+        Do not return anything, modify matrix in-place instead.
+        """
+        m, n = len(matrix), len(matrix[0])
+        rows = [1] * m
+        cols = [1] * n
+        for r in range(m):
+            for c in range(n):
+                if matrix[r][c] == 0:
+                    rows[r] = 0
+                    cols[c] = 0
+
+        for r in range(m):
+            for c in range(n):
+                if rows[r] == 0 or cols[c] == 0:
+                    matrix[r][c] = 0

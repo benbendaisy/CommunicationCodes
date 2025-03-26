@@ -12,7 +12,7 @@ class Solution:
 
     Return the minimum number of operations needed to sort nums.
     """
-    def sortArray(self, nums: List[int]) -> int:
+    def sortArray1(self, nums: List[int]) -> int:
         def helper(arr):
             cnt = 0
             visited = set()
@@ -27,3 +27,65 @@ class Solution:
                 cnt -= 2
             return cnt + len(visited)
         return min(helper(nums), helper([nums[-1]] + nums[:-1]))
+    
+    def sortArray2(self, nums: List[int]) -> int:
+        n = len(nums)
+
+        def solve(nums):
+            res = 0
+            for i in range(n):
+                # moving first element that is in wrong position to pos '0'
+                if i > 0 and nums[i] != i:
+                    nums[0] = nums[i]
+                    nums[i] = 0
+                    res += 1
+                # swap element at pos '0' until all elements are in their place
+                while nums[0] != 0:
+                    pos = nums[0]
+                    nums[0], nums[pos] = nums[pos], nums[0]
+                    res += 1
+            return res
+        
+        # copy + shift elements one position right
+        nums2 = [nums[-1]] + nums[:-1]
+        
+        return min(solve(nums), solve(nums2))
+    
+    def sortArray3(self, nums: List[int]) -> int:
+        n = len(nums)
+
+        def helper(arr: List[int]):
+            res = 0
+            for i in range(n):
+                if i > 0 and arr[i] != i:
+                    arr[0] = arr[i]
+                    arr[i] = 0
+                    res += 1
+                while arr[0] != 0:
+                    pos = arr[0]
+                    arr[0], arr[pos] = arr[pos], arr[0]
+                    res += 1
+            return res
+
+        return min(helper(nums[:]), helper([nums[-1]] + nums[:-1]))
+    
+    def sortArray(self, nums: List[int]) -> int:
+        n = len(nums)
+
+        def helper(arr: List[int]) -> int:
+            n = len(arr)
+            cnt = 0
+            for i in range(n):
+                # move the num that is not in the correct position to position zero
+                if i > 0 and arr[i] != i:
+                    arr[0] = arr[i]
+                    arr[i] = 0
+                    cnt += 1
+                while arr[0] != 0:
+                    pos = arr[0]
+                    arr[0], arr[pos] = arr[pos], arr[0]
+                    cnt += 1
+            return cnt
+
+
+        return min(helper(nums[:]), helper([nums[-1]] + nums[:-1]))

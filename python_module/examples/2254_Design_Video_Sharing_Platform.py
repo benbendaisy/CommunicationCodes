@@ -1,4 +1,4 @@
-class VideoSharingPlatform:
+class VideoSharingPlatform1:
     """
         You have a video sharing platform where users can upload and delete videos. Each video is a string of digits, where the ith digit of the string represents the content of the video at minute i. For example, the first digit represents the content at minute 0 in the video, the second digit represents the content at minute 1 in the video, and so on. Viewers of videos can also like and dislike videos. Internally, the platform keeps track of the number of views, likes, and dislikes on each video.
 
@@ -104,6 +104,55 @@ class VideoSharingPlatform:
         if videoId in self.storage:
             return self.views[videoId]
         return -1
+
+class VideoSharingPlatform:
+
+    def __init__(self):
+        self.views = defaultdict(int)
+        self.likes = defaultdict(int)
+        self.dislikes = defaultdict(int)
+        self.video_ids = [0]
+        self.videos = {}
+
+    def upload(self, video: str) -> int:
+        if self.video_ids:
+            id = heapq.heappop(self.video_ids)
+        else:
+            id = len(self.videos)
+        self.videos[id] = video
+        return id
+
+    def remove(self, videoId: int) -> None:
+        if videoId not in self.videos:
+            return
+        del self.videos[videoId]
+        heapq.heappush(self.video_ids, videoId)
+
+    def watch(self, videoId: int, startMinute: int, endMinute: int) -> str:
+        if videoId not in self.videos:
+            return "-1"
+        self.views[videoId] += 1
+        return self.videos[videoId][startMinute:(min(endMinute, len(self.videos[videoId]) - 1) + 1)]
+
+    def like(self, videoId: int) -> None:
+        if videoId not in self.videos:
+            return
+        self.likes[videoId] += 1
+
+    def dislike(self, videoId: int) -> None:
+        if videoId not in self.videos:
+            return
+        self.dislikes[videoId] += 1
+
+    def getLikesAndDislikes(self, videoId: int) -> List[int]:
+        if videoId not in self.videos:
+            return [-1]
+        return [self.likes[videoId], self.dislikes[videoId]]
+
+    def getViews(self, videoId: int) -> int:
+        if videoId not in self.videos:
+            return -1
+        return self.views[videoId]
 
 # Your VideoSharingPlatform object will be instantiated and called as such:
 # obj = VideoSharingPlatform()

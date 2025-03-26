@@ -42,7 +42,7 @@ class Solution:
                 first_end = end
         return arrows_cnt
     
-    def findMinArrowShots(self, points: List[List[int]]) -> int:
+    def findMinArrowShots2(self, points: List[List[int]]) -> int:
         if not points:
             return 0
         points.sort(key=lambda x: (x[1], x[0]))
@@ -53,3 +53,15 @@ class Solution:
                 arrow_cnt += 1
                 end_point = point[1]
         return arrow_cnt
+    
+    def findMinArrowShots3(self, points: List[List[int]]) -> int:
+        if not points:
+            return 0
+        points.sort(key=lambda x: (x[1], x[0]))
+        end_point = points[0][1]
+        arr_cnt = 1
+        for point in points:
+            if end_point < point[0]:
+                arr_cnt += 1
+                end_point = point[1]
+        return arr_cnt

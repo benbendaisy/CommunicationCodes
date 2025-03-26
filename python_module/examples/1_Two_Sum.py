@@ -29,7 +29,7 @@ class Solution:
             num_dict[v] = i
         return []
     
-    def twoSum(self, nums: List[int], target: int) -> List[int]:
+    def twoSum2(self, nums: List[int], target: int) -> List[int]:
         num_dict = {}
         
         for i, num in enumerate(nums):
@@ -37,3 +37,11 @@ class Solution:
                 return [i, num_dict[target - num]]
             num_dict[num] = i
         return []
+    
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        dics = {}
+        for i, num in enumerate(nums):
+            if target - num in dics:
+                return [dics[target - num], i]
+            dics[num] = i
+        return [-1, -1]

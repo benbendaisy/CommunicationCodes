@@ -32,7 +32,7 @@ class Solution:
             cur = cur.next
         return False
     
-    def hasCycle(self, head: Optional[ListNode]) -> bool:
+    def hasCycle2(self, head: Optional[ListNode]) -> bool:
         if not head:
             return False
         slow, fast = head, head.next
@@ -42,3 +42,16 @@ class Solution:
             slow = slow.next
             fast = fast.next.next
         return True
+
+    def hasCycle(self, head: Optional[ListNode]) -> bool:
+        if not head:
+            return False
+        
+        slow = head
+        fast = head.next
+        while fast and fast.next:
+            if fast == slow:
+                return True
+            fast = fast.next.next
+            slow = slow.next
+        return False

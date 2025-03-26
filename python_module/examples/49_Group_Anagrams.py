@@ -36,8 +36,15 @@ class Solution:
             ans[tuple(count)].append(s)
         return ans.values()
     
-    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+    def groupAnagrams3(self, strs: List[str]) -> List[List[str]]:
         res = defaultdict(list)
         for s in strs:
             res[tuple(sorted(s))].append(s)
         return res.values()
+    
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        dics = defaultdict(list)
+        for word in strs:
+            key = tuple(sorted(word))
+            dics[key].append(word)
+        return list(dics.values())

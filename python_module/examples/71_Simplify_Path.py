@@ -28,7 +28,7 @@ class Solution:
         Output: "/home/foo"
         Explanation: In the canonical path, multiple consecutive slashes are replaced by a single one.
     """
-    def simplifyPath(self, path: str) -> str:
+    def simplifyPath1(self, path: str) -> str:
         dir_stack = []
         fields = path.split("/")
         for field in fields:
@@ -37,3 +37,43 @@ class Solution:
             elif field not in [".", "", ".."]:
                 dir_stack.append(field)
         return "/" + "/".join(dir_stack)
+    
+    def simplifyPath2(self, path: str) -> str:
+        if not path:
+            return path
+        
+        fields = path.split("/")
+        res = ["/"]
+        for field in fields:
+            match field:
+                case ".":
+                    continue
+                case "":
+                    continue
+                case "..":
+                    if len(res) >= 2:
+                        res.pop()
+                case _:
+                    if len(res) > 1:
+                        res.append(f"/{field}")
+                    else:
+                        res.append(f"{field}")
+        return "".join(res)
+    
+    def simplifyPath3(self, path: str) -> str:
+        if not path:
+            return path
+        
+        fields = path.split("/")
+        res = []
+        for field in fields:
+            match field:
+                case "." | "":
+                    continue
+                case "..":
+                    if res:
+                        res.pop()
+                case _:
+                    res.append(f"{field}")
+                        
+        return "/" + "/".join(res)

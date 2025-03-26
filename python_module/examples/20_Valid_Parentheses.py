@@ -50,12 +50,24 @@ class Solution:
                 stack.append(ch)
         return not stack 
     
-    def isValid(self, s: str) -> bool:
+    def isValid3(self, s: str) -> bool:
         close_characters = {')': '(', '}': '{', ']': '['}
         stack = []
         for ch in s:
             if ch in close_characters:
                 if not stack or stack[-1] != close_characters[ch]:
+                    return False
+                stack.pop()
+            else:
+                stack.append(ch)
+        return not stack
+    
+    def isValid(self, s: str) -> bool:
+        mappings = {"}":"{", ")":"(", "]":"["}
+        stack = []
+        for ch in s:
+            if ch in mappings:
+                if not stack or stack[-1] != mappings[ch]:
                     return False
                 stack.pop()
             else:

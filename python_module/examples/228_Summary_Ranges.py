@@ -32,7 +32,7 @@ class Solution:
     [6,6] --> "6"
     [8,9] --> "8->9"
     """
-    def summaryRanges(self, nums: List[int]) -> List[str]:
+    def summaryRanges1(self, nums: List[int]) -> List[str]:
         if not nums:
             return []
         prev = 0
@@ -45,4 +45,22 @@ class Solution:
             else:
                 res.append(str(nums[prev]) + "->" + str(nums[i]))
             prev = i + 1
+        return res
+    
+    def summaryRanges(self, nums: List[int]) -> List[str]:
+        num_set = set(nums)
+        res = []
+
+        intervals = []
+        for num in nums:
+            if not intervals or intervals[-1][1] + 1 != num:
+                intervals.append([num, num])
+            elif intervals[-1][1] + 1 == num:
+                intervals[-1][1] = num
+        res = []
+        for start, end in intervals:
+            if start != end:
+                res.append(f"{start}->{end}")
+            else:
+                res.append(f"{start}")
         return res

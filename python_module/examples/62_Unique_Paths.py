@@ -53,7 +53,7 @@ class Solution:
         return paths(0, 0)
     
 
-    def uniquePaths(self, m: int, n: int) -> int:
+    def uniquePaths3(self, m: int, n: int) -> int:
         
         @cache
         def helper(row: int, col: int):
@@ -66,4 +66,18 @@ class Solution:
             return helper(row + 1, col) + helper(row, col + 1)
 
         return helper(0, 0)
+    
+    def uniquePaths(self, m: int, n: int) -> int:
+        
+        mod = 2 * 10 ** 9
+        @cache
+        def helper(row: int, col: int) -> int:
+            if row == m - 1 and col == n - 1:
+                return 1
+            if row == m or col == n:
+                return 0
+            
+            return helper(row + 1, col) + helper(row, col + 1)
+
+        return helper(0, 0) %  mod
 

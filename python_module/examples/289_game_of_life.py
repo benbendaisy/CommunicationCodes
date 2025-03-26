@@ -44,7 +44,7 @@ class Solution:
                     board[row][col] = 1
     
 
-    def gameOfLife(self, board: List[List[int]]) -> None:
+    def gameOfLife2(self, board: List[List[int]]) -> None:
         """
         Do not return anything, modify board in-place instead.
         """
@@ -69,6 +69,34 @@ class Solution:
                     board[row][col] = 0
                 if board[row][col] == 2:
                     board[row][col] = 1
+    
+    def gameOfLife3(self, board: List[List[int]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        """
+        directions = ((-1, 0), (1, 0), (0, -1), (0, 1), (-1, 1), (1, -1), (1, 1), (-1, -1))
+        m, n = len(board), len(board[0])
+        for r in range(m):
+            for c in range(n):
+                lives = 0
+                for dx, dy in directions:
+                    new_r = r + dx
+                    new_c = c + dy
+                    if 0 <= new_r < m and 0 <= new_c < n:
+                        if abs(board[new_r][new_c]) == 1:
+                            lives += 1
+                if board[r][c] == 1:
+                    if lives < 2 or lives > 3:
+                        board[r][c] = -1
+                else:
+                    if lives == 3:
+                        board[r][c] = 2
+        for r in range(m):
+            for c in range(n):
+                if board[r][c] == -1:
+                    board[r][c] = 0
+                elif board[r][c] == 2:
+                    board[r][c] = 1
 
 
 if __name__ == "__main__":

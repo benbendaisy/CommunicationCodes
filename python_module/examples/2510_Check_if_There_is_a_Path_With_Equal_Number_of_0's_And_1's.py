@@ -18,7 +18,7 @@ class Solution:
     Output: false
     Explanation: There is no path in this grid with an equal number of 0's and 1's.
     """
-    def isThereAPath(self, grid: List[List[int]]) -> bool:
+    def isThereAPath1(self, grid: List[List[int]]) -> bool:
         m, n = len(grid), len(grid[0])
         @cache
         def helper(row, col, balance):
@@ -32,5 +32,27 @@ class Solution:
                 return True
             elif col < n - 1 and helper(row, col + 1, balance):
                 return True
+            return False
+        return helper(0, 0, 0)
+    
+    def isThereAPath(self, grid: List[List[int]]) -> bool:
+        m, n = len(grid), len(grid[0])
+        @cache
+        def helper(row: int, col: int, balance: int) -> bool:
+            if row >= m or col >= n:
+                return False
+
+            if grid[row][col] == 1:
+                balance += 1
+            elif grid[row][col] == 0:
+                balance -= 1
+
+            if row == m - 1 and col == n - 1:
+                return balance == 0
+
+            for dx, dy in ((1, 0), (0, 1)):
+                new_r, new_c = row + dx, col + dy
+                if helper(new_r, new_c, balance):
+                    return True
             return False
         return helper(0, 0, 0)

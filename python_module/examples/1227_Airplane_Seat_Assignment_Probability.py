@@ -17,7 +17,17 @@ class Solution:
     Output: 0.50000
     Explanation: The second person has a probability of 0.5 to get the second seat (when first person gets the first seat).
     """
-    def nthPersonGetsNthSeat(self, n: int) -> float:
+    def nthPersonGetsNthSeat1(self, n: int) -> float:
         if n == 1:
             return 1.0
         return 0.5
+    
+    def nthPersonGetsNthSeat(self, n: int) -> float:
+        @cache
+        def helper(idx: int) -> int:
+            if idx == 1:
+                return 1
+            
+            return 1/idx + (idx - 2) / idx * helper(idx - 1)
+        
+        return helper(n)
