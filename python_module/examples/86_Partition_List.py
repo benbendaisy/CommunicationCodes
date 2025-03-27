@@ -52,7 +52,7 @@ class Solution:
             great_tail.next = None
         return less_head if less_head else great_head
     
-    def partition(self, head: Optional[ListNode], x: int) -> Optional[ListNode]:
+    def partition2(self, head: Optional[ListNode], x: int) -> Optional[ListNode]:
         before_head, after_head = ListNode(0), ListNode(0)
         before_tail, after_tail = before_head, after_head
         cur = head
@@ -65,3 +65,19 @@ class Solution:
         after_tail.next = None
         before_tail.next = after_head.next
         return before_head.next
+    
+    def partition(self, head: Optional[ListNode], x: int) -> Optional[ListNode]:
+        left_p, after_p = ListNode(), ListNode()
+        p1, p2 = left_p, after_p
+        cur = head
+        while cur:
+            if cur.val < x:
+                p1.next = cur
+                p1 = p1.next
+            else:
+                p2.next = cur
+                p2 = p2.next
+            cur = cur.next
+        p2.next = None
+        p1.next = after_p.next
+        return left_p.next

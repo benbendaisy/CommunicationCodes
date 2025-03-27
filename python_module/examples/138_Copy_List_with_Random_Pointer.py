@@ -39,7 +39,7 @@ class Solution:
     Input: head = [[3,null],[3,0],[3,null]]
     Output: [[3,null],[3,0],[3,null]]
     """
-    def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
+    def copyRandomList1(self, head: 'Optional[Node]') -> 'Optional[Node]':
         if not head:
             return head
         old_to_new = {}
@@ -53,3 +53,43 @@ class Solution:
             old_to_new[cur].random = old_to_new.get(cur.random)
             cur = cur.next
         return old_to_new[head]
+    
+    def copyRandomList2(self, head: 'Optional[Node]') -> 'Optional[Node]':
+        if not head:
+            return head
+        
+        old_new = {}
+        cur = head
+        while cur:
+            old_new[cur] = Node(cur.val)
+            cur = cur.next
+        
+        cur = head
+        dummy = Node(0)
+        dummy.next = old_new[cur]
+        while cur:
+            if cur.next:
+                old_new[cur].next = old_new[cur.next]
+            else:
+                old_new[cur].next = None
+            if cur.random:
+                old_new[cur].random = old_new[cur.random]
+            cur = cur.next
+        return dummy.next
+    
+    def copyRandomList3(self, head: 'Optional[Node]') -> 'Optional[Node]':
+        if not head:
+            return head
+        
+        old_new = {}
+        cur = head
+        while cur:
+            old_new[cur] = Node(cur.val)
+            cur = cur.next
+        
+        cur = head
+        while cur:
+            old_new[cur].next = old_new.get(cur.next)
+            old_new[cur].random = old_new.get(cur.random)
+            cur = cur.next
+        return old_new[head]

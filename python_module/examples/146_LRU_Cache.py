@@ -4,7 +4,7 @@ class ListNode:
         self.value = value
         self.next = None
         self.prev = None
-class LRUCache:
+class LRUCache1:
     def __init__(self, capacity: int):
         self.capacity = capacity
         self.cache_dict = {}
@@ -39,7 +39,7 @@ class LRUCache:
     def remove(self, node):
         node.prev.next = node.next
         node.next.prev = node.prev
-class LRUCache1:
+class LRUCache2:
     """
     Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.
 
@@ -85,6 +85,25 @@ class LRUCache1:
         if key not in self.cache:
             if len(self.cache) == self.capacity:
                 del self.cache[next(iter(self.cache))]
+        else:
+            self.cache.pop(key)
+        self.cache[key] = value
+
+class LRUCache:
+    def __init__(self, capacity: int):
+       self.cache = {}
+       self.capacity = capacity
+    def get(self, key: int) -> int:
+        if key in self.cache:
+            val = self.cache.pop(key)
+            self.cache[key] = val
+            return val
+        return -1
+
+    def put(self, key: int, value: int) -> None:
+        if key not in self.cache:
+            if len(self.cache) == self.capacity:
+                self.cache.pop(next(iter(self.cache)))
         else:
             self.cache.pop(key)
         self.cache[key] = value
