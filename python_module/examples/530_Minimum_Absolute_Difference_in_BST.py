@@ -35,7 +35,7 @@ class Solution:
         in_order_traverse(root)
         return self.min_diff
 
-    def getMinimumDifference(self, root: Optional[TreeNode]) -> int:
+    def getMinimumDifference2(self, root: Optional[TreeNode]) -> int:
         stack = []
         cur = root
         prev_val = None
@@ -50,3 +50,40 @@ class Solution:
             prev_val = cur.val
             cur = cur.right
         return min_diff
+    
+    def getMinimumDifference3(self, root: Optional[TreeNode]) -> int:
+        self.prev = None  # To keep track of the last visited node in in-order traversal
+        self.min_diff = float('inf')
+
+        def in_order_traversal(node: Optional[TreeNode]):
+            if not node:
+                return
+            
+            # Traverse left subtree
+            in_order_traversal(node.left)
+            
+            # Process current node
+            if self.prev is not None:
+                self.min_diff = min(self.min_diff, node.val - self.prev)
+            self.prev = node.val  # Update previous node
+            
+            # Traverse right subtree
+            in_order_traversal(node.right)
+
+        in_order_traversal(root)
+        return self.min_diff
+    
+    def getMinimumDifference(self, root: Optional[TreeNode]) -> int:
+        self.prev = None
+        self.min_diff = float("inf")
+        def helper(node: TreeNode):
+            if not node:
+                return
+            helper(node.left)
+            if self.prev is not None:
+                self.min_diff = min(self.min_diff, abs(self.prev - node.val))
+            self.prev = node.val
+            helper(node.right)
+        
+        helper(root)
+        return self.min_diff

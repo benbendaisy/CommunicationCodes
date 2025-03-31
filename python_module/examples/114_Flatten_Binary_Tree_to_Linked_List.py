@@ -76,7 +76,7 @@ class Solution:
         arr[n - 1].left = None
         arr[n - 1].right = None
 
-    def flatten(self, root: Optional[TreeNode]) -> None:
+    def flatten3(self, root: Optional[TreeNode]) -> None:
         if not root:
             return
         def flattenTree(node: TreeNode):
@@ -105,3 +105,47 @@ class Solution:
             return rightTail if rightTail else leftTail
 
         flattenTree(root)
+    
+    def flatten4(self, root: Optional[TreeNode]) -> None:
+        """
+        Do not return anything, modify root in-place instead.
+        """
+        if not root:
+            return
+        arr = []
+        def helper(node: TreeNode):
+            if not node:
+                return
+            
+            arr.append(node)
+            helper(node.left)
+            helper(node.right)
+        helper(root)
+        for i in range(len(arr) - 1):
+            arr[i].left = None
+            arr[i].right = arr[i + 1]
+        return root
+    
+    def flatten(self, root: Optional[TreeNode]) -> None:
+        """
+        Do not return anything, modify root in-place instead.
+        """
+        if not root:
+            return
+        arr = []
+        def helper(node: TreeNode) -> TreeNode:
+            if not node:
+                return None
+            if not node.left and not node.right:
+                return node
+            
+            left = helper(node.left)
+            right = helper(node.right)
+            if left:
+                left.right = node.right
+                node.right = node.left
+                node.left = None
+            
+            return right if right else left
+
+        return helper(root)

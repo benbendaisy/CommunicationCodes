@@ -54,7 +54,7 @@ class Solution:
 
         return pathSum(root, 0)
 
-    def hasPathSum(self, root: Optional[TreeNode], targetSum: int) -> bool:
+    def hasPathSum2(self, root: Optional[TreeNode], targetSum: int) -> bool:
         if not root:
             return False
 
@@ -71,3 +71,32 @@ class Solution:
                 stack.append((node.left, sums - node.left.val))
 
         return False
+    
+    def hasPathSum3(self, root: Optional[TreeNode], targetSum: int) -> bool:
+        if not root:
+            return False
+        def helper(node: TreeNode, running_sum: int) -> bool:
+            running_sum += node.val
+            if not node.left and not node.right:
+                return running_sum == targetSum
+            if node.left and helper(node.left, running_sum):
+                return True
+            if node.right and helper(node.right, running_sum):
+                return True
+            return False
+        
+        return helper(root, 0)
+    
+    def hasPathSum4(self, root: Optional[TreeNode], targetSum: int) -> bool:
+        if not root:
+            return False
+        def helper(node: TreeNode, running_sum: int) -> bool:
+            if not node:
+                return False
+            running_sum += node.val
+            if not node.left and not node.right:
+                return running_sum == targetSum
+            
+            return helper(node.left, running_sum) or helper(node.right, running_sum)
+        
+        return helper(root, 0)

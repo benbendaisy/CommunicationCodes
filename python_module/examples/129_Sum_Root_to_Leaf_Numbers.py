@@ -36,7 +36,7 @@ class Solution:
         The root-to-leaf path 4->0 represents the number 40.
         Therefore, sum = 495 + 491 + 40 = 1026.
     """
-    def sumNumbers(self, root: Optional[TreeNode]) -> int:
+    def sumNumbers1(self, root: Optional[TreeNode]) -> int:
         self.res = 0
         def dfs(node: TreeNode, cur_sums: int):
             if not node:
@@ -49,3 +49,15 @@ class Solution:
             dfs(node.right, cur_sums)
         dfs(root, 0)
         return self.res
+    
+    def sumNumbers2(self, root: Optional[TreeNode]) -> int:
+        def helper(node: TreeNode, running_sum: int) -> int:
+            if not node:
+                return 0
+            running_sum = running_sum * 10 + node.val
+            if not node.left and not node.right:
+                return running_sum
+            
+            return helper(node.left, running_sum) + helper(node.right, running_sum)
+        
+        return helper(root, 0)

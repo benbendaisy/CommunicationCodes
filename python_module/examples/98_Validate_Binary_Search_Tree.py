@@ -42,11 +42,23 @@ class Solution:
             return valid_bst(cur.left, less_val, cur.val) and valid_bst(cur.right, cur.val, bigger_val)
         return valid_bst(root, -math.inf, math.inf)
     
-    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+    def isValidBST2(self, root: Optional[TreeNode]) -> bool:
         def helper(node, lower, upper):
             if not node:
                 return True
             if node.val <= lower or node.val >= upper:
                 return False
             return helper(node.left, lower, node.val) and helper(node.right, node.val, upper)
+        return helper(root, float('-inf'), float('inf'))
+
+    def isValidBST3(self, root: Optional[TreeNode]) -> bool:
+        def helper(node: TreeNode, lower: int, upper: int):
+            if not node:
+                return True
+            
+            if node.val <= lower or node.val >= upper:
+                return False
+            
+            return helper(node.left, lower, node.val) and helper(node.right, node.val, upper)
+        
         return helper(root, float('-inf'), float('inf'))

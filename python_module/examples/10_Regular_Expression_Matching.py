@@ -41,7 +41,7 @@ class Solution:
                     dp[i][j] = False
         return dp[m][n]
 
-    def isMatch(self, s: str, p: str) -> bool:
+    def isMatch2(self, s: str, p: str) -> bool:
         m, n = len(s), len(p)
         @lru_cache(None)
         def is_match(idx_s, idx_p):
@@ -55,7 +55,7 @@ class Solution:
             return ans
         return is_match(0, 0)
     
-    def isMatch(self, s: str, p: str) -> bool:
+    def isMatch3(self, s: str, p: str) -> bool:
         if not s and not p:
             return True
         
@@ -82,3 +82,16 @@ class Solution:
                 return helper(idx1 + 1, idx2 + 1)
             return False
         return helper(0, 0)
+    
+    def isSymmetric(self, root: Optional[TreeNode]) -> bool:
+        @cache
+        def helper(left: TreeNode, right: TreeNode) -> bool:
+            if not left and not right:
+                return True
+            elif not left or not right:
+                return False
+            
+            if left.val != right.val:
+                return False
+            return helper(left.left, right.right) and helper(left.right, right.left)
+        return helper(root, root)

@@ -28,7 +28,7 @@ class Solution:
         The number of nodes in the tree is in the range [1, 104].
         -231 <= Node.val <= 231 - 1
     """
-    def averageOfLevels(self, root: Optional[TreeNode]) -> List[float]:
+    def averageOfLevels1(self, root: Optional[TreeNode]) -> List[float]:
         if not root:
             return []
         queue = deque([(root, 0)])
@@ -47,3 +47,17 @@ class Solution:
 
         return res
 
+    def averageOfLevels(self, root: Optional[TreeNode]) -> List[float]:
+        pos_dict = defaultdict(list)
+        def helper(node: TreeNode, dep: int):
+            if not node:
+                return
+            pos_dict[dep].append(node.val)
+            helper(node.left, dep + 1)
+            helper(node.right, dep + 1)
+        helper(root, 0)
+        res = []
+        for level in pos_dict.values():
+            res.append(sum(level) * 1.0 / len(level))
+        
+        return res

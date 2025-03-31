@@ -27,11 +27,22 @@ class Solution:
         Output: false
 
     """
-    def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
+    def isSameTree1(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
         if not p and not q:
             return True
         elif not p or not q or p.val != q.val:
             return False
 
-        return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
+        return self.isSameTree1(p.left, q.left) and self.isSameTree1(p.right, q.right)
 
+
+    def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
+        @cache
+        def helper(p_node: TreeNode, q_node: TreeNode) -> bool:
+            if not p_node and not q_node:
+                return True
+            if not p_node or not q_node or p_node.val != q_node.val:
+                return False
+            
+            return helper(p_node.left, q_node.left) and helper(p_node.right, q_node.right)
+        return helper(p, q)

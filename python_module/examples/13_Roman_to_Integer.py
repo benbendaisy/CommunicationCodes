@@ -83,7 +83,7 @@ class Solution:
                 idx += 1
         return cnt
     
-    def romanToInt(self, s: str) -> int:
+    def romanToInt3(self, s: str) -> int:
         value_map = {
             "I" : 1,
             "V": 5,
@@ -100,5 +100,26 @@ class Solution:
                 idx += 2
             else:
                 res += value_map[s[idx]]
+                idx += 1
+        return res
+    
+    def romanToInt(self, s: str) -> int:
+        mappings = {
+            "I": 1,
+            "V": 5,
+            "X": 10,
+            "L": 50,
+            "C": 100,
+            "D": 500,
+            "M": 1000
+        }
+        n, idx = len(s), 0
+        res = 0
+        while idx < n:
+            if idx < n - 1 and mappings[s[idx]] < mappings[s[idx + 1]]:
+                res += mappings[s[idx + 1]] - mappings[s[idx]]
+                idx += 2
+            else:
+                res += mappings[s[idx]]
                 idx += 1
         return res

@@ -30,7 +30,7 @@ class Solution:
         The number of nodes in the tree is in the range [0, 100].
         -100 <= Node.val <= 100
     """
-    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
+    def rightSideView1(self, root: Optional[TreeNode]) -> List[int]:
         if not root:
             return []
         level_map = defaultdict(list)
@@ -45,4 +45,22 @@ class Solution:
         for key in sorted(level_map.keys()):
             cur = level_map[key][-1]
             res.append(cur.val)
+        return res
+    
+    def rightSideView2(self, root: Optional[TreeNode]) -> List[int]:
+        if not root:
+            return []
+        pos_dict = defaultdict(list)
+        def helper(node: TreeNode, dep: int):
+            if not node:
+                return
+            
+            pos_dict[dep].append(node)
+            helper(node.left, dep + 1)
+            helper(node.right, dep + 1)
+        
+        helper(root, 0)
+        res = []
+        for level in pos_dict.values():
+            res.append(level[-1].val)
         return res

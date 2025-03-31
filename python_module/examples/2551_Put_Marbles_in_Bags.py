@@ -29,10 +29,59 @@ class Solution:
     Explanation: The only distribution possible is [1],[3]. 
     Since both the maximal and minimal score are the same, we return 0.
     """
-    def putMarbles(self, weights: List[int], k: int) -> int:
+    def putMarbles1(self, weights: List[int], k: int) -> int:
         v = []
         n = len(weights)
         for i in range(n - 1):
             v.append(weights[i] + weights[i + 1])
         v.sort()
         return sum(v[n - k:]) - sum(v[:k - 1])
+    
+    def putMarbles2(self, weights: List[int], k: int) -> int:
+        self.min_score = float('inf')
+        self.max_score = float('-inf')
+        n = len(weights)
+
+        @cache
+        def helper(idx: int, p: int, running_score: int):
+            if p == k - 1:  # Last partition takes the remaining elements
+                partition_score = running_score + weights[idx] + weights[-1]
+                self.min_score = min(self.min_score, partition_score)
+                self.max_score = max(self.max_score, partition_score)
+                return
+            
+            for i in range(idx, n - 1):  # Try different partition points
+                partition_score = running_score + weights[idx] + weights[i]
+                helper(i + 1, p + 1, partition_score)
+
+        helper(0, 0, 0)
+        return self.max_score - self.min_score
+
+    def putMarbles3(self, weights: List[int], k: int) -> int:
+        n = len(weights)
+        if k == 1:
+            return 0  # Only one way to partition, so min and max scores are the same.
+
+        # Compute pairwise sums of consecutive elements
+        pair_sums = [weights[i] + weights[i + 1] for i in range(n - 1)]
+
+        # Sort the pair sums to determine best and worst partitions
+        pair_sums.sort()
+
+        # The min score uses the smallest (k-1) pairs, max score uses the largest (k-1) pairs
+        min_score = sum(pair_sums[:k-1])
+        max_score = sum(pair_sums[-(k-1):])
+
+        return max_score - min_score
+    
+    def putMarbles4(self, weights: List[int], k: int) -> int:
+        if not weights:
+            return 0
+        n = len(weights)
+        if k == 1:
+            return 0
+        sums = []
+        for i in range(n - 1):
+            sums.append(weights[i] + weights[i + 1])
+        sums.sort()
+        return sum(sums[-(k-1):]) - sum(sums[:k - 1])

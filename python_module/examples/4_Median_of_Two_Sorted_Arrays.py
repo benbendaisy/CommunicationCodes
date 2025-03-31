@@ -270,3 +270,34 @@ class Solution:
             else:
                 left = p1 + 1
         return -1
+    
+    def findMedianSortedArrays10(self, nums1: List[int], nums2: List[int]) -> float:
+        if not nums1 and not nums2:
+            return 0.0
+        
+        if len(nums1) > len(nums2):
+            nums1, nums2 = nums2, nums1
+        
+        n1, n2 = len(nums1), len(nums2)
+        total = n1 + n2
+        half = (total + 1) // 2
+        left, right = 0, n1
+        while left <= right:
+            p1 = (left + right) // 2
+            p2 = half - p1
+            max_left1 = float('-inf') if p1 == 0 else nums1[p1 - 1]
+            min_right1 = float('inf') if p1 == n1 else nums1[p1]
+
+            max_left2 = float('-inf') if p2 == 0 else nums2[p2 - 1]
+            min_right2 = float('inf') if p2 == n2 else nums2[p2]
+
+            if max_left1 <= min_right2 and max_left2 <= min_right1:
+                if total % 2 == 0:
+                    return (max(max_left1, max_left2) + min(min_right1, min_right2)) / 2
+                else:
+                    return max(max_left1, max_left2)
+            elif max_left1 > min_right2:
+                right = p1 - 1
+            else:
+                left = p1 + 1
+        return -1

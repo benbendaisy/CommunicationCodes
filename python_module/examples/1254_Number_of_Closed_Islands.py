@@ -45,3 +45,22 @@ class Solution:
                 if grid[i][j] == 0 and dfs(i, j):
                     cnt += 1
         return cnt
+    
+    def closedIsland(self, grid: List[List[int]]) -> int:
+        m, n = len(grid), len(grid[0])
+        @cache
+        def helper(row: int, col: int) -> bool:
+            if row < 0 or row >= m or col < 0 or col >= n:
+                return False
+            if grid[row][col] == 1:
+                return True
+            grid[row][col] = 1
+
+            return all(helper(row + dx, col + dy) for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1)))
+
+        cnt = 0
+        for r in range(m):
+            for c in range(n):
+                if grid[r][c] == 0 and helper(r, c):
+                    cnt += 1
+        return cnt

@@ -25,7 +25,7 @@ class Solution:
         Input: root = []
         Output: []
     """
-    def zigzagLevelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+    def zigzagLevelOrder1(self, root: Optional[TreeNode]) -> List[List[int]]:
         if not root:
             return []
 
@@ -44,4 +44,47 @@ class Solution:
                     que.append(node.left)
                 if node.right:
                     que.append(node.right)
+        return res
+    
+    def zigzagLevelOrder2(self, root: Optional[TreeNode]) -> List[List[int]]:
+        if not root:
+            return []
+        pos_dict = defaultdict(list)
+        def helper(node: TreeNode, dep: int):
+            if not node:
+                return
+            
+            pos_dict[dep].append(node.val)
+            helper(node.left, dep + 1)
+            helper(node.right, dep + 1)
+                
+        helper(root, 0)
+        res = []
+        for key, level in pos_dict.items():
+            if key % 2 == 0:
+                res.append(level)
+            else:
+                res.append(level[::-1])
+
+        return res
+    
+    def zigzagLevelOrder3(self, root: Optional[TreeNode]) -> List[List[int]]:
+        if not root:
+            return []
+        que = deque([root])
+        res, dep = [], 0
+        while que:
+            arr, length = [], len(que)
+            for _ in range(length):
+                node = que.popleft()
+                arr.append(node.val)
+                if node.left:
+                    que.append(node.left)
+                if node.right:
+                    que.append(node.right)
+            if dep % 2 == 0:
+                res.append(arr)
+            else:
+                res.append(arr[::-1])
+            dep += 1
         return res

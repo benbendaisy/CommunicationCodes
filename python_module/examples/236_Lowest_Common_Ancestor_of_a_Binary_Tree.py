@@ -80,7 +80,7 @@ class Solution:
             cur = parents[cur]
         return cur
     
-    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+    def lowestCommonAncestor3(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
         ancestor_node = None
         def recursive_common_ancestor(node: 'TreeNode'):
             nonlocal ancestor_node
@@ -94,3 +94,37 @@ class Solution:
             return left or mid or right
         recursive_common_ancestor(root)
         return ancestor_node
+    
+    def lowestCommonAncestor4(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        @cache
+        def helper(node: TreeNode, target: TreeNode) -> bool:
+            if not node:
+                return False
+            
+            if node.val == target.val:
+                return True
+            
+            return helper(node.left, target) or helper(node.right, target)
+        
+        prev, cur = root, root
+        while cur:
+            prev = cur
+            if cur.val == p.val or cur.val == q.val or (helper(cur.left, p) and helper(cur.right, q)) or (helper(cur.left, q) and helper(cur.right, p)):
+                return cur
+            if helper(cur.left, p) and helper(cur.left, q):
+                cur = cur.left
+            else:
+                cur = cur.right
+        return prev
+    
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        def helper(node: TreeNode):
+            if not node or node == p or node == q:
+                return node
+            
+            left = helper(node.left)
+            right = helper(node.right)
+            if left and right:
+                return node
+
+            return left if left else right

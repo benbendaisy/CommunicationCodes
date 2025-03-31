@@ -24,13 +24,26 @@ class Solution:
     Input: root = []
     Output: []
     """
-    def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+    def invertTree1(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
         if not root:
             return root
-        self.invertTree(root.left)
-        self.invertTree(root.right)
+        self.invertTree1(root.left)
+        self.invertTree1(root.right)
         t = root.left
         root.left = root.right
         root.right = t
         return root
+    
+    def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        @cache
+        def helper(node: TreeNode):
+            if not node:
+                return None
+            left = helper(node.right)
+            right = helper(node.left)
+            
+            node.left = left
+            node.right = right
+            return node
+        return helper(root)
 

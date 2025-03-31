@@ -30,7 +30,7 @@ class Solution:
         getFactor(n, [], 2)
         return res
 
-    def getFactors(self, n: int) -> List[List[int]]:
+    def getFactors3(self, n: int) -> List[List[int]]:
         if n <= 2:
             return []
 
@@ -42,6 +42,40 @@ class Solution:
                 if t % i == 0:
                     getFactor(t // i, factors + [i], i)
         getFactor(n, [], 2)
+        return res
+    
+    def getFactors4(self, n: int) -> List[List[int]]:
+        def backtrack(start, target, path, result):
+            if target == 1:
+                if len(path) > 1:
+                    result.append(path.copy())
+                return
+            
+            for i in range(start, target + 1):
+                if i > target:
+                    break
+                if target % i == 0:
+                    path.append(i)
+                    backtrack(i, target // i, path, result)
+                    path.pop()
+        
+        result = []
+        backtrack(2, n, [], result)
+        return result
+    
+    def getFactors(self, n: int) -> List[List[int]]:
+        res = []
+        def helper(start: int, target: int, path: list):
+            if target == 1:
+                if len(path) > 1:
+                    path.sort()
+                    res.append(path)
+                return
+            
+            for i in range(start, target + 1):
+                if target % i == 0:
+                    helper(i, target // i, path + [i])
+        helper(2, n, [])
         return res
 
 

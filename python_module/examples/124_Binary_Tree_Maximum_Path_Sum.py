@@ -79,6 +79,25 @@ class Solution:
             return max(left_path, right_path) + node.val
         helper(root)
         return max_sum
+    
+    def maxPathSum4(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+        
+        self.max_sum = float("-inf")
+        def helper(node: TreeNode) -> int:
+            if not node:
+                return 0
+            
+            left = max(helper(node.left), 0)
+            right = max(helper(node.right), 0)
+            cur_sum = left + right + node.val
+            self.max_sum = max(self.max_sum, cur_sum)
+
+            return max(left, right) + node.val
+        
+        helper(root)
+        return self.max_sum
 
 
 

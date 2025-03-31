@@ -42,7 +42,7 @@ class Node:
         self.next = next
 
 class Solution:
-    def connect(self, root: 'Node') -> 'Node':
+    def connect1(self, root: 'Node') -> 'Node':
         if not root:
             return root
 
@@ -59,6 +59,25 @@ class Solution:
                 if i < length - 1:
                     node.next = queue[0]
 
+        return root
+    
+    def connect(self, root: 'Node') -> 'Node':
+        if not root:
+            return root
+        
+        dep_dict = defaultdict(list)
+        def helper(node: 'Node', dep: int):
+            if not node:
+                return
+            
+            dep_dict[dep].append(node)
+            helper(node.left, dep + 1)
+            helper(node.right, dep + 1)
+
+        helper(root, 0)
+        for row in dep_dict.values():
+            for i in range(len(row) - 1):
+                row[i].next = row[i + 1]
         return root
 
 

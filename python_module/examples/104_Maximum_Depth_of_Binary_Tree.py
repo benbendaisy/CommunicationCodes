@@ -22,7 +22,15 @@ class Solution:
         Input: root = [1,null,2]
         Output: 2
     """
-    def maxDepth(self, root: Optional[TreeNode]) -> int:
+    def maxDepth1(self, root: Optional[TreeNode]) -> int:
         if not root:
             return 0
         return 1 + max(self.maxDepth(root.left), self.maxDepth(root.right))
+    
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        @cache
+        def helper(node: TreeNode):
+            if not node:
+                return 0
+            return 1 + max(helper(node.left), helper(node.right))
+        return helper(root)

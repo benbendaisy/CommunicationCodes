@@ -25,7 +25,7 @@ class Solution:
         Input: root = []
         Output: []
     """
-    def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+    def levelOrder1(self, root: Optional[TreeNode]) -> List[List[int]]:
         if not root:
             return []
 
@@ -39,3 +39,35 @@ class Solution:
                 levelMap[row].append(node.val)
 
         return [levelMap[key] for key in sorted(levelMap.keys())]
+    
+    def levelOrder2(self, root: Optional[TreeNode]) -> List[List[int]]:
+        if root is None:
+            return []
+        pos_dict = defaultdict(list)
+        que = deque([root])
+        dep = 0
+        while que:
+            length = len(que)
+            for _ in range(length):
+                node = que.popleft()
+                pos_dict[dep].append(node.val)
+                if node.left:
+                    que.append(node.left)
+                if node.right:
+                    que.append(node.right)
+            dep += 1
+        return list(pos_dict.values())
+    
+    def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        if root is None:
+            return []
+        pos_dict = defaultdict(list)
+        def helper(node: TreeNode, dep):
+            if not node:
+                return
+            pos_dict[dep].append(node.val)
+
+            helper(node.left, dep + 1)
+            helper(node.right, dep + 1)
+        helper(root, 0)
+        return list(pos_dict.values())
