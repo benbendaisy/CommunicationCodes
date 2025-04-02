@@ -63,7 +63,7 @@ class Solution:
         max_circular = total_sum - min_sum
         return max(max_sum, max_circular)
     
-    def maxSubarraySumCircular(self, nums: List[int]) -> int:
+    def maxSubarraySumCircular3(self, nums: List[int]) -> int:
         if not nums:
             return 0
         m = len(nums)
@@ -76,3 +76,39 @@ class Solution:
             max_sum = max(max_sum, running_max_sum)
             min_sum = min(min_sum, running_min_sum)
         return max_sum if max_sum < 0 else max(max_sum, total_sum - min_sum)
+    
+    def maxSubarraySumCircular4(self, nums: List[int]) -> int:
+        def kadane(arr):
+            max_sum = curr_sum = arr[0]
+            for num in arr[1:]:
+                curr_sum = max(num, curr_sum + num)
+                max_sum = max(max_sum, curr_sum)
+            return max_sum
+        
+        max_kadane = kadane(nums)  # Max subarray sum for non-circular case
+        
+        total_sum = sum(nums)
+        min_kadane = kadane([-num for num in nums])  # Min subarray sum
+        max_wraparound = total_sum + min_kadane  # Maximum circular sum
+        
+        if max_wraparound == 0:  # Case when all numbers are negative
+            return max_kadane
+        
+        return max(max_kadane, max_wraparound)
+    
+    def maxSubarraySumCircular(self, nums: List[int]) -> int:
+        def kadane(arr: list):
+            max_sum = cur_sum = arr[0]
+            for num in arr[1:]:
+                cur_sum = max(num, cur_sum + num)
+                max_sum = max(max_sum, cur_sum)
+            return max_sum
+        
+        max_kadane = kadane(nums)
+        total_sum = sum(nums)
+        min_kadane = kadane([-num for num in nums])
+        max_wraparound = total_sum + min_kadane
+        if max_wraparound == 0:
+            return max_kadane
+        
+        return max(max_kadane, max_wraparound)

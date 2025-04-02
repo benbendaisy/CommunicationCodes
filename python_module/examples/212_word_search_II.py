@@ -2,7 +2,64 @@ from typing import List
 
 
 class Solution:
-    def findWord(self, board: List[List[str]], word: str, row: int, col: int, idx: int, visited: List[List[bool]]) -> bool:
+    class Trie:
+        def __init__(self):
+            self.root = TrieNode()
+        
+        def insert(self, word):
+            node = self.root
+            for char in word:
+                if char not in node.children:
+                    node.children[char] = TrieNode()
+                node = node.children[char]
+            node.is_end = True
+            node.word = word
+    def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
+        if not board or not board[0] or not words:
+            return []
+        
+        # Build Trie
+        trie = self.Trie()
+        for word in words:
+            trie.insert(word)
+        
+        m, n = len(board), len(board[0])
+        result = []
+        
+        def dfs(i, j, node):
+            # Check if current position is valid
+            if (i < 0 or i >= m or j < 0 or j >= n or 
+                board[i][j] == '#' or board[i][j] not in node.children):
+                return
+            
+            char = board[i][j]
+            current_node = node.children[char]
+            
+            # If we've found a complete word
+            if current_node.is_end:
+                result.append(current_node.word)
+                current_node.is_end = False  # Avoid duplicates
+            
+            # Mark cell as visited
+            board[i][j] = '#'
+            
+            # Explore all four directions
+            for di, dj in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
+                dfs(i + di, j + dj, current_node)
+            
+            # Restore the cell
+            board[i][j] = char
+        
+        # Start DFS from each cell
+        for i in range(m):
+            for j in range(n):
+                dfs(i, j, trie.root)
+        
+        return result
+
+
+class Solution1:
+    def findWord0(self, board: List[List[str]], word: str, row: int, col: int, idx: int, visited: List[List[bool]]) -> bool:
         if idx == len(word):
             return True
         elif col < 0 or col >= len(board[0]) or row < 0 or row >= len(board) \
@@ -33,7 +90,7 @@ class Solution:
                     break
         return arr
 
-    def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
+    def findWords2(self, board: List[List[str]], words: List[str]) -> List[str]:
         word_key = "$" # ending word key
         trie = {}
         for word in words:
@@ -81,6 +138,45 @@ class Solution:
                 if board[row][col] in trie:
                     back_tracking(row, col, trie)
         return matched_words
+    
+    def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
+        """
+        Time limit exceeded for large test cases
+        """
+        m, n = len(board), len(board[0])
+        def helper(idx: int, word: str, row: int, col: int) -> bool:
+            if idx == len(word):
+                return True
+            
+            if row < 0 or row >= m or col < 0 or col >= n or board[row][col] != word[idx]:
+                return False
+            
+            visited.add((row, col))
+
+            for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1)):
+                new_row = row + dx
+                new_col = col + dy
+                if (new_row, new_col) not in visited:
+                    if helper(idx + 1, word, new_row, new_col):
+                        return True
+            visited.remove((row, col))
+            return False
+        
+        res = []
+        for word in words:
+            found = False
+            for i in range(m):
+                for j in range(n):
+                    if board[i][j] == word[0]:
+                        visited = set()
+                        if helper(0, word, i, j):
+                            res.append(word)
+                            found = True
+                            break
+                if found:
+                    break
+                
+        return res
 
 
 

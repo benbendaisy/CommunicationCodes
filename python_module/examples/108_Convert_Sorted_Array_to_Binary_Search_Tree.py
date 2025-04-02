@@ -31,7 +31,7 @@ class Solution:
         -104 <= nums[i] <= 104
         nums is sorted in a strictly increasing order.
     """
-    def sortedArrayToBST(self, nums: List[int]) -> Optional[TreeNode]:
+    def sortedArrayToBST1(self, nums: List[int]) -> Optional[TreeNode]:
         if not nums:
             return None
         def constructBinaryTree(left, right):
@@ -50,3 +50,15 @@ class Solution:
             return node
 
         return constructBinaryTree(0, len(nums) - 1)
+    
+    def sortedArrayToBST(self, nums: List[int]) -> Optional[TreeNode]:
+        def helper(arr: list) -> TreeNode:
+            if not arr:
+                return None
+            
+            mid = len(arr) // 2
+            node = TreeNode(arr[mid])
+            node.left = helper(arr[:mid])
+            node.right = helper(arr[mid + 1:])
+            return node
+        return helper(nums)

@@ -14,7 +14,7 @@ class Node:
         self.bottomRight = bottomRight
 
 
-class Solution:
+class Solution1:
     """
         Given a n * n matrix grid of 0's and 1's only. We want to represent the grid with a Quad-Tree.
 
@@ -82,4 +82,23 @@ class Solution:
             node.topRight = self.construct([row[n:] for row in grid[:n]])
             node.bottomRight = self.construct([row[n:] for row in grid[n:]])
 
+            return node
+
+class Solution:
+    
+    def construct(self, grid: List[List[int]]) -> Node:
+        n = len(grid)
+        grid_sum = sum([sum(row) for row in grid])
+
+        if grid_sum  == n ** 2:
+            return Node(1, True)
+        elif grid_sum == 0:
+            return Node(0, True)
+        else:
+            node = Node(None, False)
+            n //= 2
+            node.topLeft = self.construct([row[:n] for row in grid[:n]])
+            node.topRight = self.construct([row[n:] for row in grid[:n]])
+            node.bottomLeft = self.construct([row[:n] for row in grid[n:]])
+            node.bottomRight = self.construct([row[n:] for row in grid[n:]])
             return node

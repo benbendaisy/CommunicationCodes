@@ -51,7 +51,7 @@ class Solution:
         m, n = len(grid), len(grid[0])
         nums = [grid[r][c] for r in range(m) for c in range(n)]
         remainder = nums[0] % x
-        if(any(num % x != remainder  for num in nums)):
+        if(any(num % x != remainder for num in nums)):
             return -1
         nums.sort()
         median = nums[len(nums) // 2]

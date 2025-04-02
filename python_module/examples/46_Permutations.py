@@ -38,7 +38,7 @@ class Solution:
         permutation(0)
         return res
 
-    def permute(self, nums: List[int]) -> List[List[int]]:
+    def permute2(self, nums: List[int]) -> List[List[int]]:
         res = []
         def back_track(path, choices):
             if not choices:
@@ -47,4 +47,34 @@ class Solution:
             for i in range(len(choices)):
                 back_track(path + [choices[i]], choices[:i] + choices[i + 1:])
         back_track([], nums)
+        return res
+    
+    def permute3(self, nums: List[int]) -> List[List[int]]:
+        if not nums:
+            return []
+        res = []
+        def helper(choices: list, path: list):
+            if not choices:
+                res.append(path)
+                return
+            
+            for i in range(len(choices)):
+                helper(choices[:i] + choices[i + 1:], path + [choices[i]])
+        
+        helper(nums, [])
+        return res
+    
+    def permute4(self, nums: List[int]) -> List[List[int]]:
+        if not nums:
+            return []
+        res, n = [], len(nums)
+        def helper(idx):
+            if idx == n:
+                res.append(nums[:])
+                return
+            for i in range(idx, n):
+                nums[i], nums[idx] = nums[idx], nums[i]
+                helper(idx + 1)
+                nums[i], nums[idx] = nums[idx], nums[i]
+        helper(0)
         return res

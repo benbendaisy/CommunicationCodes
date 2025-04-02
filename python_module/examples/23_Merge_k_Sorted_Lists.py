@@ -70,7 +70,7 @@ class Solution:
         right = self.mergeKLists(lists[mid:])
         return merge(left, right)
     
-    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+    def mergeKLists3(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
         def merge_sort(left: int, right: int):
             if left == right:
                 return lists[left]
@@ -97,3 +97,32 @@ class Solution:
         if not lists:
             return None
         return merge_sort(0, len(lists) - 1)
+    
+    def mergeKLists4(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+        def merge(l1: ListNode, l2: ListNode) -> ListNode:
+            dummy = ListNode()
+            cur = dummy
+            while l1 and l2:
+                if l1.val < l2.val:
+                    cur.next = l1
+                    l1 = l1.next
+                else:
+                    cur.next = l2
+                    l2 = l2.next
+                cur = cur.next
+            cur.next = l1 if l1 else l2
+            return dummy.next
+        def helper(arr: List):
+            if not arr:
+                return []
+            elif len(arr) == 1:
+                return arr[0]
+            
+            mid = len(arr) // 2
+            left = helper(arr[:mid])
+            right = helper(arr[mid:])
+            return merge(left, right)
+        
+        if not lists:
+            return None
+        return helper(lists)

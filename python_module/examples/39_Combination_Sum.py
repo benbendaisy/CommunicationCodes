@@ -59,3 +59,20 @@ class Solution:
                     helper(path + [candidates[i]], i)
         helper([], 0)
         return res
+    
+    def combinationSum3(self, candidates: List[int], target: int) -> List[List[int]]:
+        if not candidates:
+            return 0
+        
+        res, n = [], len(candidates)
+        def helper(idx: int, running_sum: int, path: list):
+            if running_sum == target:
+                res.append(path)
+                return
+            if running_sum > target or idx > n:
+                return
+            
+            for i in range(idx, n):
+                helper(i, running_sum + candidates[i], path + [candidates[i]])
+        helper(0, 0, [])
+        return res

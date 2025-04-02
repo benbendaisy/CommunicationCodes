@@ -28,7 +28,7 @@ class Solution:
         Input: start = "AAAAACCC", end = "AACCCCCC", bank = ["AAAACCCC","AAACCCCC","AACCCCCC"]
         Output: 3
     """
-    def minMutation(self, start: str, end: str, bank: List[str]) -> int:
+    def minMutation1(self, start: str, end: str, bank: List[str]) -> int:
         queue = deque([(start, 0)])
         visited = {start}
 
@@ -42,5 +42,50 @@ class Solution:
                     if new_node not in visited and new_node in bank:
                         queue.append((new_node, steps + 1))
                         visited.add(new_node)
+        return -1
+    
+    def minMutation2(self, startGene: str, endGene: str, bank: List[str]) -> int:
+        bank = set(bank)
+        if endGene not in bank:
+            return -1
+        choice = ('A', 'C', 'G', 'T')
+        visited = set([startGene])
+        n = len(startGene)
+        def helper(gene: str, cnt: int) -> int:
+            if gene == endGene:
+                return cnt
+            visited.add(gene)
+            min_mute = float('inf')
+            for i in range(n):
+                for ch in choice:
+                    if ch != gene[i]:
+                        new_start = gene[:i] + ch + gene[i + 1:]
+                        if new_start in bank and new_start not in visited:
+                            min_mute = min(min_mute, helper(new_start, cnt + 1))
+            
+            visited.remove(gene)
+            return min_mute
+        res = helper(startGene, 0)
+        return -1 if res == float('inf') else res
+    
+    def minMutation(self, startGene: str, endGene: str, bank: List[str]) -> int:
+        bank = set(bank)
+        if endGene not in bank:
+            return -1
+        choice = ('A', 'C', 'G', 'T')
+        visited = set([startGene])
+        n = len(startGene)
+        que = deque([(startGene, 0)])
+        while que:
+            gene, cnt = que.popleft()
+            if gene == endGene:
+                return cnt
+            visited.add(gene)
+            for i in range(n):
+                for ch in choice:
+                    if gene[i] != ch:
+                        new_gene = gene[:i] + ch + gene[i + 1:]
+                        if new_gene in bank and new_gene not in visited:
+                            que.append((new_gene, cnt + 1))
         return -1
 

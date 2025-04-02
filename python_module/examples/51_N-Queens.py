@@ -23,7 +23,7 @@ class Solution:
 
         1 <= n <= 9
     """
-    def solveNQueens(self, n: int) -> List[List[str]]:
+    def solveNQueens1(self, n: int) -> List[List[str]]:
         if n < 1:
             return []
 
@@ -47,6 +47,33 @@ class Solution:
 
         columns = [0] * n
         solveQueens(0, columns)
+        return res
+    
+    def solveNQueens2(self, n: int) -> List[List[str]]:
+        if n < 1:
+            return []
+        
+        res = []
+        def check_board(cols: list, row: int, col: int):
+            for i in range(row):
+                if cols[i] == col or abs(i - row) == abs(cols[i] - col):
+                    return False
+            return True
+        
+        def helper(idx: int, cols: list):
+            if idx == n:
+                board = [['.'] * n for _ in range(n)]
+                for i in range(n):
+                    board[i][cols[i]] = 'Q'
+                res.append(["".join(row) for row in board])
+                return
+            for i in range(n):
+                cols[idx] = i
+                if check_board(cols, idx, i):
+                    helper(idx + 1, cols)
+        
+        cols = [0] * n
+        helper(0, cols)
         return res
 
 

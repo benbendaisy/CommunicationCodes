@@ -33,7 +33,7 @@ class Solution:
     - Solve question 4: Earn 5 points
     Total points earned: 2 + 5 = 7. There is no other way to earn 7 or more points.
     """
-    def mostPoints(self, questions: List[List[int]]) -> int:
+    def mostPoints1(self, questions: List[List[int]]) -> int:
         @lru_cache(None)
         def dp(idx):
             if idx >= len(questions):
@@ -43,3 +43,21 @@ class Solution:
             return max(skipped, used)
 
         return dp(0)
+    
+    def mostPoints2(self, questions: List[List[int]]) -> int:
+        if not questions:
+            return 0
+        n = len(questions)
+
+        @cache
+        def helper(idx: int) -> int:
+            if idx >= n:
+                return 0
+            # skip the current
+            option1 = helper(idx + 1)
+            # take the current
+            next_idx = idx + questions[idx][1] + 1
+            option2 = questions[idx][0] + helper(next_idx)
+            return max(option1, option2)
+        
+        return helper(0)

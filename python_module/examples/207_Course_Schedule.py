@@ -28,7 +28,7 @@ class Solution:
     Explanation: There are a total of 2 courses to take. 
     To take course 1 you should have finished course 0, and to take course 0 you should also have finished course 1. So it is impossible.
     """
-    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+    def canFinish1(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
         from collections import defaultdict, deque
         # key: index of node; value: GNode
         graph = defaultdict(GNode)
@@ -57,3 +57,23 @@ class Solution:
                     nodepCourses.append(outIndex)
         
         return True if removedEdges == totalDep else False
+    
+    def canFinish2(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        if not prerequisites:
+            return True
+        
+        graph = defaultdict(list)
+        in_degree = [0] * numCourses
+        for u, v in prerequisites:
+            graph[v].append(u)
+            in_degree[u] += 1
+        que = deque([course for course in range(numCourses) if in_degree[course] == 0])
+        cnt = 0
+        while que:
+            node = que.popleft()
+            cnt += 1
+            for neighbor in graph[node]:
+                in_degree[neighbor] -= 1
+                if in_degree[neighbor] == 0:
+                    que.append(neighbor)
+        return cnt == numCourses

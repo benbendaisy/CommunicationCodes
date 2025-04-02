@@ -52,7 +52,7 @@ class Solution:
         Output: []
         Explanation: This an empty graph, it does not have any nodes.
     """
-    def cloneGraph(self, node: 'Node') -> 'Node':
+    def cloneGraph1(self, node: 'Node') -> 'Node':
         if not node:
             return node
         que, clone = deque([node]), {node.val: Node(node.val, [])}
@@ -66,3 +66,16 @@ class Solution:
                     que.append(neighbor)
                 cur_clone.neighbors.append(clone[neighbor.val])
         return clone[node.val]
+    
+    def cloneGraph(self, node: 'Node') -> 'Node':
+        if not node:
+            return node
+        graph, que = {node: Node(node.val, [])}, deque([node])
+        while que:
+            cur_node = que.popleft()
+            for neighbor in cur_node.neighbors:
+                if neighbor not in graph:
+                    graph[neighbor] = Node(neighbor.val, [])
+                    que.append(neighbor)
+                graph[cur_node].neighbors.append(graph[neighbor])
+        return graph[node]

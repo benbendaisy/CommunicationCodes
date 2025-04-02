@@ -49,7 +49,7 @@ class Solution:
                 visited[r][c] = False
         return False
     
-    def exist(self, board: List[List[str]], word: str) -> bool:
+    def exist3(self, board: List[List[str]], word: str) -> bool:
         if not board:
             return False
         rows, cols = len(board), len(board[0])
@@ -79,6 +79,64 @@ class Solution:
                 if board[i][j] == word[0] and back_track(i, j, 0):
                     return True
 
+        return False
+    
+    def exist4(self, board: List[List[str]], word: str) -> bool:
+        if not board or not word:
+            return False
+        m, n = len(board), len(board[0])
+        if m * n < len(word):
+            return False
+
+        def helper(idx: int, row: int, col: int) -> bool:
+            if idx == len(word):
+                return True
+            if row < 0 or row >= m or col < 0 or col >= n or board[row][col] != word[idx]:
+                return False
+            # visited.add((row, col))
+            temp, board[row][col] = board[row][col], "#"
+            for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                new_row, new_col = row + dx, col + dy
+                if helper(idx + 1, new_row, new_col):
+                    return True
+                    
+            # visited.remove((row, col))
+            board[row][col] = temp
+            return False
+        
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] == word[0] and helper(0, i, j):
+                    return True
+        return False
+    
+    def exist5(self, board: List[List[str]], word: str) -> bool:
+        if not board or not word:
+            return False
+        visited, m, n = set(), len(board), len(board[0])
+        if m * n < len(word):
+            return False
+
+        def helper(idx: int, row: int, col: int) -> bool:
+            if idx == len(word):
+                return True
+            if row < 0 or row >= m or col < 0 or col >= n or board[row][col] != word[idx] or (row, col) in visited:
+                return False
+            visited.add((row, col))
+            # temp, board[row][col] = board[row][col], "#"
+            for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                new_row, new_col = row + dx, col + dy
+                if helper(idx + 1, new_row, new_col):
+                    return True
+                    
+            visited.remove((row, col))
+            # board[row][col] = temp
+            return False
+        
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] == word[0] and helper(0, i, j):
+                    return True
         return False
 
 

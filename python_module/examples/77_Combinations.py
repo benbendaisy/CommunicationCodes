@@ -2,7 +2,7 @@ from typing import List
 
 
 class Solution:
-    def combine(self, n: int, k: int) -> List[List[int]]:
+    def combine1(self, n: int, k: int) -> List[List[int]]:
         def helper(idx, temp_arr, ans):
             length = len(temp_arr)
             if length == k:
@@ -20,3 +20,19 @@ class Solution:
         ans = []
         helper(0, temp_arr, ans)
         return ans
+    
+    def combine2(self, n: int, k: int) -> List[List[int]]:
+        res = []
+        def helper(idx: int, path: []):
+            if len(path) == k:
+                res.append(path)
+                return 
+            
+            if idx > n:
+                return
+            
+            for i in range(idx, n + 1):
+                helper(i + 1, path + [i])
+        helper(1, [])
+
+        return res

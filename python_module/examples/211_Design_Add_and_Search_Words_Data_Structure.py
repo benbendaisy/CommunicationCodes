@@ -1,4 +1,4 @@
-class WordDictionary:
+class WordDictionary1:
     """
         Design a data structure that supports adding new words and finding if a string matches any previously added string.
 
@@ -48,3 +48,30 @@ class WordDictionary:
                 return helper(trie[word[idx]], idx + 1)
             return False
         return helper(self.children, 0)
+
+class WordDictionary2:
+    class TrieNode:
+        def __init__(self):
+            self.child = {}
+            self.is_ending = False
+    def __init__(self):
+        self.children = self.TrieNode()
+    def addWord(self, word: str) -> None:
+        node = self.children
+        for ch in word:
+            if ch not in node.child:
+                node.child[ch] = self.TrieNode()
+            node = node.child[ch]
+        node.is_ending = True
+
+    def search(self, word: str) -> bool:
+        n = len(word)
+        def helper(idx: int, node: self.TrieNode):
+            if idx == n:
+                return node.is_ending
+            ch = word[idx]
+            if ch == ".":
+                return any(helper(idx + 1, child) for child in node.child.values())
+            next_node = node.child.get(ch)
+            return next_node is not None and helper(idx + 1, next_node)
+        return helper(0, self.children)

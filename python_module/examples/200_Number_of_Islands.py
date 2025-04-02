@@ -71,7 +71,7 @@ class Solution:
                     blood_search(r, c)
         return cnt
     
-    def numIslands(self, grid: List[List[str]]) -> int:
+    def numIslands3(self, grid: List[List[str]]) -> int:
         cnt = 0
         rows, cols = len(grid), len(grid[0])
         def helper(row: int, col: int) -> int:
@@ -88,5 +88,26 @@ class Solution:
                 if grid[i][j] == "1":
                     cnt += 1
                     helper(i, j)
+        return cnt
+    
+    def numIslands(self, grid: List[List[str]]) -> int:
+        if not grid:
+            return 0
+        m, n = len(grid), len(grid[0])
+
+        def helper(row: int, col: int):
+            if row < 0 or row >= m or col < 0 or col >= n or grid[row][col] != '1':
+                return
+            grid[row][col] = '0'
+            for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1)):
+                new_row, new_col = row + dx, col + dy
+                helper(new_row, new_col)
+        
+        cnt = 0
+        for r in range(m):
+            for c in range(n):
+                if grid[r][c] == '1':
+                    helper(r, c)
+                    cnt += 1
         return cnt
 

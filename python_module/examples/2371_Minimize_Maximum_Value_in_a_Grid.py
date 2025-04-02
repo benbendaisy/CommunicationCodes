@@ -33,7 +33,7 @@ class Solution:
             grid[i][j] = row[i] = col[j] = max(row[i], col[j]) + 1
         return grid
 
-    def minScore(self, grid: List[List[int]]) -> List[List[int]]:
+    def minScore2(self, grid: List[List[int]]) -> List[List[int]]:
         m, n = len(grid), len(grid[0])
         row, col = [0] * m, [0] * n
         arr = sorted(product(range(m), range(n)), key = lambda x: grid[x[0]][x[1]])
@@ -41,4 +41,19 @@ class Solution:
             grid[i][j] = row[i] = col[j] = max(row[i], col[j]) + 1
         return grid
     
-    
+    def minScore(self, grid: List[List[int]]) -> List[List[int]]:
+        m, n = len(grid), len(grid[0])
+        min_heap = []
+        rows = [1] * m
+        cols = [1] * n
+
+        for i in range(m):
+            for j in range(n):
+                heapq.heappush(min_heap, (grid[i][j], i, j))
+        
+        while min_heap:
+            _, i, j = heapq.heappop(min_heap)
+            val = max(rows[i], cols[j])
+            grid[i][j] = val
+            rows[i] = cols[j] = val + 1
+        return grid
