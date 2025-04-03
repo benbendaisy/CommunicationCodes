@@ -20,7 +20,7 @@ class Solution:
     Input: matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 13
     Output: false
     """
-    def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+    def searchMatrix1(self, matrix: List[List[int]], target: int) -> bool:
         m, n = len(matrix), len(matrix[0])
         r, c = m - 1, 0
         while r >= 0 and c < n:
@@ -30,4 +30,18 @@ class Solution:
                 c += 1
             else:
                 r -= 1
+        return False
+    
+    def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+        if not matrix or matrix[0][0] > target or matrix[-1][-1] < target:
+            return False
+        m, n = len(matrix), len(matrix[0])
+        r, c = m - 1, 0
+        while r >= 0 and c < n:
+            if matrix[r][c] == target:
+                return True
+            elif matrix[r][c] > target:
+                r -= 1
+            elif matrix[r][c] < target:
+                c += 1
         return False

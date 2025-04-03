@@ -24,11 +24,17 @@ Input: nums = [1]
 
 Output: 1
     """
-    def singleNumber(self, nums: List[int]) -> int:
+    def singleNumber1(self, nums: List[int]) -> int:
         if not nums:
             return 0
         
         res = nums[0]
         for i in range(1, len(nums)):
             res = res ^ nums[i]
+        return res
+    
+    def singleNumber(self, nums: List[int]) -> int:
+        res = 0
+        for num in nums:
+            res = res ^ num
         return res

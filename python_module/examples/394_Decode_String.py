@@ -28,7 +28,7 @@ class Solution:
         s is guaranteed to be a valid input.
         All the integers in s are in the range [1, 300].
     """
-    def decodeString(self, s: str) -> str:
+    def decodeString1(self, s: str) -> str:
         stack = []
         for i in range(len(s)):
             if s[i] != "]":
@@ -43,5 +43,40 @@ class Solution:
                     n = stack.pop() + n
                 stack.append(int(n) * subStr)
         return "".join(stack)
+    
+    def decodeString2(self, s: str) -> str:
+        stack = []
+        for ch in s:
+            if ch != "]":
+                stack.append(ch)
+            else:
+                sub_str = ""
+                while stack and stack[-1] != "[":
+                    sub_str = stack.pop() + sub_str
+                stack.pop() # pop out "["
+                cnt = ""
+                while stack and stack[-1].isdigit():
+                    cnt = stack.pop() + cnt
+                cnt = int(cnt)
+                stack.append(sub_str * cnt)
+        return "".join(stack)
 
+    def decodeString3(self, s: str) -> str:
+        if not s:
+            return s
+        
+        stack = []
+        for ch in s:
+            if ch != "]":
+                stack.append(ch)
+            else:
+                chars = ""
+                while stack and  stack[-1] != "[":
+                    chars = stack.pop() + chars
+                stack.pop() # skip '['
+                digits = ""
+                while stack and stack[-1].isdigit():
+                    digits = stack.pop() + digits
+                stack.append(chars * int(digits))
+        return "".join(stack)
 

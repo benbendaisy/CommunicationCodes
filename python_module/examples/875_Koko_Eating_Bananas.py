@@ -24,7 +24,7 @@ class Solution:
         Input: piles = [30,11,23,4,20], h = 6
         Output: 23
     """
-    def minEatingSpeed(self, piles: List[int], h: int) -> int:
+    def minEatingSpeed1(self, piles: List[int], h: int) -> int:
         left = 1
         right = max(piles)
 
@@ -41,3 +41,20 @@ class Solution:
             else:
                 left = mid + 1
         return left
+    
+    def minEatingSpeed(self, piles: List[int], h: int) -> int:
+        def is_valid(k: int) -> bool:
+            cnt = 0
+            for num in piles:
+                cnt += math.ceil(num / k)
+            return cnt <= h
+        
+        max_pile = max(piles)
+        l, r = 1, max_pile
+        while l < r:
+            mid = (l + r) // 2
+            if is_valid(mid):
+                r = mid # cannot rule out mid
+            else:
+                l = mid + 1 # can rule out mid as it failed
+        return l

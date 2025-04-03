@@ -45,3 +45,11 @@ class Solution:
             right = right & (right - 1)
         return right
     
+    def rangeBitwiseAnd3(self, left: int, right: int) -> int:
+        """
+        Time Limit Exceeded for large ranges.
+        """
+        res = left
+        for num in range(left + 1, right + 1):
+            res &= num
+        return res

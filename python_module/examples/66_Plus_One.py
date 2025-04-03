@@ -29,7 +29,7 @@ class Solution:
         Incrementing by one gives 9 + 1 = 10.
         Thus, the result should be [1,0].
     """
-    def plusOne(self, digits: List[int]) -> List[int]:
+    def plusOne1(self, digits: List[int]) -> List[int]:
         if not digits:
             return []
 
@@ -42,3 +42,18 @@ class Solution:
         if carry != 0:
             digits.insert(0, carry)
         return digits
+    
+    def plusOne(self, digits: List[int]) -> List[int]:
+        if not digits:
+            return []
+        
+        res, n = [], len(digits)
+        carrier = 1
+        for digit in digits[::-1]:
+            value = digit + carrier
+            carrier = value // 10
+            res.append(value % 10)
+        
+        if carrier > 0:
+            res.append(carrier)
+        return res[::-1]

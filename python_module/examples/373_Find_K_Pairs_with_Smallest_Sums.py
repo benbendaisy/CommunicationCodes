@@ -33,7 +33,7 @@ class Solution:
         nums1 and nums2 both are sorted in ascending order.
         1 <= k <= 104
     """
-    def kSmallestPairs(self, nums1: List[int], nums2: List[int], k: int) -> List[List[int]]:
+    def kSmallestPairs1(self, nums1: List[int], nums2: List[int], k: int) -> List[List[int]]:
         minHeap = []
         heapq.heappush(minHeap, (nums1[0] + nums2[0], 0, 0))
         visited = set((0,0))
@@ -49,5 +49,25 @@ class Solution:
                 heapq.heappush(minHeap, (nums1[i] + nums2[j + 1], i, j + 1))
                 visited.add((i, j + 1))
             k -= 1
+        return res
+    
+    def kSmallestPairs(self, nums1: List[int], nums2: List[int], k: int) -> List[List[int]]:
+        if not nums1 and not nums2:
+            return []
+        n1, n2 = len(nums1), len(nums2)
+        heap = [(nums1[0] + nums2[0], 0, 0)]
+        res, visited = [], set([(0, 0)])
+        while len(res) < k:
+            _, idx1, idx2 = heapq.heappop(heap)
+            res.append((nums1[idx1], nums2[idx2]))
+            if idx1 < n1 - 1:
+                if (idx1 + 1, idx2) not in visited:
+                    visited.add((idx1 + 1, idx2))
+                    heapq.heappush(heap, (nums1[idx1 + 1] + nums2[idx2], idx1 + 1, idx2))
+            
+            if idx2 < n2 - 1:
+                if (idx1, idx2 + 1) not in visited:
+                    visited.add((idx1, idx2 + 1))
+                    heapq.heappush(heap, (nums1[idx1] + nums2[idx2 + 1], idx1, idx2 + 1))
         return res
 

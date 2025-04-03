@@ -36,7 +36,7 @@ class Solution:
                     max_triplet = max(max_triplet, (nums[i] - nums[j]) * nums[k])
         return max(max_triplet, 0)
     
-    def maximumTripletValue(self, nums: List[int]) -> int:
+    def maximumTripletValue2(self, nums: List[int]) -> int:
         n = len(nums)
         max_prefix = [0] * n
         max_prefix[0] = nums[0]
@@ -49,3 +49,17 @@ class Solution:
                 value = (max_prefix[j - 1] - nums[j]) * nums[k]
                 max_triplet = max(max_triplet, value)
         return max(max_triplet, 0)
+    
+    def maximumTripletValue3(self, nums: List[int]) -> int:
+        n = len(nums)
+        max_prefix = [0] * n
+        max_prefix[0] = nums[0]
+        for i in range(1, n):
+            max_prefix[i] = max(max_prefix[i - 1], nums[i])
+        
+        max_triplet = 0
+        for j in range(1, n - 1):
+            for k in range(j + 1, n):
+                value = (max_prefix[j - 1] - nums[j]) * nums[k]
+                max_triplet = max(max_triplet, value)
+        return max_triplet

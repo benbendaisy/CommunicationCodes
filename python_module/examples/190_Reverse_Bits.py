@@ -26,7 +26,7 @@ class Solution:
             n >>= 1
         return res
     
-    def reverseBits(self, n: int) -> int:
+    def reverseBits2(self, n: int) -> int:
         res = 0
         while n:
             # Shift result left to make space for the next bit
@@ -34,5 +34,12 @@ class Solution:
             # Add the least significant bit of n to result
             res |= n & 1
             # Shift n right to process the next bit
+            n >>= 1
+        return res
+    
+    def reverseBits(self, n: int) -> int:
+        res = 0
+        for _ in range(32):
+            res = res << 1 | (n & 1)
             n >>= 1
         return res

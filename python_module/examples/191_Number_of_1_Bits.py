@@ -51,7 +51,14 @@ class Solution:
             mask <<= 1
         return cnt
     
-    def hammingWeight(self, n: int) -> int:
+    def hammingWeight4(self, n: int) -> int:
+        cnt = 0
+        while n:
+            cnt += n & 1
+            n >>= 1
+        return cnt
+    
+    def hammingWeight5(self, n: int) -> int:
         cnt = 0
         while n:
             cnt += n & 1

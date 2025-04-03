@@ -29,7 +29,7 @@ class Solution:
         nums is a non-decreasing array.
         -109 <= target <= 109
     """
-    def searchRange(self, nums: List[int], target: int) -> List[int]:
+    def searchRange1(self, nums: List[int], target: int) -> List[int]:
         if not nums:
             return [-1, -1]
         n = len(nums)
@@ -48,3 +48,55 @@ class Solution:
             else:
                 r = mid - 1
         return [-1, -1]
+    
+    def searchRange2(self, nums: List[int], target: int) -> List[int]:
+        if not nums:
+            return [-1, -1]
+        n = len(nums)
+        l, r = 0, n - 1
+        while l <= r:
+            mid = (l + r) // 2
+            if nums[mid] == target:
+                # expand left
+                left = mid
+                while left > 0 and nums[left] == target:
+                    left -= 1
+                # expand right
+                right = mid
+                while right < n and nums[right] == target:
+                    right += 1
+                if nums[left] != target:
+                    left += 1
+                if right == n or nums[right] != target:
+                    right -= 1
+                return [left, right]
+            elif nums[mid] < target:
+                l = mid + 1
+            else:
+                r = mid - 1
+        return [-1, -1]
+
+    def searchRange(self, nums: List[int], target: int) -> List[int]:
+        if not nums:
+            return [-1, -1]
+        n = len(nums)
+        def find_left():
+            l, r = 0, n - 1
+            while l <= r:
+                mid = (l + r) // 2
+                if nums[mid] < target:
+                    l = mid + 1
+                else:
+                    r = mid - 1
+            return l if l < n and nums[l] == target else -1
+        
+        def find_right():
+            l, r = 0, n - 1
+            while l <= r:
+                mid = (l + r) // 2
+                if nums[mid] > target:
+                    r = mid - 1
+                else:
+                    l = mid + 1
+            return r if r >= 0 and nums[r] == target else -1
+        return [find_left(), find_right()]

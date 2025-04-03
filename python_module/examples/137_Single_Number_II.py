@@ -17,7 +17,7 @@ class Solution:
 
         return res if res < (1 << 31) else res - (1 << 32)
     
-    def singleNumber(self, nums: List[int]) -> int:
+    def singleNumber2(self, nums: List[int]) -> int:
         res = 0
         # Check each of the 32 bits
         for i in range(32):
@@ -34,4 +34,18 @@ class Solution:
                     res -= (1 << 31)
                 else:
                     res |= (1 << i)
+        return res
+    
+    def singleNumber3(self, nums: List[int]) -> int:
+        res = 0
+        for i in range(32):
+            bit_sum = 0
+            for num in nums:
+                bit_sum += (num >> i) & 1
+            
+            if bit_sum % 3 == 1:
+                if i == 31:
+                    res -= 1 << i
+                else:
+                    res |= 1 << i
         return res

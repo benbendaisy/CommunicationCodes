@@ -26,3 +26,18 @@ class Solution:
         t1 = datetime.strptime(date1, "%Y-%m-%d").date()
         t2 = datetime.strptime(date2, "%Y-%m-%d").date()
         return abs((t2 - t1).days)
+    
+    def daysBetweenDates(self, date1: str, date2: str) -> int:
+        days = list(accumulate([0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30]))
+        is_leap = lambda year: year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)
+
+        def to_days(day_str: str) -> int:
+            y, m, d = day_str.split("-")
+            y, m, d = int(y), int(m), int(d)
+
+            res = d + int(m > 2 and is_leap(y))
+            res += days[m - 1]
+            res += sum(365 + int(is_leap(y)) for y in range(1971, y))
+            return res
+
+        return abs(to_days(date1) - to_days(date2))

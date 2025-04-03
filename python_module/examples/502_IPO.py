@@ -28,7 +28,7 @@ class Solution:
         Input: k = 3, w = 0, profits = [1,2,3], capital = [0,1,2]
         Output: 6
     """
-    def findMaximizedCapital(self, k: int, w: int, profits: List[int], capital: List[int]) -> int:
+    def findMaximizedCapital1(self, k: int, w: int, profits: List[int], capital: List[int]) -> int:
         n = len(profits)
         projects = list(zip(capital, profits))
         projects.sort()
@@ -41,5 +41,38 @@ class Solution:
             if not que:
                 break
             w += -heapq.heappop(que)
+        return w
+    
+    def findMaximizedCapital2(self, k: int, w: int, profits: List[int], capital: List[int]) -> int:
+        """
+        Time Limit Exceeded
+        """
+        def helper(choice: list, running_profit: int, steps: int) -> int:
+            if steps == k or not choice:
+                return running_profit
+
+            max_profit = running_profit
+            for i, v in enumerate(choice):
+                if running_profit >= capital[v]:
+                    max_profit = max(max_profit, helper(choice[:i] + choice[i + 1:], running_profit + profits[v], steps + 1))
+            return max_profit
+        n = len(profits)
+        res = helper([i for i in range(n)], w, 0)
+        return res if res != float('-inf') else 0
+    
+    def findMaximizedCapital3(self, k: int, w: int, profits: List[int], capital: List[int]) -> int:
+        n = len(profits)
+        projects = list(zip(capital, profits))
+        projects.sort()
+
+        heap = []
+        ptr = 0
+        for _ in range(k):
+            while ptr < n and projects[ptr][0] <= w:
+                heapq.heappush(heap, -projects[ptr][1])
+                ptr += 1
+            if not heap:
+                break
+            w += -heapq.heappop(heap)
         return w
 

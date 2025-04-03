@@ -38,7 +38,7 @@ class Solution:
 
         return "".join([str(ch) for ch in res])
 
-    def addBinary(self, a: str, b: str) -> str:
+    def addBinary2(self, a: str, b: str) -> str:
         # List to store the result
         res = []
         carry = 0
@@ -54,4 +54,28 @@ class Solution:
             res.insert(0, str(t % 2))
             carry = t // 2
         return "".join(res)
+    
+    def addBinary(self, a: str, b: str) -> str:
+        if not a:
+            return b
+        if not b:
+            return a
+        arr_a = list(map(int, list(a)))
+        arr_b = list(map(int, list(b)))
+
+        res, idx1, idx2 = [], len(arr_a) - 1, len(arr_b) - 1
+        carry = 0
+        while idx1 >= 0 or idx2 >= 0 or carry > 0:
+            value = carry
+            if idx1 >= 0:
+                value += arr_a[idx1]
+                idx1 -= 1
+            
+            if idx2 >= 0:
+                value += arr_b[idx2]
+                idx2 -= 1
+            carry = value // 2
+            res.append(str(value % 2))
+        
+        return "".join(res[::-1])
 

@@ -22,11 +22,26 @@ class Solution:
     Output: 5
     Explanation: Your function can return either index number 1 where the peak element is 2, or index number 5 where the peak element is 6.
     """
-    def findPeakElement(self, nums: List[int]) -> int:
+    def findPeakElement1(self, nums: List[int]) -> int:
         if not nums:
             return -1
         for i in range(len(nums)):
             if (i == 0 or nums[i] > nums[i - 1]) and (i == len(nums) - 1 or nums[i] > nums[i + 1]):
                 return i
         return -1
+    
+    def findPeakElement2(self, nums: List[int]) -> int:
+        if not nums:
+            return -1
+        n = len(nums)
+        l, r = 0, n - 1
+        while l < r:
+            mid = (l + r) // 2
+            if (mid == 0 or nums[mid - 1] < nums[mid]) and (mid == n - 1 or nums[mid] > nums[mid + 1]):
+                return mid
+            elif mid == 0 or nums[mid - 1] < nums[mid]:
+                l = mid + 1
+            else:
+                r = mid - 1
+        return l
             
