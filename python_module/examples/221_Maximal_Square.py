@@ -52,7 +52,7 @@ class Solution:
         
         return max_side * max_side
     
-    def maximalSquare(self, matrix: List[List[str]]) -> int:
+    def maximalSquare3(self, matrix: List[List[str]]) -> int:
         if not matrix or not matrix[0]:
             return 0
     
@@ -69,3 +69,48 @@ class Solution:
                         dp[i][j] = min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]) + 1
                     max_len = max(max_len, dp[i][j])
         return max_len * max_len
+    
+    def maximalSquare4(self, matrix: List[List[str]]) -> int:
+        if not matrix:
+            return 0
+        m, n = len(matrix), len(matrix[0])
+        
+        max_area = 0
+        heights = [0] * (n + 1)
+
+        for i in range(m):
+            for j in range(n):
+                if matrix[i][j] == '0':
+                    heights[j] = 0
+                else:
+                    heights[j] += 1
+            stack = []
+            for j in range(n + 1):
+                while stack and heights[stack[-1]] > heights[j]:
+                    height = heights[stack.pop()]
+                    width = j if not stack else j - stack[-1] - 1
+                    length = min(height, width)
+                    max_area = max(max_area, length * length)
+                stack.append(j)
+        return max_area
+    
+    def maximalSquare5(self, matrix: List[List[str]]) -> int:
+        if not matrix:
+            return 0
+        m, n = len(matrix), len(matrix[0])
+        
+        max_area = 0
+        heights = [0] * (n + 1)
+
+        for row in matrix:
+            for i in range(n):
+                heights[i] += 0 if row[i] == '0' else 1
+            stack = []
+            for j in range(n + 1):
+                while stack and heights[stack[-1]] > heights[j]:
+                    height = heights[stack.pop()]
+                    width = j if not stack else j - stack[-1] - 1
+                    length = min(height, width)
+                    max_area = max(max_area, length * length)
+                stack.append(j)
+        return max_area

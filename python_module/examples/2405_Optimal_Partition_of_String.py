@@ -20,7 +20,7 @@ class Solution:
         Explanation:
         The only valid partition is ("s","s","s","s","s","s").
     """
-    def partitionString(self, s: str) -> int:
+    def partitionString1(self, s: str) -> int:
         last_positions = [0] * 26
         partitions = 0
         last_position = 0
@@ -30,3 +30,17 @@ class Solution:
                 last_position = i + 1
             last_positions[ord(s[i]) - ord('a')] = i + 1
         return partitions
+    
+    def partitionString2(self, s: str) -> int:
+        if not s:
+            return 0
+        last_positions, partition = defaultdict(int), 1
+        new_start = 0
+        for i, v in enumerate(s):
+            if v in last_positions and last_positions[v] >= new_start:
+                partition += 1
+                new_start = i
+            
+            last_positions[v] = i
+        
+        return partition

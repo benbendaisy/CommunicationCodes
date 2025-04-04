@@ -122,7 +122,7 @@ class Solution:
             max_profit = max(max_profit, profit)
         return max_profit
     
-    def maxProfit(self, prices: List[int]) -> int:
+    def maxProfit5(self, prices: List[int]) -> int:
         if not prices or len(prices) < 2:
             return 0
         n = len(prices)
@@ -141,3 +141,45 @@ class Solution:
             return max_profit
         
         return helper(0, 2, False)
+    
+    def maxProfit6(self, prices: List[int]) -> int:
+        if not prices or len(prices) < 2:
+            return 0
+        n = len(prices)
+        @cache
+        def helper(idx: int, ops: int, holding: bool):
+            if idx == n or ops == 2:
+                return 0
+
+            # sip current
+            max_profit = helper(idx + 1, ops, holding)
+            if holding:
+                # sell stock
+                max_profit = max(max_profit, helper(idx + 1, ops + 1, False) + prices[idx])
+            else:
+                # buy stock
+                max_profit = max(max_profit, helper(idx + 1, ops, True) - prices[idx])
+            return max_profit
+        return helper(0, 0, False)
+    
+    def maxProfit6(self, prices: List[int]) -> int:
+        if not prices or len(prices) < 2:
+            return 0
+        n = len(prices)
+        max_left_profit = [0] * n
+        max_right_profit = [0] * n
+        
+        min_price = prices[0]
+        for i in range(1, n):
+            min_price = min(min_price, prices[i])
+            max_left_profit[i] = max(max_left_profit[i - 1], prices[i] - min_price)
+        
+        max_price = prices[-1]
+        for i in range(n - 2, -1, -1):
+            max_price = max(max_price, prices[i])
+            max_right_profit[i] = max(max_right_profit[i + 1], max_price - prices[i])
+        max_profits = 0
+        for i in range(n):
+            profit = max_left_profit[i] + (max_right_profit[i + 1] if i + 1 < n else 0)
+            max_profits = max(max_profits, profit)
+        return max_profits

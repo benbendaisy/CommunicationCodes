@@ -104,7 +104,7 @@ class Solution:
                     return s[start:start + length]
         return ""
     
-    def longestPalindrome(self, s: str) -> str:
+    def longestPalindrome6(self, s: str) -> str:
         n = len(s)
         def expand(l: int, r: int) -> str:
             if l < 0 or r >= n or s[l] != s[r]:
@@ -123,6 +123,51 @@ class Solution:
             if len(even) > len(max_pal):
                 max_pal = even
         return max_pal
+    
+    def longestPalindrome7(self, s: str) -> str:
+        n = len(s)
+
+        def expand(left: int, right: int) -> int:
+            while left >= 0 and right < n and s[left] == s[right]:
+                left -= 1
+                right += 1
+            return s[left + 1: right]
+        
+        max_len, max_str = float('-inf'), ""
+        for i in range(n):
+            # odd
+            str1 = expand(i, i)
+            if max_len < len(str1):
+                max_len = len(str1)
+                max_str = str1
+            # even
+            if i + 1 < n and s[i] == s[i + 1]:
+                str1 = expand(i, i + 1)
+                if max_len < len(str1):
+                    max_len = len(str1)
+                    max_str = str1
+        return max_str
+
+    def longestPalindrome8(self, s: str) -> str:
+        n = len(s)
+
+        def expand(left: int, right: int) -> int:
+            while left >= 0 and right < n and s[left] == s[right]:
+                left -= 1
+                right += 1
+            return s[left + 1: right]
+        
+        max_str = ""
+        for i in range(n):
+            # odd
+            str1 = expand(i, i)
+        
+            # even
+            str2 = ""
+            if i + 1 < n and s[i] == s[i + 1]:
+                str2 = expand(i, i + 1)
+            max_str = max(max_str, str1, str2, key=len)
+        return max_str
     
 if __name__ == "__main__":
     s = "boqylncwfahjzvawrojyhqiymirlkfzkhtvmbjnbfjxzewqqqcfnximdnrxtrbafkimcqvuprgrjetrecqkltforcudmbpofcxqdcirnaciggflvsialdjtjnbrayeguklcbdbkouodxbmhgtaonzqftkebopghypjzfyqutytbcfejhddcrinopynrprohpbllxvhitazsjeyymkqkwuzfenhphqfzlnhenldbigzmriikqkgzvszztmvylzhbfjoksyvfdkvshjzdleeylqwsapapduxrfbwskpnhvmagkolzlhakvfbvcewvdihqceecqhidvwecvbfvkahlzlokgamvhnpkswbfrxudpapaswqlyeeldzjhsvkdfvyskojfbhzlyvmtzzsvzgkqkiirmzgibdlnehnlzfqhphnefzuwkqkmyyejszatihvxllbphorprnyponircddhjefcbtytuqyfzjpyhgpobektfqznoatghmbxdouokbdbclkugeyarbnjtjdlaisvlfggicanricdqxcfopbmducroftlkqcertejrgrpuvqcmikfabrtxrndmixnfcqqqwezxjfbnjbmvthkzfklrimyiqhyjorwavzjhafwcnlyqob"

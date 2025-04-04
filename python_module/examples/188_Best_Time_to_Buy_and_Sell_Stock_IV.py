@@ -177,7 +177,7 @@ class Solution:
 
         return helper(0, k, False)
     
-    def maxProfit(self, k: int, prices: List[int]) -> int:
+    def maxProfit6(self, k: int, prices: List[int]) -> int:
         if not prices or len(prices) < 2:
             return 0
         
@@ -199,6 +199,23 @@ class Solution:
             return max_profit
         
         return helper(0, k, False)
+    
+    def maxProfit7(self, k: int, prices: List[int]) -> int:
+        if not prices:
+            return 0
+        n = len(prices)
+        @cache
+        def helper(idx: int, ops: int, holding: bool) -> int:
+            if idx == n or ops == k:
+                return 0
+            # skip
+            max_profit = helper(idx + 1, ops, holding)
+            if holding:
+                max_profit = max(max_profit, helper(idx + 1, ops + 1, False) + prices[idx])
+            else:
+                max_profit = max(max_profit, helper(idx + 1, ops, True) - prices[idx])
+            return max_profit
+        return helper(0, 0, False)
 
 
 if __name__ == "__main__":

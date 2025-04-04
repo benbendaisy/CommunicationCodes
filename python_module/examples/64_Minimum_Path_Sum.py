@@ -44,7 +44,7 @@ class Solution:
                     
         return dp[-1][-1]
     
-    def minPathSum(self, grid: List[List[int]]) -> int:
+    def minPathSum3(self, grid: List[List[int]]) -> int:
         m, n = len(grid), len(grid[0])
         
         @cache
@@ -57,3 +57,17 @@ class Solution:
             return grid[row][col] + min(helper(row + 1, col), helper(row, col + 1))
         
         return helper(0, 0)
+    
+    def minPathSum(self, grid: List[List[int]]) -> int:
+        m, n = len(grid), len(grid[0])
+
+        @cache
+        def helper(row: int, col: int) -> int:
+            if row == m - 1 and col == n - 1:
+                return grid[row][col]
+            elif row == m or col == n:
+                return float('inf')
+
+            return min(helper(row + 1, col), helper(row, col + 1)) + grid[row][col]
+        res = helper(0, 0)
+        return -1 if res == float('inf') else res

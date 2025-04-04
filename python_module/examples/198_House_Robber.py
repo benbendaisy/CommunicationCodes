@@ -26,7 +26,7 @@ class Solution:
         1 <= nums.length <= 100
         0 <= nums[i] <= 400
     """
-    def rob(self, nums: List[int]) -> int:
+    def rob0(self, nums: List[int]) -> int:
         if not nums:
             return 0
 
@@ -71,7 +71,7 @@ class Solution:
                 dp[i] = max(dp[i], dp[j] + nums[i])
         return max(dp)
     
-    def rob(self, nums: List[int]) -> int:
+    def rob3(self, nums: List[int]) -> int:
         m = len(nums)
         @cache
         def helper(idx: int):
@@ -81,6 +81,20 @@ class Solution:
             for i in range(idx, m):
                 max_profit = max(max_profit,nums[i] + helper(i + 2))
             return max_profit
+        return helper(0)
+    
+    def rob(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        n = len(nums)
+        @cache
+        def helper(idx: int) -> int:
+            if idx >= n:
+                return 0
+            # skip
+            opt1 = helper(idx + 1)
+            opt2 = nums[idx] + helper(idx + 2)
+            return max(opt1, opt2)
         return helper(0)
 
 

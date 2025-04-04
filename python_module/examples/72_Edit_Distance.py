@@ -66,7 +66,7 @@ class Solution:
             return min(helper(idx1 + 1, idx2), helper(idx1, idx2 + 1), helper(idx1 + 1, idx2 + 1)) + 1
         return helper(0, 0)
     
-    def minDistance(self, word1: str, word2: str) -> int:
+    def minDistance3(self, word1: str, word2: str) -> int:
         if not word1 and not word2:
             return 0
         elif not word1:
@@ -80,6 +80,58 @@ class Solution:
             dp[0][j] = j
         for i in range(m + 1):
             dp[i][0] = i
+        for i in range(1, m + 1):
+            for j in range(1, n + 1):
+                if word1[i - 1] == word2[j - 1]:
+                    dp[i][j] = dp[i - 1][j - 1]
+                else:
+                    dp[i][j] = min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]) + 1
+        return dp[-1][-1]
+    
+    def minDistance4(self, word1: str, word2: str) -> int:
+        if not word1 and not word2:
+            return 0
+        elif not word1:
+            return len(word2)
+        elif not word2:
+            return len(word1)
+        m, n = len(word1), len(word2)
+        @cache
+        def helper(idx1: int, idx2: int) -> int:
+            if idx1 == m and idx2 == n:
+                return 0
+            
+            if idx1 == m:
+                return n - idx2
+            
+            if idx2 == n:
+                return m - idx1
+
+            if word1[idx1] == word2[idx2]:
+                return helper(idx1 + 1, idx2 + 1)
+            else:
+                opt1 = helper(idx1 + 1, idx2) # delete or insert in word1
+                opt2 = helper(idx1, idx2 + 1) # delete or insert in word2
+                opt3 = helper(idx1 + 1, idx2 + 1) # replace
+                return min(opt1, opt2, opt3) + 1
+        return helper(0, 0)
+    
+    def minDistance5(self, word1: str, word2: str) -> int:
+        if not word1 and not word2:
+            return 0
+        elif not word1:
+            return len(word2)
+        elif not word2:
+            return len(word1)
+        m, n = len(word1), len(word2)
+        
+        dp = [[0] * (n + 1) for _ in range(m + 1)]
+        for i in range(m + 1):
+            dp[i][0] = i
+        
+        for j in range(n + 1):
+            dp[0][j] = j
+        
         for i in range(1, m + 1):
             for j in range(1, n + 1):
                 if word1[i - 1] == word2[j - 1]:

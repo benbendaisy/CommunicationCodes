@@ -21,7 +21,7 @@ class Solution:
         else:
             return 1 / res
         
-    def myPow(self, x: float, n: int) -> float:
+    def myPow2(self, x: float, n: int) -> float:
         @cache
         def helper(m: int):
             if m == 0:
@@ -31,6 +31,36 @@ class Solution:
             if m % 2 == 0:
                 return res
             return res * x
+        res = helper(abs(n))
+        if n > 0:
+            return res
+        return 1 / res
+    
+    def myPow3(self, x: float, n: int) -> float:
+        def helper(m: int):
+            if m == 0:
+                return 1
+            
+            half = helper(m // 2)
+            total = half * half
+            if m % 2 == 0:
+                return total
+            return total * x
+        res = helper(abs(n))
+        if n > 0:
+            return res
+        return 1 / res
+    
+    def myPow4(self, x: float, n: int) -> float:
+        def helper(m: int) -> int:
+            if m == 0:
+                return 1
+            half = helper(m // 2)
+            total = half * half
+            if m % 2 == 0:
+                return total
+            return total * x
+        
         res = helper(abs(n))
         if n > 0:
             return res

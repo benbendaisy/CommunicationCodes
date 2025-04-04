@@ -75,7 +75,7 @@ class Solution:
                     dp[i][j] = (dp[i][j - 1] and s2[j - 1] == s3[i + j - 1]) or (dp[i - 1][j] and s1[i - 1] == s3[i + j - 1])
         return dp[-1][-1]
 
-    def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
+    def isInterleave5(self, s1: str, s2: str, s3: str) -> bool:
         if not s1 and not s2 and not s3:
             return True
         m, n, k = len(s1), len(s2), len(s3)
@@ -103,6 +103,27 @@ class Solution:
             
             return False
         
+        return helper(0, 0, 0)
+    
+    def isInterleave6(self, s1: str, s2: str, s3: str) -> bool:
+        if not s1 and not s2 and not s3:
+            return True
+        if len(s1) + len(s2) != len(s3):
+            return False
+        
+        m, n, k = len(s1), len(s2), len(s3)
+        @cache
+        def helper(idx1: int, idx2: int, idx3: int) -> bool:
+            if idx1 == m and idx2 == n:
+                return True
+            
+            if idx1 < m and s1[idx1] == s3[idx3] and helper(idx1 + 1, idx2, idx3 + 1):
+                return True
+            
+            if idx2 < n and s2[idx2] == s3[idx3] and helper(idx1, idx2 + 1, idx3 + 1):
+                return True
+            
+            return False
         return helper(0, 0, 0)
 
 if __name__ == "__main__":

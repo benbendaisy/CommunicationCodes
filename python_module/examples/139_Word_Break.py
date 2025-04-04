@@ -53,7 +53,7 @@ class Solution:
         
         return helper(s)
     
-    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+    def wordBreak3(self, s: str, wordDict: List[str]) -> bool:
         if not s or not wordDict or len(wordDict) == 0:
             return False
         
@@ -68,5 +68,20 @@ class Solution:
                     return True
             return False
         
+        return helper(0)
+    
+    def wordBreak4(self, s: str, wordDict: List[str]) -> bool:
+        if not s or not wordDict or len(wordDict) == 0:
+            return False
+        n = len(s)
+        @cache
+        def helper(idx: int) -> bool:
+            if idx == n:
+                return True
+            
+            for i in range(idx, n):
+                if s[idx: i + 1] in wordDict and helper(i + 1):
+                    return True
+            return False
         return helper(0)
 

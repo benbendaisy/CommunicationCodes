@@ -75,7 +75,7 @@ class Solution:
         res = helper(0)
         return -1 if res == float('inf') else res
     
-    def coinChange(self, coins: List[int], amount: int) -> int:
+    def coinChange4(self, coins: List[int], amount: int) -> int:
         if amount == 0:
             return 0
         if not coins:
@@ -94,6 +94,52 @@ class Solution:
         
         t = helper(0, 0)
         return t if t != float('inf') else -1
+    
+    def coinChange5(self, coins: List[int], amount: int) -> int:
+        if not coins:
+            return -1
+        n = len(coins)
+        @cache
+        def helper(idx: int, running_amount: int) -> int:
+            if running_amount == amount:
+                return 0
+            if idx == n:
+                return float('inf')
+
+            min_cnt = float('inf')
+            for i in range(idx, n):
+                if running_amount + coins[i] <= amount:
+                    min_cnt = min(min_cnt, 1 + helper(i, running_amount + coins[i]))
+            return min_cnt
+        
+        res = helper(0, 0)
+        return -1 if res == float('inf') else res
+    
+    def coinChange6(self, coins: List[int], amount: int) -> int:
+        if not coins:
+            return -1
+        n = len(coins)
+        @cache
+        def helper(idx: int, running_amount: int) -> int:
+            if running_amount == amount:
+                return 0
+            if idx == n or running_amount > amount:
+                return float('inf')
+
+            return min(1 + helper(idx, running_amount + coins[idx]), helper(idx + 1, running_amount))
+        
+        res = helper(0, 0)
+        return -1 if res == float('inf') else res
+    
+    def coinChange7(self, coins: List[int], amount: int) -> int:
+        if not coins:
+            return -1
+        dp = [float('inf')] * (amount + 1)
+        dp[0] = 0
+        for coin in coins:
+            for i in range(coin, amount + 1):
+                dp[i] = min(dp[i], dp[i - coin] + 1)
+        return dp[-1] if dp[-1] != float('inf') else -1
 
 if __name__ == "__main__":
     coins = [474,83,404,3]

@@ -79,7 +79,7 @@ class Solution:
                 sub[i] = num
         return len(sub)
     
-    def lengthOfLIS(self, nums: List[int]) -> int:
+    def lengthOfLIS5(self, nums: List[int]) -> int:
         if not nums:
             return 0
         m = len(nums)
@@ -89,3 +89,53 @@ class Solution:
                 if nums[j] < nums[i]:
                     dp[i] = max(dp[i], dp[j] + 1)
         return max(dp)
+    
+    def lengthOfLIS6(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        n = len(nums)
+        dp = [1] * n
+        for i in range(n):
+            for j in range(i):
+                if nums[j] < nums[i]:
+                    dp[i] = max(dp[i], dp[j] + 1)
+        return max(dp)
+    
+    def lengthOfLIS7(self, nums: List[int]) -> int:
+        """
+        Memory limit exceeded
+        """
+        if not nums:
+            return 0
+        n = len(nums)
+        @cache
+        def helper(idx: int, prev: int):
+            if idx == n:
+                return 0
+            
+            max_seq = helper(idx + 1, prev) # skip the current
+            if prev == -1 or nums[idx] > nums[prev]:
+                max_seq = max(max_seq, 1 + helper(idx + 1, idx))
+            return max_seq
+        return helper(0, -1)
+    
+    def lengthOfLIS8(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        n = len(nums)
+
+        @cache
+        def helper(idx: int, prev_idx: int) -> int:
+            if idx == n:
+                return 0  # Base case: reached end of array
+
+            # Option 1: Skip current element
+            max_seq = helper(idx + 1, prev_idx)
+
+            # Option 2: Include current element if it's increasing
+            if prev_idx == -1 or nums[idx] > nums[prev_idx]:
+                max_seq = max(max_seq, 1 + helper(idx + 1, idx))
+
+            return max_seq
+
+        return helper(0, -1)

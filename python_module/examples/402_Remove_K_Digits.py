@@ -44,7 +44,7 @@ class Solution:
         final_stack = stack[:-k] if k > 0 else stack
         return "".join(final_stack).lstrip("0") or "0"
     
-    def removeKdigits(self, num: str, k: int) -> str:
+    def removeKdigits3(self, num: str, k: int) -> str:
         stack = []
         for ch in num:
             while k > 0 and stack and stack[-1] > ch:
@@ -53,3 +53,14 @@ class Solution:
             stack.append(ch)
         res = stack[:-k] if k > 0 else stack
         return "".join(res).lstrip("0") or "0"
+    
+    def removeKdigits4(self, num: str, k: int) -> str:
+        stack = []
+        for ch in num:
+            while k > 0 and stack and stack[-1] > ch:
+                stack.pop()
+                k -= 1
+            stack.append(ch)
+        
+        stack = stack[:-k] if k > 0 else stack
+        return "".join(stack).lstrip("0") or "0"
