@@ -54,7 +54,7 @@ class Solution:
                     dp[i][j] = dp[i - 1][j] or dp[i - 1][j - cur]
         return dp[n][subset_sum]
     
-    def canPartition(self, nums: List[int]) -> bool:
+    def canPartition3(self, nums: List[int]) -> bool:
         if not nums:
             return False
         
@@ -73,3 +73,26 @@ class Solution:
             
             return helper(idx + 1, sum1 + nums[idx], sum2) or helper(idx + 1, sum1, sum2 + nums[idx])
         return helper(0, 0, 0)
+    
+    def canPartition4(self, nums: List[int]) -> bool:
+        if not nums:
+            return True
+        
+        sums, half = sum(nums), sum(nums) // 2
+        if sums % 2 != 0:
+            return False
+        arr, n = [0] * 2, len(nums)
+        @cache
+        def helper(idx: int, arr: tuple):
+            if idx == n:
+                return all(arr[i] == half for i in range(2))
+            arr = list(arr)
+            for i in range(2):
+                if arr[i] + nums[idx] > half:
+                    continue
+                arr[i] += nums[idx]
+                if helper(idx + 1, tuple(arr)):
+                    return True
+                arr[i] -= nums[idx]
+            return False
+        return helper(0, tuple([0] * 2))

@@ -157,7 +157,7 @@ class Solution:
         
         return max_freq
 
-    def largestPathValue(self, colors: str, edges: List[List[int]]) -> int:
+    def largestPathValue5(self, colors: str, edges: List[List[int]]) -> int:
         n = len(colors)
         graph = defaultdict(list)
         in_degree = defaultdict(int)
@@ -186,6 +186,30 @@ class Solution:
         for i in range(n):
             max_freq = max(max_freq, max(dp[i]))
         return max_freq
+    
+    def largestPathValue6(self, colors: str, edges: List[List[int]]) -> int:
+        n = len(colors)
+        graph, in_degree = defaultdict(list), [0] * n
+        for u, v in edges:
+            graph[u].append(v)
+            in_degree[v] += 1
+        
+        que = [i for i in range(n) if in_degree[i] == 0]
+        # max freq of each colors over all paths ending at i
+        colors_dict = {i: defaultdict(int) for i in range(n)}
+        visited_cnt, res = 0, 0
+        while que:
+            node = que.pop()
+            colors_dict[node][colors[node]] += 1
+            res = max(res, colors_dict[node][colors[node]])
+            visited_cnt += 1
+            for neighbor in graph[node]:
+                for x in colors_dict[node]:
+                    colors_dict[neighbor][x] = max(colors_dict[neighbor][x], colors_dict[node][x])
+                in_degree[neighbor] -= 1
+                if in_degree[neighbor] == 0:
+                    que.append(neighbor)
+        return res if visited_cnt == n else -1
 
 if __name__ == "__main__":
     colors = "abaca"

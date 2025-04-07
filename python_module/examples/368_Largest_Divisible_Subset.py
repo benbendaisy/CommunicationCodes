@@ -101,7 +101,7 @@ class Solution:
         helper([], 0)
         return max(dp, key=len)
     
-    def largestDivisibleSubset(self, nums: List[int]) -> List[int]:
+    def largestDivisibleSubset5(self, nums: List[int]) -> List[int]:
         if not nums:
             return []
         nums.sort()
@@ -115,3 +115,65 @@ class Solution:
                         max_subset = subset
             return max_subset + [nums[idx]]
         return max([helper(i) for i in range(len(nums))], key=len)
+    
+    def largestDivisibleSubset6(self, nums: List[int]) -> List[int]:
+        if not nums:
+            return []
+        
+        # Sort the array to ensure the divisibility condition is easier to check.
+        nums.sort()
+        n = len(nums)
+        
+        @lru_cache(maxsize=None)
+        def helper(idx: int, prev_idx: int) -> List[int]:
+            # prev_idx is -1 if no element has been chosen yet.
+            best_subset = []
+            
+            # Iterate through the remaining elements.
+            for i in range(idx, n):
+                # Check divisibility condition if an element has been chosen.
+                if prev_idx == -1 or nums[i] % nums[prev_idx] == 0:
+                    candidate = helper(i + 1, i)
+                    # Update best_subset if we found a longer valid subset.
+                    if len(candidate) > len(best_subset):
+                        best_subset = candidate
+            
+            # If an element has been chosen, include it at the beginning.
+            return ([nums[prev_idx]] + best_subset) if prev_idx != -1 else best_subset
+        
+        # Start with idx 0 and no previous element (denoted by -1).
+        return helper(0, -1)
+    
+    def largestDivisibleSubset7(self, nums: List[int]) -> List[int]:
+        if not nums:
+            return []
+
+        nums.sort()
+        n = len(nums)
+        @cache
+        def helper(idx: int, prev: int):
+            best = []
+            for i in range(idx, n):
+                if prev == -1 or nums[i] % nums[prev] == 0:
+                    candidate = helper(i + 1, i)
+                    if len(candidate) > len(best):
+                        best = candidate
+            return [nums[prev]] + best if prev != -1 else best
+        return helper(0, -1)
+    
+    def largestDivisibleSubset8(self, nums: List[int]) -> List[int]:
+        if not nums:
+            return []
+
+        nums.sort()
+        n, self.res = len(nums), []
+        @cache
+        def helper(idx: int, path: tuple):
+            if len(self.res) < len(path):
+                self.res = list(path)
+                
+            for i in range(idx, n):
+                if not path or nums[i] % path[-1] == 0:
+                    helper(i + 1, path + (nums[i],))
+        helper(0, ())
+        return self.res

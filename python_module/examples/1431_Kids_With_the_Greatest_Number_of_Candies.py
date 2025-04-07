@@ -30,7 +30,7 @@ class Solution:
         Input: candies = [12,1,12], extraCandies = 10
         Output: [true,false,true]
     """
-    def kidsWithCandies(self, candies: List[int], extraCandies: int) -> List[bool]:
+    def kidsWithCandies1(self, candies: List[int], extraCandies: int) -> List[bool]:
         if not candies:
             return []
 
@@ -42,3 +42,15 @@ class Solution:
             else:
                 ans.append(False)
         return ans
+    
+    def kidsWithCandies2(self, candies: List[int], extraCandies: int) -> List[bool]:
+        if not candies:
+            return []
+        max_candy = max(candies)
+        res, n = [], len(candies)
+        for i in range(n):
+            if candies[i] + extraCandies >= max_candy:
+                res.append(True)
+            else:
+                res.append(False)
+        return res
