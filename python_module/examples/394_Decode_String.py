@@ -79,4 +79,24 @@ class Solution:
                     digits = stack.pop() + digits
                 stack.append(chars * int(digits))
         return "".join(stack)
+    
+    def decodeString4(self, s: str) -> str:
+        if not s:
+            return ""
+        
+        stack = []
+        for ch in s:
+            if ch != ']':
+                stack.append(ch)
+            else:
+                sub_str = ""
+                while stack and stack[-1].isalpha():
+                    sub_str = stack.pop() + sub_str
+                stack.pop() # pop '['
+                digits = ""
+                while stack and stack[-1].isdigit():
+                    digits = stack.pop() + digits
+                
+                stack.append(sub_str * int(digits))
+        return "".join(stack)
 

@@ -56,7 +56,7 @@ class Solution:
             ]
         return dfs(root)[-1]
     
-    def longestZigZag(self, root: Optional[TreeNode]) -> int:
+    def longestZigZag2(self, root: Optional[TreeNode]) -> int:
         if not root:
             return 0
         
@@ -77,3 +77,22 @@ class Solution:
         helper(root.left, True, 1)
         helper(root.right, False, 1)
         return self.max_dep
+    
+    def longestZigZag3(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+        
+        def helper(node: TreeNode):
+            if not node:
+                return (-1, -1, -1)
+            
+            left = helper(node.left)
+            right = helper(node.right)
+
+            return (
+                left[1] + 1,
+                right[0] + 1,
+                max(left[1] + 1, right[0] + 1, left[2], right[2])
+            )
+        
+        return helper(root)[-1]

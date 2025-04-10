@@ -42,7 +42,7 @@ class Solution:
                 left = mid + 1
         return left
     
-    def minEatingSpeed(self, piles: List[int], h: int) -> int:
+    def minEatingSpeed2(self, piles: List[int], h: int) -> int:
         def is_valid(k: int) -> bool:
             cnt = 0
             for num in piles:
@@ -58,3 +58,22 @@ class Solution:
             else:
                 l = mid + 1 # can rule out mid as it failed
         return l
+    
+    def minEatingSpeed3(self, piles: List[int], h: int) -> int:
+        if not piles:
+            return 0
+        
+        def is_valid(k: int) -> bool:
+            cnt = 0
+            for pile in piles:
+                cnt += math.ceil(pile / k)
+            return cnt <= h
+        
+        left, right = 1, max(piles)
+        while left < right:
+            mid = (left + right) // 2
+            if is_valid(mid):
+                right = mid
+            else:
+                left = mid + 1
+        return left

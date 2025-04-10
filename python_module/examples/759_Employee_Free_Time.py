@@ -63,7 +63,7 @@ class Solution:
         
         return free_times
     
-    def employeeFreeTime(self, schedule: '[[Interval]]') -> '[Interval]':
+    def employeeFreeTime3(self, schedule: '[[Interval]]') -> '[Interval]':
         # Flatten and sort all intervals
         intervals = sorted([interval for employee in schedule for interval in employee], key=lambda x: x.start)
 
@@ -76,4 +76,17 @@ class Solution:
         res = []
         for i in range(1, len(merged)):
             res.append(Interval(merged[i - 1].end, merged[i].start))
+        return res
+    
+    def employeeFreeTime4(self, schedule: '[[Interval]]') -> '[Interval]':
+        intervals = sorted([interval for employee in schedule for interval in employee], key=lambda x: x.start)
+        merged = []
+        for interval in intervals:
+            if not merged or merged[-1].end < interval.start:
+                merged.append(interval)
+            else:
+                merged[-1].end = max(merged[-1].end, interval.end)
+        res = []
+        for i in range(len(merged) - 1):
+            res.append(Interval(merged[i].end, merged[i + 1].start))
         return res

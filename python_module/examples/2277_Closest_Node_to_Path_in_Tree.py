@@ -208,3 +208,46 @@ class Solution:
                     if neighbor not in seen:
                         que.append(neighbor)
         return res
+    
+    def closestNode5(self, n: int, edges: List[List[int]], query: List[List[int]]) -> List[int]:
+        if not query:
+            return []
+        
+        graph = defaultdict(list)
+        for u, v in edges:
+            graph[u].append(v)
+            graph[v].append(u)
+    
+        def helper(node: TreeNode, target: TreeNode, mask: int, path: list):
+            if node == target:
+                return path
+            
+            for neighbor in graph[node]:
+                if mask & (1 << neighbor) != 0:
+                    continue
+                
+                new_mask = mask | 1 << neighbor
+                res = helper(neighbor, target, new_mask, path + [neighbor])
+                if res:
+                    return res
+            return []
+        
+        res = []
+        for q in query:
+            path = helper(q[0], q[1], 1 << q[0], [q[0]])
+            if q[2] in path:
+                res.append(q[2])
+                continue
+            
+            que = deque([q[2]])
+            visited = set()
+            while que:
+                node = que.popleft()
+                if node in path:
+                    res.append(node)
+                    break
+                visited.add(node)
+                for neighbor in graph[node]:
+                    if neighbor not in visited:
+                        que.append(neighbor)
+        return res

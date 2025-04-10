@@ -44,7 +44,7 @@ class Solution:
         
         return cnt
     
-    def subarraySum(self, nums: List[int], k: int) -> int:
+    def subarraySum3(self, nums: List[int], k: int) -> int:
         prefix_sum = defaultdict(int)
         prefix_sum[0] = 1
         running_sum, cnt = 0, 0
@@ -54,4 +54,17 @@ class Solution:
             if (running_sum - k) in prefix_sum:
                 cnt += prefix_sum[running_sum - k]
             prefix_sum[running_sum] += 1
+        return cnt
+    
+    def subarraySum4(self, nums: List[int], k: int) -> int:
+        if not nums:
+            return 0
+        
+        sub_dict = defaultdict(int)
+        sub_dict[0] = 1
+        running_sum, cnt = 0, 0
+        for num in nums:
+            running_sum += num
+            cnt += sub_dict[running_sum - k]
+            sub_dict[running_sum] += 1
         return cnt

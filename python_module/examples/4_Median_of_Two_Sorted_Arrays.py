@@ -332,3 +332,66 @@ class Solution:
             else:
                 right = p1 -1
         return -1
+    
+    def findMedianSortedArrays12(self, nums1: List[int], nums2: List[int]) -> float:
+        if not nums1 and not nums2:
+            return 0
+        
+        if len(nums1) > len(nums2):
+            nums1, nums2 = nums2, nums1
+        
+        n1, n2 = len(nums1), len(nums2)
+        total = n1 + n2
+        half = (total + 1) // 2
+        left, right = 0, n1
+        while left <= right:
+            p1 = (left + right) // 2
+            p2 = half - p1
+
+            left_max1 = float('-inf') if p1 == 0 else nums1[p1 - 1]
+            right_min1 = float('inf') if p1 == n1 else nums1[p1]
+
+            left_max2 = float('-inf') if p2 == 0 else nums2[p2 - 1]
+            right_min2 = float('inf') if p2 == n2 else nums2[p2]
+
+            if left_max1 <= right_min2 and left_max2 <= right_min1:
+                if total % 2 == 0:
+                    return (max(left_max1, left_max2) + min(right_min1, right_min2)) / 2
+                else:
+                    return max(left_max1, left_max2)
+            elif left_max1 < right_min2:
+                left = p1 + 1
+            else:
+                right = p1 - 1
+        return -1
+    
+    def findMedianSortedArrays13(self, nums1: List[int], nums2: List[int]) -> float:
+        if not nums1 and not nums2:
+            return 0.0
+        
+        if len(nums1) > len(nums2):
+            nums1, nums2 = nums2, nums1
+        
+        n1, n2 = len(nums1), len(nums2)
+        total = n1 + n2
+        half = (total + 1) // 2
+        left, right = 0, n1
+        while left <= right:
+            p1 = (left + right) // 2
+            p2 = half - p1
+            left_max1 = float('-inf') if p1 == 0 else nums1[p1 - 1]
+            left_min1 = float('inf') if p1 == n1 else nums1[p1]
+
+            right_max2 = float('-inf') if p2 == 0 else nums2[p2 - 1]
+            right_min2 = float('inf') if p2 == n2 else nums2[p2]
+
+            if left_max1 <= right_min2 and right_max2 <= left_min1:
+                if total % 2 == 1:
+                    return max(left_max1, right_max2)
+                else:
+                    return (max(left_max1, right_max2) + min(left_min1, right_min2)) / 2
+            elif left_max1 < right_max2:
+                left = p1 + 1
+            else:
+                right = p1 - 1
+        return -1

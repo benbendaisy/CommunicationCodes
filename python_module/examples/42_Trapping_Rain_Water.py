@@ -93,7 +93,7 @@ class Solution:
             stack.append(i)
         return water
     
-    def trap(self, height: List[int]) -> int:
+    def trap5(self, height: List[int]) -> int:
         if not height:
             return 0
         stack, water = [], 0
@@ -107,6 +107,22 @@ class Solution:
                 water += w * h
             stack.append(i)
         return water
+    
+    def trap6(self, height: List[int]) -> int:
+        if not height:
+            return 0
+        
+        stack, max_water = [], 0
+        for i, v in enumerate(height):
+            while stack and height[stack[-1]] < v:
+                bottom = height[stack.pop()]
+                if not stack:
+                    break
+                h = min(height[stack[-1]], v) - bottom
+                w = i - stack[-1] - 1
+                max_water += w * h
+            stack.append(i)
+        return max_water
 
     
 

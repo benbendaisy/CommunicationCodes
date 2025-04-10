@@ -29,10 +29,22 @@ class Solution:
             cur = next
         return prev
     
-    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+    def reverseList2(self, head: Optional[ListNode]) -> Optional[ListNode]:
         if not head:
             return head
         prev, cur = None, head
+        while cur:
+            t = cur.next
+            cur.next = prev
+            prev = cur
+            cur = t
+        return prev
+    
+    def reverseList3(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        if not head or not head.next:
+            return head
+        
+        cur, prev = head, None
         while cur:
             t = cur.next
             cur.next = prev

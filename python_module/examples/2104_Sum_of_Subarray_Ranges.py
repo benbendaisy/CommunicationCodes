@@ -158,3 +158,23 @@ class Solution:
         for i in range(n):
             range_sum += helper(i, nums[i], nums[i])
         return range_sum
+    
+    def subArrayRanges(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        
+        self.sums = 0
+        n = len(nums)
+
+        def helper(end: int, cur_min: int, cur_max: int):
+            if end == n:
+                return
+            cur_max = max(cur_max, nums[end])
+            cur_min = min(cur_min, nums[end])
+            self.sums += cur_max - cur_min
+            helper(end + 1, cur_min, cur_max)
+        
+        for start in range(n):
+            helper(start, nums[start], nums[start])
+        
+        return self.sums

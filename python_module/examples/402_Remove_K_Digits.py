@@ -64,3 +64,16 @@ class Solution:
         
         stack = stack[:-k] if k > 0 else stack
         return "".join(stack).lstrip("0") or "0"
+    
+    def removeKdigits5(self, num: str, k: int) -> str:
+        if not num:
+            return ""
+        stack = []
+        for ch in num:
+            while k > 0 and stack and stack[-1] > ch:
+                k -= 1
+                stack.pop()
+            stack.append(ch)
+        if k > 0:
+            stack = stack[:-k]
+        return "".join(stack).lstrip("0") or "0"

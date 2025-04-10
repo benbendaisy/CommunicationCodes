@@ -44,9 +44,15 @@ class Solution:
         freq_set = set(freq.values())
         return len(freq) == len(freq_set)
     
-    def uniqueOccurrences(self, arr: List[int]) -> bool:
+    def uniqueOccurrences4(self, arr: List[int]) -> bool:
         freq = defaultdict(int)
         for num in arr:
             freq[num] += 1
         values = set(freq.values())
         return len(freq) == len(values)
+    
+    def uniqueOccurrences5(self, arr: List[int]) -> bool:
+        freq = defaultdict(int)
+        for num in arr:
+            freq[num] += 1
+        return len(freq) == len(set(freq.values()))

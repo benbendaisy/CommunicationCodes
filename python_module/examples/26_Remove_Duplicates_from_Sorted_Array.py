@@ -84,7 +84,7 @@ class Solution:
                 nums[idx] = nums[i]
         return idx + 1
     
-    def removeDuplicates(self, nums: List[int]) -> int:
+    def removeDuplicates4(self, nums: List[int]) -> int:
         if not nums:
             return 0
         n, idx = len(nums), 0
@@ -92,5 +92,16 @@ class Solution:
             if nums[idx] != nums[i]:
                 idx += 1
                 nums[idx] = nums[i]
-        return idx + 1 
+        return idx + 1
+    
+    def removeDuplicates(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        idx, n = 0, len(nums)
+        for i in range(1, n):
+            if nums[idx] != nums[i]:
+                idx += 1
+                nums[idx] = nums[i]
+                
+        return idx + 1
 

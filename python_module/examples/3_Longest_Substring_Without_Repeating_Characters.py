@@ -103,6 +103,19 @@ class Solution:
             max_len = max(max_len, i - left + 1)
         return max_len
 
+    def lengthOfLongestSubstring7(self, s: str) -> int:
+        if not s:
+            return 0
+
+        window = set()
+        max_len, left = 0, 0
+        for i, ch in enumerate(s):
+            while ch in window:
+                window.remove(s[left])
+                left += 1
+            max_len = max(max_len, i - left + 1)
+            window.add(ch)
+        return max_len
 
 if __name__ == "__main__":
     s = "abba"

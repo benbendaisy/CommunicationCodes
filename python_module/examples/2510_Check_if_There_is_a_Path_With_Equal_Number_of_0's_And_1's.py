@@ -35,7 +35,7 @@ class Solution:
             return False
         return helper(0, 0, 0)
     
-    def isThereAPath(self, grid: List[List[int]]) -> bool:
+    def isThereAPath2(self, grid: List[List[int]]) -> bool:
         m, n = len(grid), len(grid[0])
         @cache
         def helper(row: int, col: int, balance: int) -> bool:
@@ -56,3 +56,44 @@ class Solution:
                     return True
             return False
         return helper(0, 0, 0)
+    
+    def isThereAPath3(self, grid: List[List[int]]) -> bool:
+        if not grid:
+            return True
+        
+        m, n = len(grid), len(grid[0])
+        @cache
+        def helper(row: int, col: int, balance: int) -> bool:
+            if row >= m or col >= n:
+                return False
+            balance += -1 if grid[row][col] == 0 else 1
+            if row == m - 1 and col == n - 1:
+                return balance == 0
+            for dx, dy in ((1, 0), (0, 1)):
+                new_row, new_col = row + dx, col + dy
+                if helper(new_row, new_col, balance):
+                    return True
+                    
+            return False
+        
+        return helper(0, 0, 0)
+    
+    def isThereAPath4(self, grid: List[List[int]]) -> bool:
+        if not grid:
+            return True
+        
+        m, n = len(grid), len(grid[0])
+        @cache
+        def helper(row: int, col: int, balance: int) -> bool:
+            if row == m - 1 and col == n - 1:
+                return balance == 0
+
+            for dx, dy in ((1, 0), (0, 1)):
+                new_row, new_col = row + dx, col + dy
+                if 0 <= new_row < m and 0 <= new_col < n:
+                    new_balance = balance + (-1 if grid[new_row][new_col] == 0 else 1)
+                    if helper(new_row, new_col, new_balance):
+                        return True
+            return False
+        balance = -1 if grid[0][0] == 0 else 1
+        return helper(0, 0, balance)

@@ -44,7 +44,7 @@ class Solution:
                 stack.append((x, y))
         return len([p for p in stack if counter[p] == 1])
 
-    def visibleMountains(self, peaks: List[List[int]]) -> int:
+    def visibleMountains2(self, peaks: List[List[int]]) -> int:
         if not peaks:
             return 0
         freq = defaultdict(int)
@@ -66,4 +66,28 @@ class Solution:
             if not stack or not within(stack[-1], (x, y)):
                 stack.append((x, y))
             
+        return len([p for p in stack if freq[p] == 1])
+    
+    def visibleMountains3(self, peaks: List[List[int]]) -> int:
+        if not peaks:
+            return 0
+        
+        def within(p1, p2):
+            x1, y1 = p1
+            x2, y2 = p2
+            b1 = y1 - x1
+            b2 = y1 + x1
+            return y2 <= x2 + b1 and y2 <= -x2 + b2
+
+        freq = defaultdict(int)
+        for peak in peaks:
+            freq[tuple(peak)] += 1
+        
+        sorted_peaks = sorted(freq.keys())
+        stack = []
+        for x, y in sorted_peaks:
+            while stack and within((x, y), stack[-1]):
+                stack.pop()
+            if not stack or not within(stack[-1], (x, y)):
+                stack.append((x, y))
         return len([p for p in stack if freq[p] == 1])

@@ -41,7 +41,7 @@ class Solution:
     Output: You guessed the secret word correctly.
     Explanation: Since there are two words, you can guess both.
     """
-    def findSecretWord(self, wordlist: List[str], master: 'Master') -> None:
+    def findSecretWord1(self, wordlist: List[str], master: 'Master') -> None:
         def hamming_distance(w1: str, w2: str) -> int:
             return sum(1 for k in range(6) if w1[k] != w2[k])
 
@@ -57,3 +57,17 @@ class Solution:
 			# number of guesses may be ecxeed 10, but in next attempt it's not, etc.
             current_guess = words.pop()
             curr_distance = 6 - Master.guess(master, current_guess)
+    
+    def findSecretWord2(self, words: List[str], master: 'Master') -> None:
+        if not words:
+            return
+        def hamilton_distance(word1: str, word2: str) -> int:
+            return sum(1 for i in range(len(word1)) if word1[i] != word2[i])
+        
+        cur_guess = words[0]
+        cur_distance = 6 - Master.guess(master, cur_guess)
+        while cur_distance != 0:
+            words = [word for word in words if hamilton_distance(cur_guess, word) == cur_distance]
+            cur_guess = words.pop()
+            cur_distance = 6 - Master.guess(master, cur_guess)
+

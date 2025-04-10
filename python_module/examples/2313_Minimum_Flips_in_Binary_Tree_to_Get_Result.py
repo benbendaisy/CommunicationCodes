@@ -105,7 +105,7 @@ class Solution:
         
         return dfs(root, result)
     
-    def minimumFlips(self, root: Optional[TreeNode], result: bool) -> int:
+    def minimumFlips3(self, root: Optional[TreeNode], result: bool) -> int:
         if not root:
             return -1
         
@@ -137,5 +137,77 @@ class Solution:
                         return min(left_true + right_false, left_false + right_true)
                     else:
                         return min(left_true + right_true, left_false + right_false)
+            return float('inf')
+        return helper(root, result)
+    
+    def minimumFlips4(self, root: Optional[TreeNode], result: bool) -> int:
+        if not root:
+            return -1
+        
+        @cache
+        def helper(node: TreeNode, target: bool) -> int:
+            if not node.left and not node.right:
+                return int(node.val != target)
+            
+            if node.val == 5:
+                return helper(node.left or node.right, not target)
+            
+            left_true = helper(node.left, True)
+            left_false = helper(node.left, False)
+            right_true = helper(node.right, True)
+            right_false = helper(node.right, False)
+
+            match node.val:
+                case 2:
+                    if target:
+                        return min(left_true, right_true)
+                    else:
+                        return left_false + right_false
+                case 3:
+                    if target:
+                        return left_true + right_true
+                    else:
+                        return min(left_false, right_false)
+                case 4:
+                    if target:
+                        return min(left_true + right_false, left_false + right_true)
+                    else:
+                        return min(left_true + right_true, left_false + right_false)
+            return float('inf')
+        return helper(root, result)
+    
+    def minimumFlips5(self, root: Optional[TreeNode], result: bool) -> int:
+        if not root:
+            return -1
+        
+        @cache
+        def helper(node: TreeNode, target: bool) -> int:
+            if not node.left and not node.right:
+                return int(node.val != target)
+            
+            if node.val == 5:
+                return helper(node.left or node.right, not target)
+            
+            left_true = helper(node.left, True)
+            left_false = helper(node.left, False)
+            right_true = helper(node.right, True)
+            right_false = helper(node.right, False)
+
+            match node.val:
+                case 2:
+                    if target:
+                        return min(left_true, right_true)
+                    else:
+                        return left_false + right_false
+                case 3:
+                    if target:
+                        return left_true + right_true
+                    else:
+                        return min(left_false, right_false)
+                case 4:
+                    if target:
+                        return min(left_true + right_false, left_false + right_true)
+                    else:
+                        return min(left_false + right_false, left_true + right_true)
             return float('inf')
         return helper(root, result)

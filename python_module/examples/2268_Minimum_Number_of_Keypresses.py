@@ -33,4 +33,41 @@ class Solution:
     Type 'l' by pressing button 3 twice.
     A total of 15 button presses are needed, so return 15.
     """
-    def minimumKeypresses(self, s: str) -> int:
+    def minimumKeypresses1(self, s: str) -> int:
+        # Count the frequency of each character in the string
+        freq = defaultdict(int)
+        for char in s:
+            freq[char] += 1
+        
+        # Sort characters by frequency in descending order
+        sorted_chars = sorted(freq.items(), key=lambda x: -x[1])
+        
+        total_presses = 0
+        # The first 9 chars contribute 1 press, next 9 contribute 2, remaining 8 contribute 3
+        for index, (char, count) in enumerate(sorted_chars):
+            if index < 9:
+                total_presses += count * 1
+            elif index < 18:
+                total_presses += count * 2
+            else:
+                total_presses += count * 3
+        
+        return total_presses
+    
+    def minimumKeypresses2(self, s: str) -> int:
+        if not s:
+            return 0
+        freq = defaultdict(int)
+        for ch in s:
+            freq[ch] += 1
+        
+        sorted_arr = sorted(freq.items(), key=lambda x: -x[1])
+        cnt = 0
+        for idx, (_, value) in enumerate(sorted_arr):
+            if idx < 9:
+                cnt += value * 1
+            elif idx < 18:
+                cnt += value * 2
+            else:
+                cnt += value * 3
+        return cnt

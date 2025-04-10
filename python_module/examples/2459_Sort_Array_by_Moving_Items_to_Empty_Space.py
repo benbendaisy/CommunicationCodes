@@ -69,7 +69,7 @@ class Solution:
 
         return min(helper(nums[:]), helper([nums[-1]] + nums[:-1]))
     
-    def sortArray(self, nums: List[int]) -> int:
+    def sortArray4(self, nums: List[int]) -> int:
         n = len(nums)
 
         def helper(arr: List[int]) -> int:
@@ -89,3 +89,20 @@ class Solution:
 
 
         return min(helper(nums[:]), helper([nums[-1]] + nums[:-1]))
+    
+    def sortArray5(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        def helper(arr: list) -> int:
+            n, cnt = len(arr), 0
+            for i in range(n):
+                if i > 0 and arr[i] != i:
+                    arr[0] = arr[i]
+                    arr[i] = 0
+                    cnt += 1
+                while arr[0] != 0:
+                    pos = arr[0]
+                    arr[0], arr[pos] = arr[pos], arr[0]
+                    cnt += 1
+            return cnt
+        return min(helper(nums[:]), helper(nums[-1:] + nums[:-1]))

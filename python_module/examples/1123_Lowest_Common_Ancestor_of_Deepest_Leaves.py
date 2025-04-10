@@ -25,7 +25,7 @@ class Solution:
         
         return helper(root)[1]
     
-    def lcaDeepestLeaves(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+    def lcaDeepestLeaves2(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
         def dfs(node):
             if not node:
                 return 0, None  # depth, LCA
@@ -41,3 +41,23 @@ class Solution:
                 return left_depth + 1, node  # This node is the LCA
 
         return dfs(root)[1]  # Extract the LCA from the tuple
+    
+    def lcaDeepestLeaves3(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        if not root:
+            return root
+        
+        def helper(node: TreeNode):
+            if not node:
+                return (0, None)
+            
+            left_dep, left_lca = helper(node.left)
+            right_dep, right_lca = helper(node.right)
+
+            if left_dep > right_dep:
+                return (left_dep + 1, left_lca)
+            elif right_dep > left_dep:
+                return (right_dep + 1, right_lca)
+            
+            return (left_dep + 1, node)
+        
+        return helper(root)[1]

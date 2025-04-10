@@ -37,7 +37,7 @@ class Solution:
 
         return sum(sum(row) for row in grid)
     
-    def numEnclaves(self, grid: List[List[int]]) -> int:
+    def numEnclaves2(self, grid: List[List[int]]) -> int:
         if not grid:
             return 0
         m, n = len(grid), len(grid[0])
@@ -54,3 +54,23 @@ class Solution:
                 if grid[r][c] == 1 and (r == 0 or r == m - 1 or c == 0 or c == n - 1):
                     helper(r, c)
         return sum(sum(row) for row in grid)
+    
+    def numEnclaves3(self, grid: List[List[int]]) -> int:
+        if not grid:
+            return 0
+        m, n = len(grid), len(grid[0])
+
+        def helper(row: int, col: int):
+            if row < 0 or row >= m or col < 0 or col >= n or grid[row][col] == 0:
+                return
+            
+            grid[row][col] = 0
+            for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1)):
+                new_row, new_col = row + dx, col + dy
+                helper(new_row, new_col)
+        
+        for row in range(m):
+            for col in range(n):
+                if grid[row][col] == 1 and (row == 0 or row == m - 1 or col == 0 or col == n - 1):
+                    helper(row, col)
+        return sum([sum(row) for row in grid])

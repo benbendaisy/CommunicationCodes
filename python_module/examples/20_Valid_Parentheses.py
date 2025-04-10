@@ -62,7 +62,7 @@ class Solution:
                 stack.append(ch)
         return not stack
     
-    def isValid(self, s: str) -> bool:
+    def isValid4(self, s: str) -> bool:
         mappings = {"}":"{", ")":"(", "]":"["}
         stack = []
         for ch in s:
@@ -72,4 +72,20 @@ class Solution:
                 stack.pop()
             else:
                 stack.append(ch)
+        return not stack
+    
+    def isValid(self, s: str) -> bool:
+        mappings = {
+            ')' : '(',
+            ']' : '[',
+            '}' : '{'
+        }
+        stack = []
+        for ch in s:
+            if ch not in mappings:
+                stack.append(ch)
+            else:
+                if not stack or mappings[ch] != stack[-1]:
+                    return False
+                stack.pop()
         return not stack

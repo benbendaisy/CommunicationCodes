@@ -26,4 +26,92 @@ class Solution:
     Based on the first two equations, we get code / et = 0.4.
     Since the third equation is code / et = 0.5, we get a contradiction.
     """
-    def checkContradictions(self, equations: List[List[str]], values: List[float]) -> bool:
+    def checkContradictions1(self, equations: List[List[str]], values: List[float]) -> bool:
+        if not equations:
+            return False
+        
+        graph = defaultdict(list)
+        for i, (u, v) in enumerate(equations):
+            graph[u].append((v, values[i]))
+            graph[v].append((u, 1 / values[i]))
+
+        # Dictionary to keep track of assigned values to each variable
+        value_dict = {}
+        
+        # BFS queue
+        queue = deque()
+        
+        # Iterate through all variables in the graph
+        for node in graph:
+            if node not in value_dict:
+                # Assign a starting value (1.0) to the current node
+                value_dict[node] = 1.0
+                queue.append(node)
+                
+                while queue:
+                    current = queue.popleft()
+                    for neighbor, weight in graph[current]:
+                        # Calculate the value for the neighbor based on current node's value
+                        new_value = value_dict[current] / weight
+                        
+                        if neighbor in value_dict:
+                            # Check if the calculated value contradicts the existing value
+                            if not math.isclose(new_value, value_dict[neighbor], rel_tol=1e-9):
+                                return True  # Contradiction found
+                        else:
+                            # Assign the new value and continue BFS
+                            value_dict[neighbor] = new_value
+                            queue.append(neighbor)
+        
+        return False  # No contradictions found
+    
+    def checkContradictions2(self, equations: List[List[str]], values: List[float]) -> bool:
+        if not equations:
+            return False
+        
+        graph = defaultdict(list)
+        for (u, v), value in zip(equations, values):
+            graph[u].append((v, value))
+            graph[v].append((u, 1 / value))
+        value_dict, que = {}, deque()
+        for node in graph:
+            if node not in value_dict:
+                value_dict[node] = 1.0
+                que.append(node)
+                while que:
+                    cur = que.popleft()
+                    for neighbor, weight in graph[cur]:
+                        new_value = value_dict[cur] / weight
+                        if neighbor in value_dict:
+                            if abs(new_value - value_dict[neighbor]) > 0.0000001:
+                                return True
+                        else:
+                            value_dict[neighbor] = new_value
+                            que.append(neighbor)
+        return False
+    
+    def checkContradictions3(self, equations: List[List[str]], values: List[float]) -> bool:
+        if not equations:
+            return False
+        
+        graph = defaultdict(list)
+        for (u, v), value in zip(equations, values):
+            graph[u].append((v, value))
+            graph[v].append((u, 1 / value))
+        
+        que, value_dict = deque(), {}
+        for node in graph:
+            if node not in value_dict:
+                value_dict[node] = 1.0 # validate current node
+                que.append(node) # use node as a start point to calculate the value with base value as 1.0
+                while que:
+                    cur = que.popleft()
+                    for neighbor, weight in graph[cur]:
+                        new_value = value_dict[cur] / weight # calculate the new value for the neighbor
+                        if neighbor in value_dict: # if the value of neighbor already exists, compare the new value
+                            if abs(value_dict[neighbor] - new_value) > 0.0001:
+                                return True
+                        else:
+                            value_dict[neighbor] = new_value
+                            que.append(neighbor)
+        return False

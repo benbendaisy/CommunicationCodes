@@ -210,6 +210,34 @@ class Solution:
                 if in_degree[neighbor] == 0:
                     que.append(neighbor)
         return res if visited_cnt == n else -1
+    
+    def largestPathValue7(self, colors: str, edges: List[List[int]]) -> int:
+        if not colors:
+            return 0
+        
+        n = len(colors)
+        graph, in_degree = defaultdict(list), [0] * n
+        for u, v in edges:
+            graph[u].append(v)
+            in_degree[v] += 1
+        
+        que = [i for i in range(n) if in_degree[i] == 0]
+        color_dict = [defaultdict(int) for _ in range(n)]
+        visited_node, max_color = 0, 0
+        while que:
+            node = que.pop()
+            cur_color = colors[node]
+            color_dict[node][cur_color] += 1
+            max_color = max(max_color, color_dict[node][cur_color])
+            visited_node += 1
+            for neighbor in graph[node]:
+                for cl in color_dict[node]:
+                    color_dict[neighbor][cl] = max(color_dict[neighbor][cl], color_dict[node][cl])
+                in_degree[neighbor] -= 1
+                if in_degree[neighbor] == 0:
+                    que.append(neighbor)
+        
+        return max_color if visited_node == n else -1
 
 if __name__ == "__main__":
     colors = "abaca"
