@@ -19,7 +19,7 @@ class Solution:
     Output: 16
     Explanation: Pick pizza slice of size 8 in each turn. If you pick slice with size 9 your partners will pick slices of size 8.
     """
-    def maxSizeSlices(self, slices: List[int]) -> int:
+    def maxSizeSlices1(self, slices: List[int]) -> int:
         """
         Calculate the maximum sum of slice sizes you can pick when:
         - You pick any slice
@@ -50,5 +50,22 @@ class Solution:
         # Since you can pick at most n/3 slices, we need to run the recursion twice:
         # Once excluding the first slice and once excluding the last slice to handle the circular nature.
         # This ensures that we don't pick both the first and last slices, which would violate the rules.
+        remaining = n // 3
+        return max(helper(0, n - 2, remaining), helper(1, n - 1, remaining))
+    
+    def maxSizeSlices2(self, slices: List[int]) -> int:
+        if not slices:
+            return 0
+        
+        @cache
+        def helper(start: int, end: int, remaining: int) -> int:
+            if start > end or remaining == 0:
+                return 0
+            # option 1: take start and skip next 2
+            take = slices[start] + helper(start + 2, end, remaining - 1)
+            skip = helper(start + 1, end, remaining)
+
+            return max(take, skip)
+        n = len(slices)
         remaining = n // 3
         return max(helper(0, n - 2, remaining), helper(1, n - 1, remaining))

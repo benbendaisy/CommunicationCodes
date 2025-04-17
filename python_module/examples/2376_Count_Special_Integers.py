@@ -123,7 +123,7 @@ class Solution:
         cnt += helper(0, True, 0)
         return cnt
 
-    def countSpecialNumbers(self, n: int) -> int:
+    def countSpecialNumbers5(self, n: int) -> int:
         str_n = str(n)
         len_n = len(str_n)
 
@@ -146,6 +146,33 @@ class Solution:
                     continue
                 
                 total += helper(idx + 1, is_prefix_limit and digit == upper_bound, mask | (1 << digit))
+            return total
+        
+        cnt += helper(0, True, 0)
+        return cnt
+    
+    def countSpecialNumbers6(self, n: int) -> int:
+        n_str = str(n)
+        len_n = len(n_str)
+
+        cnt = 0
+        for i in range(1, len_n):
+            f = 9
+            for j in range(1, i):
+                f *= (10 - j)
+            cnt += f
+        
+        @cache
+        def helper(idx: int, is_prefix_limit: bool, mask: int) -> int:
+            if idx == len_n:
+                return 1
+            
+            total = 0
+            upper_bound = int(n_str[idx]) if is_prefix_limit else 9
+            for digit in range(0 if idx > 0 else 1, upper_bound + 1):
+                if (mask & (1 << digit)) != 0:
+                    continue
+                total += helper(idx + 1, digit == upper_bound and is_prefix_limit, mask | (1 << digit))
             return total
         
         cnt += helper(0, True, 0)

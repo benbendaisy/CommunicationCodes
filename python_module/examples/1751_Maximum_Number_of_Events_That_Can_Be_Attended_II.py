@@ -49,7 +49,7 @@ class Solution:
                 dp[i][j] = max(dp[i + 1][j], events[i][2] + dp[next][j - 1])
         return dp[0][k]
     
-    def maxValue(self, events: List[List[int]], k: int) -> int:
+    def maxValue3(self, events: List[List[int]], k: int) -> int:
         if not events:
             return 0
         
@@ -75,3 +75,23 @@ class Solution:
         
         # Start from first event with k selections available
         return helper(0, k)
+    
+    def maxValue4(self, events: List[List[int]], k: int) -> int:
+        if not events:
+            return 0
+        
+        events.sort()
+        start_days = [x for x, _, _ in events]
+        n = len(start_days)
+        @cache
+        def helper(idx: int, m: int) -> int:
+            if idx == n or m == 0:
+                return 0
+            # skip the class
+            opt1 = helper(idx + 1, m)
+            # take the class
+            next_id = bisect.bisect_right(start_days, events[idx][1])
+            opt2 = events[idx][2] + helper(next_id, m - 1)
+            return max(opt1, opt2)
+        return helper(0, k)
+    

@@ -76,3 +76,25 @@ class Solution:
                 helper(i, running_sum + candidates[i], path + [candidates[i]])
         helper(0, 0, [])
         return res
+    
+    def combinationSum4(self, candidates: List[int], target: int) -> List[List[int]]:
+        if not candidates:
+            return []
+        
+        n, res = len(candidates), []
+
+        @cache
+        def helper(idx: int, path: tuple):
+            path_sum = sum(path)
+            if path_sum == target:
+                res.append(list(path))
+                return
+                    
+            if idx == n:
+                return
+            
+            for i in range(idx, n):
+                if candidates[i] + path_sum <= target:
+                    helper(i, path + (candidates[i],))
+        helper(0, ())
+        return res

@@ -131,7 +131,7 @@ class Solution:
         
         return res.strip()
 
-    def numberToWords(self, num: int) -> str:
+    def numberToWords4(self, num: int) -> str:
         below_20 = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"]
         tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"]
         thousands = ["", "Thousand", "Million", "Billion"]
@@ -145,6 +145,54 @@ class Solution:
                 return tens[value // 10] + " " + helper(value % 10)
             else:
                 return below_20[value // 100] + " Hundred " + helper(value % 100)
+        
+        if num == 0:
+            return "Zero"
+        res = ""
+        for i in range(len(thousands)):
+            if num % 1000 != 0:
+                res = helper(num % 1000) + thousands[i] + " " + res
+            num //= 1000
+        return res.strip()
+    
+    def numberToWords5(self, num: int) -> str:
+        below_20 = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"]
+        tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"]
+        thousands = ["", "Thousand", "Million", "Billion"]
+        
+        def helper(value: int) -> str:
+            if value == 0:
+                return ""
+            elif value < 20:
+                return below_20[value] + " "
+            elif value < 100:
+                return tens[value // 10] + " " + helper(value % 10)
+
+            return below_20[value // 100] + " Hundred " + helper(value % 100)
+        
+        if num == 0:
+            return "Zero"
+        
+        res = ""
+        for i in range(len(thousands)):
+            if num % 1000 != 0:
+                res = helper(num % 1000) + thousands[i] + " " + res
+            num = num // 1000
+        return res.strip()
+    
+    def numberToWords6(self, num: int) -> str:
+        below_20 = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"]
+        tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"]
+        thousands = ["", "Thousand", "Million", "Billion"]
+        
+        def helper(value: int) -> str:
+            if value == 0:
+                return ""
+            elif value < 20:
+                return below_20[value] + " "
+            elif value < 100:
+                return tens[value // 10] + " " + helper(value % 10)
+            return below_20[value // 100] + " Hundred " + helper(value % 100)
         
         if num == 0:
             return "Zero"

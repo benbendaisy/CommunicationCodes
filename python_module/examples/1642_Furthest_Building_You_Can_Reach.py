@@ -142,7 +142,7 @@ class Solution:
 
         return len(heights) - 1  # We reached the last building
     
-    def furthestBuilding(self, heights: List[int], bricks: int, ladders: int) -> int:
+    def furthestBuilding6(self, heights: List[int], bricks: int, ladders: int) -> int:
         heap = []
         n = len(heights)
         for i in range(len(heights) - 1):
@@ -151,6 +151,21 @@ class Solution:
             if diff > 0:
                 heapq.heappush(heap, diff)
             
+            if len(heap) > ladders:
+                bricks -= heapq.heappop(heap)
+            
+            if bricks < 0:
+                return i
+        return n - 1
+    
+    def furthestBuilding7(self, heights: List[int], bricks: int, ladders: int) -> int:
+        heap = []
+        n = len(heights)
+        for i in range(n - 1):
+            diff = heights[i + 1] - heights[i]
+            if diff > 0:
+                heapq.heappush(heap, diff)
+
             if len(heap) > ladders:
                 bricks -= heapq.heappop(heap)
             

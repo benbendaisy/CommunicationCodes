@@ -108,7 +108,7 @@ class Solution:
                 
         return result
     
-    def maxSumSubmatrix(self, matrix: List[List[int]], k: int) -> int:
+    def maxSumSubmatrix3(self, matrix: List[List[int]], k: int) -> int:
         if not matrix or not matrix[0]:
             return 0
         
@@ -130,4 +130,26 @@ class Solution:
                     if idx < len(sorted_sums):
                         res = max(res, prefix_sum - sorted_sums[idx])
                     sorted_sums.add(prefix_sum)
+        return res
+    
+    def maxSumSubmatrix(self, matrix: List[List[int]], k: int) -> int:
+        if not matrix or not matrix[0]:
+            return 0
+        
+        m, n = len(matrix), len(matrix[0])
+        res = float('-inf')
+        for left in range(n):
+            row_sums = [0] * m
+            for right in range(left, n):
+                for i in range(m):
+                    row_sums[i] += matrix[i][right]
+            
+                prefix_sum, sorted_nums = 0, SortedList([0])
+                for val in row_sums:
+                    prefix_sum += val
+                    target = prefix_sum - k
+                    idx = sorted_nums.bisect_left(target)
+                    if idx < len(sorted_nums):
+                        res = max(res, prefix_sum - sorted_nums[idx])
+                    sorted_nums.add(prefix_sum)
         return res

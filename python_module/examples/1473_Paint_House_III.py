@@ -45,7 +45,7 @@ class Solution:
         0 <= houses[i] <= n
         1 <= cost[i][j] <= 104
     """
-    def minCost(self, houses: List[int], cost: List[List[int]], m: int, n: int, target: int) -> int:
+    def minCost1(self, houses: List[int], cost: List[List[int]], m: int, n: int, target: int) -> int:
         maxCnt = 1000001
         @lru_cache(None)
         def findMinCost(hidex: int, neighborcnt: int, prevColor: int):
@@ -67,7 +67,7 @@ class Solution:
         minCost = findMinCost(0, 0, -1)
         return minCost if minCost != maxCnt else -1
     
-    def minCost(houses: List[int], cost: List[List[int]], m: int, n: int, target: int) -> int:
+    def minCost2(houses: List[int], cost: List[List[int]], m: int, n: int, target: int) -> int:
         INF = float('inf')
 
         @lru_cache(None)  # Memoization to avoid recomputation
@@ -95,7 +95,7 @@ class Solution:
         result = dfs(0, 0, 0)
         return result if result != INF else -1
     
-    def minCost(self, houses: List[int], cost: List[List[int]], m: int, n: int, target: int) -> int:
+    def minCost3(self, houses: List[int], cost: List[List[int]], m: int, n: int, target: int) -> int:
         inf = float('inf')
 
         @cache
@@ -116,3 +116,27 @@ class Solution:
             return min_cost
         res = helper(0, 0, 0)
         return res if res != inf else -1
+    
+    def minCost4(self, houses: List[int], cost: List[List[int]], m: int, n: int, target: int) -> int:
+        if not houses or not cost or len(houses) != len(cost):
+            return 0
+        
+        @cache
+        def helper(idx: int, last_color: int, neighbors: int) -> int:
+            if idx == m:
+                return 0 if neighbors == target else float('inf')
+            
+            if neighbors > target:
+                return float('inf')
+
+            if houses[idx] != 0:
+                return helper(idx + 1, houses[idx], neighbors + (last_color != houses[idx]))
+            
+            min_cost = float('inf')
+            for i in range(1, n + 1):
+                new_neighbors = neighbors + (i != last_color)
+                min_cost = min(min_cost, cost[idx][i - 1] + helper(idx + 1, i, new_neighbors))
+            return min_cost
+        
+        res = helper(0, -1, 0)
+        return res if res != float('inf') else -1

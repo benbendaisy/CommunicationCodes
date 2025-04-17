@@ -56,7 +56,7 @@ class Solution:
                     dp[i] = max(dp[i], 1 + dp[j])
         return max(dp)
 
-    def maxEnvelopes(self, envelopes: List[List[int]]) -> int:
+    def maxEnvelopes3(self, envelopes: List[List[int]]) -> int:
         if not envelopes:
             return 0
         envelopes.sort(key=lambda x: (x[0], -x[1]))
@@ -72,7 +72,7 @@ class Solution:
 
         return lis([x[1] for x in envelopes])
     
-    def maxEnvelopes(self, envelopes: List[List[int]]) -> int:
+    def maxEnvelopes4(self, envelopes: List[List[int]]) -> int:
         if not envelopes:
             return 0
         
@@ -104,6 +104,21 @@ class Solution:
                 dp[left] = h
         
         # The length of dp represents the length of the longest increasing subsequence
+        return len(dp)
+    
+    def maxEnvelopes5(self, envelopes: List[List[int]]) -> int:
+        if not envelopes:
+            return 0
+        envelopes.sort(key=lambda x: (x[0], -x[1]))
+        dp = []
+
+        for _, height in envelopes:
+            idx = bisect.bisect_left(dp, height)
+            if idx == len(dp):
+                dp.append(height)
+            else:
+                dp[idx] = height
+        
         return len(dp)
 
 

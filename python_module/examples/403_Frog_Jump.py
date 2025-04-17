@@ -76,7 +76,7 @@ class Solution:
         
         return helper(1, 1)
     
-    def canCross(self, stones: List[int]) -> bool:
+    def canCross4(self, stones: List[int]) -> bool:
         if not stones or len(stones) < 2 or stones[1] != 1:
             return False
         pos_set = {v for _, v in enumerate(stones)}
@@ -88,6 +88,24 @@ class Solution:
             for next_jump in (last_jump - 1, last_jump, last_jump + 1):
                 next_pos = position + next_jump
                 if next_pos <= position:
+                    continue
+                if next_pos in pos_set and helper(next_pos, next_jump):
+                    return True
+            return False
+        return helper(1, 1)
+    
+    def canCross5(self, stones: List[int]) -> bool:
+        if not stones or len(stones) < 2 or stones[1] != 1:
+            return False
+        pos_set = {v for _, v in enumerate(stones)}
+        @cache
+        def helper(pos: int, last_jumps: int) -> bool:
+            if pos == stones[-1]:
+                return True
+            
+            for next_jump in (last_jumps - 1, last_jumps, last_jumps + 1):
+                next_pos = pos + next_jump
+                if next_pos <= pos:
                     continue
                 if next_pos in pos_set and helper(next_pos, next_jump):
                     return True

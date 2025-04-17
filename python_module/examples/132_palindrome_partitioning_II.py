@@ -63,7 +63,7 @@ class Solution:
             return min_cut
         return helper(0, 0)
     
-    def minCut(self, s: str) -> int:
+    def minCut4(self, s: str) -> int:
         n = len(s)
     
         # dp[i] represents the minimum cuts needed for s[i:n]
@@ -105,6 +105,29 @@ class Solution:
             return min_cuts
         
         return min_cuts_helper(0)
+    
+    def minCut5(self, s: str) -> int:
+        n = len(s)
+
+        @cache
+        def is_valid(i: int, j: int) -> bool:
+            while i < j and s[i] == s[j]:
+                i += 1
+                j -= 1
+            return i >= j
+
+        @cache
+        def helper(idx: int) -> int:
+            if idx == n or is_valid(idx, n - 1):
+                return 0
+            
+            min_cut = float('inf')
+            for i in range(idx, n):
+                if is_valid(idx, i):
+                    min_cut = min(min_cut, 1 + helper(i + 1))
+            return min_cut
+        
+        return helper(0)
 
 if __name__ == "__main__":
     s = "apjesgpsxoeiokmqmfgvjslcjukbqxpsobyhjpbgdfruqdkeiszrlmtwgfxyfostpqczidfljwfbbrflkgdvtytbgqalguewnhvvmcgxboycffopmtmhtfizxkmeftcucxpobxmelmjtuzigsxnncxpaibgpuijwhankxbplpyejxmrrjgeoevqozwdtgospohznkoyzocjlracchjqnggbfeebmuvbicbvmpuleywrpzwsihivnrwtxcukwplgtobhgxukwrdlszfaiqxwjvrgxnsveedxseeyeykarqnjrtlaliyudpacctzizcftjlunlgnfwcqqxcqikocqffsjyurzwysfjmswvhbrmshjuzsgpwyubtfbnwajuvrfhlccvfwhxfqthkcwhatktymgxostjlztwdxritygbrbibdgkezvzajizxasjnrcjwzdfvdnwwqeyumkamhzoqhnqjfzwzbixclcxqrtniznemxeahfozp"

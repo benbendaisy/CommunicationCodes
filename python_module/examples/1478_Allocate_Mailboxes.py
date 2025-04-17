@@ -19,7 +19,7 @@ class Solution:
     Explanation: Allocate mailboxes in position 3 and 14.
     Minimum total distance from each houses to nearest mailboxes is |2-3| + |3-3| + |5-3| + |12-14| + |18-14| = 9.
     """
-    def minDistance(self, houses: List[int], k: int) -> int:
+    def minDistance1(self, houses: List[int], k: int) -> int:
         if not houses:
             return -1
 
@@ -45,5 +45,28 @@ class Solution:
             for i in range(idx, n - m + 1): # Ensure enough houses left for remaining mailboxes
                 min_cost = min(min_cost, cost[idx][i] + helper(i + 1, m - 1))
             return min_cost
+        
+        return helper(0, k)
+    
+    def minDistance2(self, houses: List[int], k: int) -> int:
+        if not houses or len(houses) < k:
+            return 0
+        n = len(houses)
+        houses.sort()
+        costs = [[0] * n for _ in range(n)]
+        for left in range(n):
+            for right in range(n):
+                median = (left + right) // 2
+                costs[left][right] = sum(abs(houses[k] - houses[median]) for k in range(left, right + 1))
+
+        @cache
+        def helper(idx: int, m: int) -> int:
+            if m == 1:
+                return costs[idx][n - 1]
+            
+            min_dis = float('inf')
+            for i in range(idx, n - m + 1):
+                min_dis = min(min_dis, costs[idx][i] + helper(i + 1, m - 1))
+            return min_dis
         
         return helper(0, k)

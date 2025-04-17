@@ -56,9 +56,16 @@ class Solution:
         sorted_words = [word for word, _ in sorted_items]
         return sorted_words[:k]
     
-    def topKFrequent(self, words: List[str], k: int) -> List[str]:
+    def topKFrequent4(self, words: List[str], k: int) -> List[str]:
         # Count word frequencies
         freq = Counter(words)
         
         # Use a min-heap to get top k frequent words with correct ordering
         return [word for word, _ in heapq.nsmallest(k, freq.items(), key=lambda x: (-x[1], x[0]))]
+    
+    def topKFrequent5(self, words: List[str], k: int) -> List[str]:
+        # Count word frequencies
+        freq = Counter(words)
+        sorted_freq = sorted(freq.items(), key=lambda x: (-x[1], x[0]))
+        values= [x[0] for x in sorted_freq]
+        return values[:k]

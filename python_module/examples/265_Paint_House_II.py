@@ -42,12 +42,11 @@ class Solution:
         
         return min(dp)
     
-    def minCostII(self, costs: List[List[int]]) -> int:
+    def minCostII3(self, costs: List[List[int]]) -> int:
         if not costs:
             return 0
         k = len(costs[0])
         dp = [0] * k
-        n = len(costs)
 
         for cost in costs:
             min1, min2 = float('inf'), float('inf')
@@ -58,6 +57,24 @@ class Solution:
                 elif val < min2:
                     min2 = val
 
+            for i in range(k):
+                dp[i] = (min1 if dp[i] != min1 else min2) + cost[i]
+        return min(dp)
+    
+    def minCostII4(self, costs: List[List[int]]) -> int:
+        if not costs:
+            return 0
+        k = len(costs[0])
+        dp = [0] * k
+
+        for cost in costs:
+            min1, min2 = float('inf'), float('inf')
+            for v in dp:
+                if v < min1:
+                    min2 = min1
+                    min1 = v
+                elif v < min2:
+                    min2 = v
             for i in range(k):
                 dp[i] = (min1 if dp[i] != min1 else min2) + cost[i]
         return min(dp)

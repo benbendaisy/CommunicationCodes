@@ -55,11 +55,10 @@ class Solution:
         min_heap = [(grid[0][0], 0, 0)]  # Min-heap (cell value, row, col)
         visited = set([(0, 0)])
         count = 0  # Track accessible cells
-        index = 0  # Query index
 
         for i, q in queries_sorted:
             while min_heap and min_heap[0][0] < q:
-                value, r, c = heappop(min_heap)
+                _, r, c = heappop(min_heap)
                 count += 1  # This cell is now reachable
                 
                 # Explore adjacent cells

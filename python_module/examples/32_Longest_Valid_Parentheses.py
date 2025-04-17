@@ -59,7 +59,7 @@ class Solution:
         return max_len
 
 
-    def longestValidParentheses(self, s: str) -> int:
+    def longestValidParentheses4(self, s: str) -> int:
         if not s:
             return 0
         stack, max_len = [-1], 0
@@ -72,6 +72,21 @@ class Solution:
                     max_len = max(max_len, i - stack[-1])
                 else:
                     stack.append(i)
+        return max_len
+    
+    def longestValidParentheses5(self, s: str) -> int:
+        if not s:
+            return 0
+        stack, max_len = [-1], 0
+        for i, v in enumerate(s):
+            if v == '(':
+                stack.append(i)
+            else:
+                stack.pop()
+                if stack:
+                    max_len = max(max_len, i - stack[-1])
+                else:
+                    stack.append(i) # mark as new start position
         return max_len
 
 

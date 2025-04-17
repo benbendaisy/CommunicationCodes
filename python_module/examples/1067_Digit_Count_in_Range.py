@@ -54,7 +54,7 @@ class Solution:
 
         return count_occurrence(high) - count_occurrence(low - 1)
     
-    def digitsCount(self, d: int, low: int, high: int) -> int:
+    def digitsCount3(self, d: int, low: int, high: int) -> int:
         def count_occurrence(n: int) -> int:
             if n < 0:
                 return 0
@@ -76,3 +76,26 @@ class Solution:
                 return total
             return helper(0, True, 0, True)
         return count_occurrence(high) - count_occurrence(low - 1)
+    
+    def digitsCount4(self, d: int, low: int, high: int) -> int:
+        def count_occurence(num):
+            if num < 0:
+                return 0
+            digits = list(map(int, str(num)))
+            length = len(digits)
+
+            @cache
+            def helper(idx: int, is_prefix_limit: bool, cnt: int, leading_zero: bool) -> int:
+                if idx == length:
+                    return cnt
+                
+                total = 0
+                upper = digits[idx] if is_prefix_limit else 9
+                for digit in range(upper + 1):
+                    new_cnt = cnt
+                    if digit == d and (d != 0 or not leading_zero):
+                        new_cnt += 1
+                    total += helper(idx + 1, (digit == upper) and is_prefix_limit, new_cnt, leading_zero and digit == 0)
+                return total
+            return helper(0, True, 0, True)
+        return count_occurence(high) - count_occurence(low - 1)

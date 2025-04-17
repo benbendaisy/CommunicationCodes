@@ -90,7 +90,7 @@ class Solution:
                     helper(i, j)
         return cnt
     
-    def numIslands(self, grid: List[List[str]]) -> int:
+    def numIslands4(self, grid: List[List[str]]) -> int:
         if not grid:
             return 0
         m, n = len(grid), len(grid[0])
@@ -109,5 +109,25 @@ class Solution:
                 if grid[r][c] == '1':
                     helper(r, c)
                     cnt += 1
+        return cnt
+    
+    def numIslands5(self, grid: List[List[str]]) -> int:
+        if not grid:
+            return 0
+        m, n = len(grid), len(grid[0])
+        def helper(row: int, col: int):
+            if row < 0 or row >= m or col < 0 or col >= n or grid[row][col] != "1":
+                return
+            grid[row][col] = "2"
+            for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1)):
+                new_row, new_col = row + dx, col + dy
+                helper(new_row, new_col)
+        
+        cnt = 0
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] == "1":
+                    cnt += 1
+                    helper(i, j)
         return cnt
 

@@ -122,7 +122,7 @@ class Solution:
         
         return sum(dp[n][a][l] for a in range(2) for l in range(3)) % mod
     
-    def checkRecord(self, n: int) -> int:
+    def checkRecord3(self, n: int) -> int:
         
         mod = 10**9 + 7
     
@@ -140,4 +140,20 @@ class Solution:
                 helper(idx + 1, absences, consecutive_lates + 1)  # Adding 'L'
             ) % mod
         
+        return helper(0, 0, 0)
+    
+    def checkRecord4(self, n: int) -> int:
+        mod = 10 ** 9 + 7
+
+        @lru_cache(None)
+        def helper(idx: int, absents: int, lates: int) -> int:
+            if absents >= 2 or lates >= 3:
+                return 0
+
+            if idx == n:
+                return 1
+            
+            return (
+                helper(idx + 1, absents, 0) + helper(idx + 1, absents + 1, 0) + helper(idx + 1, absents, lates + 1)
+            ) % mod
         return helper(0, 0, 0)

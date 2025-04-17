@@ -57,7 +57,7 @@ class Solution:
         num1, num2 = int(num1), int(num2)
         return (count_valid_numbers(str(num2)) - count_valid_numbers(str(num1 - 1))) % mod
     
-    def count(self, num1: str, num2: str, min_sum: int, max_sum: int) -> int:
+    def count3(self, num1: str, num2: str, min_sum: int, max_sum: int) -> int:
         mod = 10 ** 9 + 7
 
         def count_valid_numbers(n: str) -> int:
@@ -71,6 +71,26 @@ class Solution:
                 upper = int(n[idx]) if is_prefix_limit else 9
                 cnt = 0
                 for digit in range(0, upper + 1):
+                    cnt += helper(idx + 1, is_prefix_limit and (digit == upper), digit_sum + digit)
+                return cnt
+            return helper(0, True, 0)
+        num1 = int(num1)
+        return (count_valid_numbers(num2) - count_valid_numbers(str(num1 - 1))) % mod
+    
+    def count(self, num1: str, num2: str, min_sum: int, max_sum: int) -> int:
+        mod = 10 ** 9 + 7
+
+        def count_valid_numbers(n: str) -> int:
+            @cache
+            def helper(idx: int, is_prefix_limit: bool, digit_sum: int) -> int:
+                if digit_sum > max_sum:
+                    return 0
+                
+                if idx == len(n):
+                    return min_sum <= digit_sum <= max_sum
+                upper = int(n[idx]) if is_prefix_limit else 9
+                cnt = 0
+                for digit in range(upper + 1):
                     cnt += helper(idx + 1, is_prefix_limit and (digit == upper), digit_sum + digit)
                 return cnt
             return helper(0, True, 0)

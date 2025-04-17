@@ -30,7 +30,7 @@ class Solution:
     Input: graph = [[1,3],[0],[3],[0,2]]
     Output: 1
     """
-    def catMouseGame(self, graph: List[List[int]]) -> int:
+    def catMouseGame1(self, graph: List[List[int]]) -> int:
         n = len(graph)
         @cache
         def helper(mouse_pos: int, cat_pos: int, moves: int):
@@ -65,4 +65,42 @@ class Solution:
                         res = 0
             return res
         
+        return helper(1, 2, 0)
+    
+    def catMouseGame2(self, graph: List[List[int]]) -> int:
+        if not graph:
+            return 0
+        n = len(graph)
+        @cache
+        def helper(mouse_pos: int, cat_pos: int, moves: int) -> int:
+            if mouse_pos == 0:
+                return 1
+            
+            if mouse_pos == cat_pos:
+                return 2
+            
+            if moves >= 5 * n:
+                return 0
+            
+            if moves % 2 == 0:
+                res = 2
+                for next_pos in graph[mouse_pos]:
+                    next_res = helper(next_pos, cat_pos, moves + 1)
+                    if next_res == 1:
+                        res = 1
+                        break
+                    if next_res == 0:
+                        res = 0
+            else:
+                res = 1
+                for next_pos in graph[cat_pos]:
+                    if next_pos == 0:
+                        continue
+                    next_res = helper(mouse_pos, next_pos, moves + 1)
+                    if next_res == 2:
+                        res = 2
+                        break
+                    if next_res == 0:
+                        res = 0
+            return res
         return helper(1, 2, 0)
