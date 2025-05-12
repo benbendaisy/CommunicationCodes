@@ -91,11 +91,11 @@ class Solution:
                 while r >= l and s[r] != s[right]:
                     r -= 1
                 if l > r:
-                    cnt = 2 * helper(left + 1, right - 1) + 2 # no duplication
+                    cnt = 2 * helper(left + 1, right - 1) + 2 # no duplication, # 's[i]' and 's[i]s[j]'
                 elif l == r:
-                    cnt = 2 * helper(left + 1, right - 1) + 1 # one duplication
+                    cnt = 2 * helper(left + 1, right - 1) + 1 # one duplication # 's[i]s[j]' and 's[i]' is already counted in helper(left + 1, right - 1)
                 else:
-                    cnt = 2 * helper(left + 1, right - 1) - helper(l + 1, r - 1) # more than one duplication and removing duplication
+                    cnt = 2 * helper(left + 1, right - 1) - helper(l + 1, r - 1) # more than one duplication and removing duplication where both cases are counted
             # Case 2: When s[left] != s[right]
             else:
                 cnt = helper(left + 1, right) + helper(left, right - 1) - helper(left + 1, right - 1)

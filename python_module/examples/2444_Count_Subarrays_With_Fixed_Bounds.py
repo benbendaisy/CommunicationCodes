@@ -41,7 +41,7 @@ class Solution:
                 last_min, last_max = -1, -1
         return cnt
 
-    def countSubarrays(self, nums: List[int], minK: int, maxK: int) -> int:
+    def countSubarrays2(self, nums: List[int], minK: int, maxK: int) -> int:
         # min_position, max_position: the MOST RECENT positions of minK and maxK.
         # left_bound: the MOST RECENT value outside the range [minK, maxK].
         res = 0
@@ -59,4 +59,43 @@ class Solution:
             # The number of valid subarrays equals the number of elements between left_bound and 
             # the smaller of the two most recent positions.
             res += max(0, min(min_pos, max_pos) - left_bound)
+        return res
+    
+    def countSubarrays3(self, nums, minK, maxK):
+        res = 0
+        min_pos = max_pos = bad_pos = -1
+        
+        for i, num in enumerate(nums):
+            if num < minK or num > maxK:
+                bad_pos = i
+            if num == minK:
+                min_pos = i
+            if num == maxK:
+                max_pos = i
+
+            # We can only form a valid subarray ending at i
+            # if both min_pos and max_pos are after the last bad element
+            valid_start = min(min_pos, max_pos)
+            if valid_start > bad_pos:
+                res += valid_start - bad_pos
+        
+        return res
+    
+    def countSubarrays5(self, nums: List[int], minK: int, maxK: int) -> int:
+        res = 0
+        bad_pos = min_pos = max_pos = -1
+        for i, num in enumerate(nums):
+            if num < minK or num > maxK:
+                bad_pos = i
+            
+            if num == minK:
+                min_pos = i
+            if num == maxK:
+                max_pos = i
+
+            # We can only form a valid subarray ending at i
+            # if both min_pos and max_pos are after the last bad element
+            valid_start = min(min_pos, max_pos)
+            if valid_start > bad_pos:
+                res += (valid_start - bad_pos)
         return res

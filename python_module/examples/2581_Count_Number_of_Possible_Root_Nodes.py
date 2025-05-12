@@ -96,3 +96,31 @@ class Solution:
                 res += 1
         return res
     
+    def rootCount3(self, edges: List[List[int]], guesses: List[List[int]], k: int) -> int:
+        if not edges:
+            return 0
+        graph = defaultdict(list)
+        for u, v in edges:
+            graph[u].append(v)
+            graph[v].append(u)
+        
+        guess_set = {(u, v) for u, v in guesses}
+
+        @cache
+        def helper(node: int, parent: int) -> int:
+            cnt = 0
+            for neighbor in graph[node]:
+                if neighbor == parent:
+                    continue
+                if (node, neighbor) in guess_set:
+                    cnt += 1
+                cnt += helper(neighbor, node)
+            return cnt
+        
+        res = 0
+        for node in graph:
+            correct_guess = helper(node, -1)
+            if correct_guess >= k:
+                res += 1
+        return res
+    

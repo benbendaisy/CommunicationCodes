@@ -153,7 +153,7 @@ class Solution:
         
         return answer
     
-    def sumOfDistancesInTree(self, n: int, edges: List[List[int]]) -> List[int]:
+    def sumOfDistancesInTree4(self, n: int, edges: List[List[int]]) -> List[int]:
         graph = defaultdict(list)
 
         for u, v in edges:
@@ -182,3 +182,38 @@ class Solution:
         dfs(0, -1, 0)
         reroot(0, -1)
         return ans
+    
+    def sumOfDistancesInTree5(self, n: int, edges: List[List[int]]) -> List[int]:
+        if n == 1:
+            return [0]  # Only one node, no distance
+
+        # Step 1: Build the adjacency list representation of the tree
+        graph = defaultdict(list)
+        for u, v in edges:
+            graph[u].append(v)
+            graph[v].append(u)
+        
+        # Step 2: Initialize storage arrays
+        res = [0] * n
+        subtree_cnt = [1] * n
+
+        # Step 3: First DFS - Compute subtree sizes and initial distances
+        def post_order(node: int, parent: int):
+            for child in graph[node]:
+                if child == parent:
+                    continue
+                post_order(child, node)
+                subtree_cnt[node] += subtree_cnt[child]
+                res[node] += res[child] + subtree_cnt[child]
+        
+        post_order(0, -1)  # Start from node 0
+
+        # Step 4: Second DFS - Compute distances for all nodes
+        def pre_order(node: int, parent: int):
+            for child in graph[node]:
+                if child == parent:
+                    continue
+                res[child] = res[node] - subtree_cnt[child] + n - subtree_cnt[child]
+                pre_order(child, node)
+        pre_order(0, -1)
+        return res

@@ -31,7 +31,7 @@ class Solution:
     - [3]: product is 3, which is the product of distinct prime 3.
     - [15]: product is 15, which is the product of distinct primes 3 and 5.
     """
-    def numberOfGoodSubsets(self, nums: List[int]) -> int:
+    def numberOfGoodSubsets1(self, nums: List[int]) -> int:
         n = len(nums)
         res = set()
         nums.sort()
@@ -77,3 +77,46 @@ class Solution:
             if product_of_distinct_primes(product):
                 cnt += 1
         return cnt
+    
+    def numberOfGoodSubsets(self, nums: List[int]) -> int:
+        MOD = 10 ** 9 + 7
+        # List of primes up to 30
+        primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]
+        prime_to_bit = {p: i for i, p in enumerate(primes)}
+        
+        # Precompute valid numbers (no repeated prime factors)
+        def get_mask(x):
+            mask = 0
+            for p in primes:
+                count = 0
+                while x % p == 0:
+                    x //= p
+                    count += 1
+                if count > 1:  # not allowed, repeated prime factor
+                    return 0
+                elif count == 1:
+                    mask |= 1 << prime_to_bit[p]
+            if x > 1:
+                return 0  # x has a prime factor > 30
+            return mask
+
+        count = Counter(nums)
+        dp = {0: 1}  # empty subset
+        
+        for num in range(2, 31):
+            if count[num] == 0:
+                continue
+            mask = get_mask(num)
+            if mask == 0:
+                continue
+            for existing_mask in list(dp.keys())[::-1]:  # iterate in reverse to avoid overwriting
+                if existing_mask & mask == 0:  # no conflict in primes
+                    new_mask = existing_mask | mask
+                    dp[new_mask] = (dp.get(new_mask, 0) + dp[existing_mask] * count[num]) % MOD
+
+        # All non-zero masks except the empty set (dp[0] is the empty set)
+        result = sum(dp[mask] for mask in dp if mask != 0) % MOD
+
+        # Multiply by 2^count[1] to include combinations of 1s
+        ones = pow(2, count[1], MOD)
+        return result * ones % MOD

@@ -60,7 +60,7 @@ class Solution:
         
         return helper(0, n - 1)
     
-    def mergeStones(self, stones: List[int], k: int) -> int:
+    def mergeStones2(self, stones: List[int], k: int) -> int:
         n = len(stones)
         if (n - 1) % (k - 1) != 0:
             return -1  # If merging to one pile is impossible
@@ -71,6 +71,27 @@ class Solution:
         def helper(i, j, piles):
             if (j - i + 1 - piles) % (k - 1) != 0:
                 return float('inf')  # Invalid state
+            if i == j:
+                return 0 if piles == 1 else float('inf')  # Base case
+            
+            if piles == 1:
+                return helper(i, j, k) + prefix[j + 1] - prefix[i]  # Merge k piles into 1
+            
+            # Try merging into `piles` piles
+            return min(helper(i, m, 1) + helper(m + 1, j, piles - 1) for m in range(i, j, k - 1))
+        
+        return helper(0, n - 1, 1)
+    
+
+    def mergeStones3(self, stones: List[int], k: int) -> int:
+        n = len(stones)
+        if (n - 1) % (k - 1) != 0:
+            return -1  # If merging to one pile is impossible
+        
+        prefix = [0] + list(accumulate(stones))  # Prefix sum for quick range sum lookup
+        
+        @cache
+        def helper(i, j, piles):
             if i == j:
                 return 0 if piles == 1 else float('inf')  # Base case
             

@@ -27,7 +27,7 @@ class Solution:
     Input: n = 3, edges = [[1,2],[2,3]]
     Output: [2,1]
     """
-    def countSubgraphsForEachDiameter(self, n: int, edges: List[List[int]]) -> List[int]:
+    def countSubgraphsForEachDiameter1(self, n: int, edges: List[List[int]]) -> List[int]:
         graph = [[] for _ in range(n)]                              # 建图
         for u, v in edges:
             graph[u - 1].append(v - 1)
@@ -56,3 +56,65 @@ class Solution:
             if visited == mask:
                 ans[diameter - 1] += 1
         return ans
+    
+    def countSubgraphsForEachDiameter2(self, n: int, edges: List[List[int]]) -> List[int]:
+        if not edges:
+            return []
+        graph = defaultdict(list)
+        for u, v in edges:
+            graph[u - 1].append(v - 1)
+            graph[v - 1].append(u - 1)
+        
+        def helper(mask: int, node: int):
+            self.visited |= 1 << node
+            u_len = 0
+            for neighbor in graph[node]:
+                if (self.visited >> neighbor) & 1 == 0 and mask >> neighbor & 1 == 1:
+                    v_len = helper(mask, neighbor)
+                    self.diameter = max(self.diameter, u_len + v_len + 1)
+                    u_len = max(u_len, v_len + 1)
+            return u_len
+        
+        res = [0 for _ in range(n - 1)]
+        for mask in range(3, 1 << n):
+            if mask & (mask - 1) == 0:
+                continue
+            
+            self.diameter = 0
+            node = mask.bit_length() - 1
+            self.visited = 0
+            helper(mask, node)
+            if self.visited == mask:
+                res[self.diameter - 1] += 1
+        return res
+    
+    def countSubgraphsForEachDiameter3(self, n: int, edges: List[List[int]]) -> List[int]:
+        if not edges:
+            return []
+        graph = defaultdict(list)
+        for u, v in edges:
+            graph[u - 1].append(v - 1)
+            graph[v - 1].append(u - 1)
+        
+        def helper(sub_tree: int, node: int):
+            self.visited |= 1 << node
+            u_len = 0
+            for neighbor in graph[node]:
+                if (self.visited >> neighbor) & 1 == 0 and sub_tree >> neighbor & 1 == 1: # check if neighbor in the sub_tree and not visited
+                    v_len = helper(sub_tree, neighbor) # check neighbor's diameter
+                    self.diameter = max(self.diameter, u_len + v_len + 1) # get the max diameter
+                    u_len = max(u_len, v_len + 1) # update the max path
+            return u_len
+        
+        res = [0 for _ in range(n - 1)]
+        for sub_tree in range(3, 1 << n): # pick sub_trees
+            if sub_tree & (sub_tree - 1) == 0: # sub_trees must have more than 1 nodes
+                continue
+            
+            self.diameter = 0
+            node = sub_tree.bit_length() - 1
+            self.visited = 0
+            helper(sub_tree, node)
+            if self.visited == sub_tree:
+                res[self.diameter - 1] += 1
+        return res

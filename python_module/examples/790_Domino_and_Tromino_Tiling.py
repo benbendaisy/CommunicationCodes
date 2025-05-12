@@ -55,7 +55,7 @@ class Solution:
         # The answer is the number of ways to tile the entire board with no protrusion
         return dp[n][0]
     
-    def numTilings(self, n: int) -> int:
+    def numTilings2(self, n: int) -> int:
         mod = 10 ** 9 + 7
 
         @cache  
@@ -71,3 +71,47 @@ class Solution:
             return (f(n - 1) + f(n - 2) + 2 * p(n - 1)) % mod
 
         return f(n)
+    
+    def numTilings3(self, n: int) -> int:
+        MOD = 10**9 + 7
+        if n == 0:
+            return 1
+        elif n == 1:
+            return 1
+        elif n == 2:
+            return 2
+
+        dp = [0] * (n + 1)
+        dp[0], dp[1], dp[2] = 1, 1, 2
+
+        for i in range(3, n + 1):
+            dp[i] = (2 * dp[i - 1] + dp[i - 3]) % MOD
+
+        return dp[n]
+    
+    def numTilings4(self, n: int) -> int:
+        mod = 10 ** 9 + 7
+
+        @cache
+        def part(m):
+            if m == 2:
+                return 1
+            return (part(m - 1) + full(m - 2)) % mod
+        @cache
+        def full(m):
+            if m <= 2:
+                return m
+            return (full(m - 1) + full(m - 2) + 2 * part(m - 1)) % mod
+        return full(n)
+    
+    def numTilings5(self, n: int) -> int:
+        mod = 10 ** 9 + 7
+        if n <= 2:
+            return n
+        
+        dp = [0] * (n + 1)
+        dp[0], dp[1], dp[2] = 1, 1, 2
+
+        for i in range(3, n + 1):
+            dp[i] = (2 * dp[i - 1] + dp[i - 3]) % mod
+        return dp[n]

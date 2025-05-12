@@ -34,7 +34,7 @@ class Solution:
         1 <= n <= 105
         dominoes[i] is either 'L', 'R', or '.'.
     """
-    def pushDominoes(self, dominoes: str) -> str:
+    def pushDominoes1(self, dominoes: str) -> str:
         symbols = [(i, x) for i, x in enumerate(dominoes) if x != '.']
         symbols = [(-1, 'L')] + symbols + [(len(dominoes), 'R')]
 
@@ -50,6 +50,56 @@ class Solution:
                     i += 1
                     j -= 1
         return "".join(ans)
+    
+    def pushDominoes2(self, dominoes: str) -> str:
+        def recur(state):
+            # Convert to list for mutability
+            new_state = list(state)
+            changed = False
+
+            for i in range(len(state)):
+                if state[i] == '.':
+                    left = state[i - 1] if i > 0 else None
+                    right = state[i + 1] if i < len(state) - 1 else None
+
+                    if left == 'R' and right != 'L':
+                        new_state[i] = 'R'
+                        changed = True
+                    elif right == 'L' and left != 'R':
+                        new_state[i] = 'L'
+                        changed = True
+
+            new_state_str = ''.join(new_state)
+            if changed:
+                return recur(new_state_str)
+            else:
+                return new_state_str
+
+        return recur(dominoes)
+    
+    def pushDominoes3(self, dominoes: str) -> str:
+        @cache
+        def helper(state: str) -> str:
+            new_state = list(state)
+            changed = False
+
+            for i, v in enumerate(state):
+                if v == '.':
+                    left = state[i - 1] if i > 0 else None
+                    right = state[i + 1] if i < len(state) - 1 else None
+                    
+                    if left == 'R' and right != 'L':
+                        new_state[i] = 'R'
+                        changed = True
+                    elif right == 'L' and left != 'R':
+                        new_state[i] = 'L'
+                        changed = True
+            new_state_str = "".join(new_state)
+            if changed:
+                return helper(new_state_str)
+            else:
+                return new_state_str
+        return helper(dominoes)
 
 
 if __name__ == "__main__":

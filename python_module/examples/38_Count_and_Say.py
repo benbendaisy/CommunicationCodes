@@ -26,7 +26,7 @@ class Solution:
         countAndSay(3) = say "11" = two 1's = "21"
         countAndSay(4) = say "21" = one 2 + one 1 = "12" + "11" = "1211"
     """
-    def countAndSay(self, n: int) -> str:
+    def countAndSay1(self, n: int) -> str:
         currentStr = "1"
         for _ in range(n - 1):
             nextStr = ""
@@ -38,3 +38,18 @@ class Solution:
                 j = k
             currentStr = nextStr
         return currentStr
+    
+    def countAndSay2(self, n: int) -> str:
+        def helper(s: str, step: int) -> str:
+            if step == n:
+                return s
+            idx, m, res = 0, len(s), ""
+            while idx < m:
+                cnt = 1
+                while idx < m - 1 and s[idx] == s[idx + 1]:
+                    cnt += 1
+                    idx += 1
+                res += str(cnt) + str(s[idx])
+                idx += 1
+            return helper(res, step + 1)
+        return helper("1", 1)

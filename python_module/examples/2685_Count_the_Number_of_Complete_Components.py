@@ -52,30 +52,3 @@ class Solution:
                     complete_components += 1
         
         return complete_components
-
-    def countCompleteComponents(self, n: int, edges: List[List[int]]) -> int:
-        graph = defaultdict(list)
-        for u, v in edges:
-            graph[u].append(v)
-            graph[v].append(u)
-        visited = set()
-
-        def helper(node: int) -> set:
-            stack, component = [node], {node}
-            while stack:
-                curr = stack.pop()
-                for neighbor in graph[curr]:
-                    if neighbor not in visited:
-                        visited.add(neighbor)
-                        component.add(neighbor)
-                        stack.append(neighbor)
-            return component
-        
-        complete_component = 0
-        for node in range(n):
-            if node not in visited:
-                component = helper(node)
-                size = len(component)
-                if all(len(graph[v]) == size - 1 for v in component):
-                    complete_component += 1
-        return complete_component

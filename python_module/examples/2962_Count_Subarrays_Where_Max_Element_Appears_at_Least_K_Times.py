@@ -17,7 +17,7 @@ class Solution:
     Output: 0
     Explanation: No subarray contains the element 4 at least 3 times.
     """
-    def countSubarrays(self, nums: List[int], k: int) -> int:
+    def countSubarrays1(self, nums: List[int], k: int) -> int:
         if not nums:
             return 0
         left, n = 0, len(nums)
@@ -32,3 +32,33 @@ class Solution:
                 left += 1
             res += left
         return res
+    
+    def countSubarrays2(self, nums: List[int], k: int) -> int:
+        if not nums:
+            return 0
+        max_cnt, cnt, left = 0, 0, 0
+        max_num, n = max(nums), len(nums)
+        for i, num in enumerate(nums):
+            if num == max_num:
+                max_cnt += 1
+            while max_cnt == k:
+                if nums[left] == max_num:
+                    max_cnt -= 1
+                left += 1
+            cnt += left
+        return cnt
+    
+    def countSubarrays3(self, nums: List[int], k: int) -> int:
+        if not nums:
+            return 0
+        max_cnt, cnt, left = 0, 0, 0
+        max_num, n = max(nums), len(nums)
+        for i, num in enumerate(nums):
+            if num == max_num:
+                max_cnt += 1
+            while max_cnt >= k:
+                if nums[left] == max_num:
+                    max_cnt -= 1
+                left += 1
+                cnt += n - i
+        return cnt

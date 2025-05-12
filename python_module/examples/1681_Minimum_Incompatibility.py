@@ -50,7 +50,7 @@ class Solution:
         res = helper(0)
         return -1 if res == float('inf') else res
     
-    def minimumIncompatibility(self, nums: List[int], k: int) -> int:
+    def minimumIncompatibility2(self, nums: List[int], k: int) -> int:
         nums.sort()
         
         def fn(i, cand=0, ans=inf):
@@ -68,3 +68,66 @@ class Solution:
         stack = [[] for _ in range(k)]
         ans = fn(0)
         return ans if ans < inf else -1
+    
+    def min_incompatibility_recursive3(nums: list[int], k: int) -> int:
+        n = len(nums)
+        if n % k != 0:
+            return -1
+        subset_size = n // k
+        counts = Counter(nums)
+        if any(count > k for count in counts.values()):
+            return -1
+
+        nums.sort()
+
+        memo = {}
+
+        def solve(index, subsets):
+            if index == n:
+                incompatibility_sum = 0
+                for subset in subsets:
+                    if subset:
+                        incompatibility_sum += max(subset) - min(subset)
+                return incompatibility_sum
+
+            state = (index, tuple(tuple(sorted(s)) for s in subsets))
+            if state in memo:
+                return memo[state]
+
+            min_incompatibility = float('inf')
+
+            for i in range(k):
+                if len(subsets[i]) < subset_size and nums[index] not in subsets[i]:
+                    new_subsets = list(subsets)
+                    new_subsets[i] = subsets[i] + [nums[index]]
+                    result = solve(index + 1, tuple(new_subsets))
+                    min_incompatibility = min(min_incompatibility, result)
+
+            memo[state] = min_incompatibility
+            return min_incompatibility
+
+        result = solve(0, tuple([[] for _ in range(k)]))
+        return result if result != float('inf') else -1
+    
+    def minimumIncompatibility4(self, nums: List[int], k: int) -> int:
+        n = len(nums)
+        if n % k != 0:
+            return -1
+        subset_size = n // k
+        subsets = [set() for _ in range(k)]
+        self.min_sum = float('inf')
+        # @cache
+        def helper(idx: int):
+            if idx == n:
+                local_sum = sum(max(subsets[i]) - min(subsets[i]) for i in range(k))
+                self.min_sum = min(self.min_sum, local_sum)
+                return
+            
+            for i in range(k):
+                if len(subsets[i]) < subset_size and nums[idx] not in subsets[i]:
+                    subsets[i].add(nums[idx])
+                    helper(idx + 1)
+                    subsets[i].remove(nums[idx])
+        
+        helper(0)
+        return self.min_sum if self.min_sum != float('inf') else -1
