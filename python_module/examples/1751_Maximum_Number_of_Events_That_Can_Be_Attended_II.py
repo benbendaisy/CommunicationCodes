@@ -95,3 +95,26 @@ class Solution:
             return max(opt1, opt2)
         return helper(0, k)
     
+    def maxValue5(self, events: List[List[int]], k: int) -> int:
+        if not events:
+            return 0
+        
+        events.sort()
+        starts = [start for start, _, _ in events]
+        n = len(events)
+        @cache
+        def helper(idx: int, m: int):
+            if idx == n or m == 0:
+                return 0
+            
+            # option 1: skip
+            opt1 = helper(idx + 1, m)
+
+            # option 2: take the current
+            next_idx = bisect.bisect_right(starts, events[idx][1])
+            opt2 = events[idx][2] + helper(next_idx, m - 1)
+
+            return max(opt1, opt2)
+        
+        return helper(0, k)
+    

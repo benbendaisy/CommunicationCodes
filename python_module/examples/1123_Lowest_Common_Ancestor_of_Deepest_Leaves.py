@@ -61,3 +61,22 @@ class Solution:
             return (left_dep + 1, node)
         
         return helper(root)[1]
+    
+    def lcaDeepestLeaves4(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        if not root:
+            return root
+        
+        @cache
+        def helper(node: TreeNode):
+            if not node:
+                return (0, None)
+            
+            dep_left, lca_left = helper(node.left)
+            dep_right, lca_right = helper(node.right)
+
+            if dep_left > dep_right:
+                return dep_left + 1, lca_left
+            elif dep_left < dep_right:
+                return dep_right + 1, lca_right
+            return dep_left + 1, node
+        return helper(root)[1]

@@ -217,3 +217,33 @@ class Solution:
                 pre_order(child, node)
         pre_order(0, -1)
         return res
+    
+    def sumOfDistancesInTree6(self, n: int, edges: List[List[int]]) -> List[int]:
+        if n == 1:
+            return [0]
+        
+        graph = defaultdict(list)
+        for u, v in edges:
+            graph[u].append(v)
+            graph[v].append(u)
+        
+        res = [0] * n
+        subtree_cnt = [1] * n
+        def pre_order(node: int, parent: int):
+            for child in graph[node]:
+                if child == parent:
+                    continue
+                pre_order(child, node)
+                subtree_cnt[node] += subtree_cnt[child]
+                res[node] += res[child] + subtree_cnt[child]
+        
+        pre_order(0, -1)
+        def post_order(node: int, parent: int):
+            for child in graph[node]:
+                if child == parent:
+                    continue
+                res[child] = (res[node] - subtree_cnt[child]) + (n - subtree_cnt[child])
+                post_order(child, node)
+        
+        post_order(0, -1)
+        return res
