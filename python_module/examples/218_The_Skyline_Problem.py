@@ -247,6 +247,9 @@ class Solution:
         return res
     
     def getSkyline(self, buildings: List[List[int]]) -> List[List[int]]:
+        """
+        implement the algorithm by the way of sweep line algorithm
+        """
         if not buildings:
             return []
         res, points = [], []

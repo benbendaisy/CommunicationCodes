@@ -35,9 +35,10 @@ class OnesCounter2D:
 
 
 matrix = [
-    [0, 1, 1],
-    [1, 1, 0],
-    [0, 0, 1]
+    [0, 1, 1, 1],
+    [1, 1, 0, 1],
+    [0, 0, 1, 1],
+    [1, 1, 0, 1]
 ]
 
 counter = OnesCounter2D(matrix)
