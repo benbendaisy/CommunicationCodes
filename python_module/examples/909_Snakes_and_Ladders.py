@@ -120,7 +120,7 @@ class Solution:
         
         return -1
     
-    def snakesAndLadders(self, board: List[List[int]]) -> int:
+    def snakesAndLadders4(self, board: List[List[int]]) -> int:
         n = len(board)
 
         def helper(square: int):
@@ -146,6 +146,28 @@ class Solution:
                     que.append((next_square, moves + 1))
         return -1
 
+    def snakesAndLadders5(self, board: List[List[int]]) -> int:
+        n = len(board)
 
+        def helper(square: int):
+            row = (square - 1) // n
+            col = (square - 1) % n
+            if row % 2 == 1:
+                col = n - 1 - col
+            return n - 1 - row, col
+        
+        que, visited = deque([(1, 0)]), set([1])
+        while que:
+            square, moves = que.popleft()
+            if square == n * n:
+                return moves
+            for next_square in range(square + 1, min(square + 6, n * n) + 1):
+                r, c = helper(next_square)
+                if board[r][c] != -1:
+                    next_square = board[r][c]
+                if next_square not in visited:
+                    visited.add(next_square)
+                    que.append((next_square, moves + 1))
+        return -1
 
 
