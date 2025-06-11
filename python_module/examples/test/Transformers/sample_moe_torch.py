@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import math
 from torch.nn import functional as F
 from torch.nn import init
 
@@ -102,6 +103,7 @@ class MultiHeadAttention(nn.Module):
         out = torch.cat([h(x) for h in self.heads], dim=-1)
         out = self.dropout(self.proj(out))
         return out
+
 #Expert module
 class Expert(nn.Module):
     """ An MLP is a simple linear layer followed by a non-linearity i.e. each Expert """
@@ -207,7 +209,45 @@ class Block(nn.Module):
         x = x + self.sa(self.ln1(x))
         x = x + self.smoe(self.ln2(x))
         return x
-      
+
+# Encoding the positions
+
+class PositionalEncoding(nn.Module):
+    def __init__(self, d_model: int, max_len: int = 5000):
+        super().__init__()
+
+        # Create a matrix of shape (max_len, d_model)
+        pe = torch.zeros(max_len, d_model)
+
+        # Create a position vector (max_len, 1)
+        position = torch.arange(0, max_len, dtype=torch.float).unsqueeze(1)
+
+        # Compute the division term (1 / 10000^(2i/d_model))
+        div_term = torch.exp(torch.arange(0, d_model, 2).float() * (-math.log(10000.0) / d_model))
+
+        # Apply sin to even indices in the array; 2i
+        pe[:, 0::2] = torch.sin(position * div_term)
+
+        # Apply cos to odd indices in the array; 2i+1
+        pe[:, 1::2] = torch.cos(position * div_term)
+
+        # Add a batch dimension (1, max_len, d_model)
+        pe = pe.unsqueeze(0)
+
+        # Register as buffer so it's not a parameter, but moves with model.to(device)
+        self.register_buffer('pe', pe)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """
+        Args:
+            x: Tensor of shape (batch_size, seq_len, d_model)
+        Returns:
+            Tensor with positional encodings added (same shape as input)
+        """
+        x = x + self.pe[:, :x.size(1), :]
+        return x
+
+
 #Finally putting it all together to crease a sparse mixture of experts language model
 class SparseMoELanguageModel(nn.Module):
 
@@ -215,18 +255,16 @@ class SparseMoELanguageModel(nn.Module):
         super().__init__()
         # each token directly reads off the logits for the next token from a lookup table
         self.token_embedding_table = nn.Embedding(vocab_size, n_embed)
-        self.position_embedding_table = nn.Embedding(block_size, n_embed)
+        self.position_embedding_table = PositionalEncoding(n_embed, block_size)
         self.blocks = nn.Sequential(*[Block(n_embed, n_head=n_head, num_experts=num_experts,top_k=top_k) for _ in range(n_layer)])
         self.ln_f = nn.LayerNorm(n_embed) # final layer norm
         self.lm_head = nn.Linear(n_embed, vocab_size)
 
     def forward(self, idx, targets=None):
         B, T = idx.shape
-
         # idx and targets are both (B,T) tensor of integers
         tok_emb = self.token_embedding_table(idx) # (B,T,C)
-        pos_emb = self.position_embedding_table(torch.arange(T, device=device)) # (T,C)
-        x = tok_emb + pos_emb # (B,T,C)
+        x = self.position_embedding_table(tok_emb) # (B,T,C)
         x = self.blocks(x) # (B,T,C)
         x = self.ln_f(x) # (B,T,C)
         logits = self.lm_head(x) # (B,T,vocab_size)
