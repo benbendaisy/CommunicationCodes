@@ -72,3 +72,27 @@ class Solution:
                 attended += 1
                 day += 1
         return attended
+    
+    def maxEvents3(self, events: List[List[int]]) -> int:
+        if not events:
+            return 0
+        events.sort()
+        min_heap, cur_day, event_idx, total_events, attended = [], 0, 0, len(events), 0
+        while event_idx < total_events or min_heap:
+            if not min_heap:
+                cur_day = events[event_idx][0]
+            
+            # push the event that can be started
+            while event_idx < total_events and events[event_idx][0] <= cur_day:
+                heapq.heappush(min_heap, events[event_idx][1])
+                event_idx += 1
+            
+            # pop the events that already ends
+            while min_heap and min_heap[0] < cur_day:
+                heapq.heappop(min_heap)
+            
+            if min_heap:
+                heapq.heappop(min_heap)
+                attended += 1
+                cur_day += 1
+        return attended

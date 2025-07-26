@@ -67,7 +67,7 @@ class Solution:
                 hashSet.remove(nums[r])
         return maxSum
 
-    def maximumUniqueSubarray(self, nums: List[int]) -> int:
+    def maximumUniqueSubarray3(self, nums: List[int]) -> int:
         curSum = 0
         n = len(nums)
         idx = 0
@@ -82,6 +82,19 @@ class Solution:
             hashSet.add(nums[i])
             maxSum = max(maxSum, curSum)
         return maxSum
+    
+    def maximumUniqueSubarray4(self, nums: List[int]) -> int:
+        n, res, cur_sum, start = len(nums), 0, 0, 0
+        h_set = set()
+        for end in range(n):
+            while nums[end] in h_set:
+                h_set.remove(nums[start])
+                cur_sum -= nums[start]
+                start += 1
+            cur_sum += nums[end]
+            h_set.add(nums[end])
+            res = max(res, cur_sum)
+        return res
 
 if __name__ == "__main__":
     nums = [4,2,4,5,6]
